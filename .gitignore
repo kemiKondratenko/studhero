@@ -14,3 +14,6 @@ target/SpringApp.war
 target/SpringApp/WEB-INF/classes/spring-config.xml
 *.class
 target/SpringApp/WEB-INF/classes/spring-config.xml
+*.war
+.idea/workspace.xml
+target/maven-archiver/pom.properties
