@@ -1,6 +1,4 @@
 *.class
-.idea
-target
 **out/
 # Package Files #
 *.jar
@@ -12,5 +10,6 @@ hs_err_pid*
 
 
 desktop.ini
+/.idea
+/target
 *.iml
-spring1.iml
