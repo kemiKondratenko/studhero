@@ -1,0 +1,16 @@
+.idea/vcs.xml
+.idea/vcs.xml
+.idea/workspace.xml
+target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst
+target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst
+target/SpringApp.war
+target/SpringApp/ppp.jsp
+target/SpringApp/WEB-INF/classes/spring-config.xml
+target/SpringApp/WEB-INF/classes/ua/com/studhero/database/Connector.class
+target/SpringApp/WEB-INF/classes/ua/com/studhero/database/DataBaseConstants.class
+target/SpringApp/WEB-INF/classes/spring-config.xml
+target/SpringApp/ppp.jsp
+target/SpringApp.war
+target/SpringApp/WEB-INF/classes/spring-config.xml
+*.class
+target/SpringApp/WEB-INF/classes/spring-config.xml

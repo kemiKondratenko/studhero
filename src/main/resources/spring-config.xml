@@ -11,8 +11,13 @@
         <constructor-arg value="SmmngpRRR4543gfdDDlfg"/>
     </bean>
 
-    <bean id="DBWorcker" class="ua.com.studhero.database.impl.DataBaseWorkerImpl">
+    <bean id="QueryExecutor" class="ua.com.studhero.database.impl.QueryExecutorImpl">
         <property name="connector" ref="DBConnector">
+        </property>
+    </bean>
+
+    <bean id="DBWorcker" class="ua.com.studhero.database.impl.DataBaseWorkerImpl">
+        <property name="queryExecutor" ref="QueryExecutor">
         </property>
     </bean>
 
