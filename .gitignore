@@ -17,3 +17,6 @@ target/SpringApp/WEB-INF/classes/spring-config.xml
 *.war
 .idea/workspace.xml
 target/maven-archiver/pom.properties
+.idea/workspace.xml
+target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst
+target/classes/spring-config.xml
