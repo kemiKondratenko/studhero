@@ -11,4 +11,9 @@ public class MyPreparedStatement {
     public MyPreparedStatement(PreparedStatement preparedStatement){
         this.preparedStatement = preparedStatement;
     }
+
+    public PreparedStatement getPreparedStatement() {
+        return preparedStatement;
+    }
+
 }
