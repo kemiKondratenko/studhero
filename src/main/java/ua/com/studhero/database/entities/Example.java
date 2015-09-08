@@ -10,5 +10,5 @@ import ua.com.studhero.annotations.AttrId;
 public class Example extends BaseDBO{
 
     @AttrId( id = 1)
-    private int field;
+    public Integer field;
 }

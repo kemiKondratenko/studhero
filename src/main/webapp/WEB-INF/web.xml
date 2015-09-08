@@ -21,8 +21,8 @@ http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
 
 
     <context-param>
-        <param-name>webmaster</param-name>
-        <param-value>myaddress@mycompany.com</param-value>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>/WEB-INF/mvc-dispatcher-servlet.xml</param-value>
     </context-param>
 
     <session-config>

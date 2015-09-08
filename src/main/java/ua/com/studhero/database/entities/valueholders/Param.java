@@ -1,21 +1,17 @@
 package ua.com.studhero.database.entities.valueholders;
 
-
 /**
  * Created by Eugene on 06.09.2015.
  */
-public class Param {
-    Object value;
-    Class type;
+public class Param<T> {
 
-    public Param(Object value, Class type) {
+    private T value;
+
+    public Param(T value) {
         this.value = value;
-        this.type = type;
     }
 
-    public <T> T get(Class<T> fieldClass) {
-        if(fieldClass.equals(type))
-            return (T) value;
-        return null;
+    public T get(){
+        return value;
     }
 }

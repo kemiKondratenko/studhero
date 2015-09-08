@@ -13,17 +13,11 @@
     </bean>
 
     <bean id="QueryExecutor" class="ua.com.studhero.database.impl.QueryExecutorImpl">
-        <property name="connector" ref="DBConnector">
-        </property>
+        <property name="connector" ref="DBConnector"/>
     </bean>
 
     <bean id="DBWorcker" class="ua.com.studhero.database.impl.DataBaseWorkerImpl">
         <property name="queryExecutor" ref="QueryExecutor">
-        </property>
-    </bean>
-
-    <bean id="RestDBController" class="ua.com.studhero.controllers.RestDBController">
-        <property name="dataBaseWorker" ref="DBWorcker">
         </property>
     </bean>
 
