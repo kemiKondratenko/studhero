@@ -9,5 +9,5 @@ import java.util.Map;
  * Created by Eugene on 06.09.2015.
  */
 public interface QueryExecutor {
-    Map<Long, Param> getObjectParams(long objectId, long classId) throws SQLException;
+    Map<Long, Param> getObjectParams(long objectId, long classId) throws SQLException, ClassNotFoundException;
 }

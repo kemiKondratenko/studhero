@@ -11,7 +11,7 @@ public interface DataBaseWorker {
 
     public <T extends BaseDBO> boolean save(T value);
 
-    public <T extends BaseDBO> T get(long id, Class<T> objectClass) throws IllegalAccessException, InstantiationException, SQLException;
+    public <T extends BaseDBO> T get(long id, Class<T> objectClass) throws IllegalAccessException, InstantiationException, SQLException, ClassNotFoundException;
 
     public <T extends BaseDBO> boolean update(T object);
 }

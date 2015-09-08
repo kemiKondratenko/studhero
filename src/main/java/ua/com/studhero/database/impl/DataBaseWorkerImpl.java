@@ -23,7 +23,7 @@ public class DataBaseWorkerImpl implements DataBaseWorker {
     }
 
     @Override
-    public <T extends BaseDBO> T get(long id, Class<T> objectClass) throws IllegalAccessException, InstantiationException, SQLException {
+    public <T extends BaseDBO> T get(long id, Class<T> objectClass) throws IllegalAccessException, InstantiationException, SQLException, ClassNotFoundException {
         T result = objectClass.newInstance();
         ClassId classId = objectClass.getAnnotation(ClassId.class);
         Map<Long, Param> objectParams = queryExecutor.getObjectParams(id, classId.id());

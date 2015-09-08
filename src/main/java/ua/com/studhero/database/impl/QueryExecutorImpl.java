@@ -21,7 +21,7 @@ public class QueryExecutorImpl implements QueryExecutor {
     }
 
     @Override
-    public Map<Long, Param> getObjectParams(long objectId, long classId) throws SQLException {
+    public Map<Long, Param> getObjectParams(long objectId, long classId) throws SQLException, ClassNotFoundException {
         return objectParamsPreparedStatement.getObjectParams(objectId, classId);
     }
 
