@@ -16,7 +16,7 @@
         <property name="connector" ref="DBConnector"/>
     </bean>
 
-    <bean id="DBWorcker" class="ua.com.studhero.database.impl.DataBaseWorkerImpl">
+    <bean id="DBWorker" class="ua.com.studhero.database.impl.DataBaseWorkerImpl">
         <property name="queryExecutor" ref="QueryExecutor">
         </property>
     </bean>

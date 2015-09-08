@@ -12,11 +12,6 @@
     <context:component-scan base-package="ua.com.studhero.controllers" />
     <mvc:annotation-driven />
     <import resource="classpath*:spring-config.xml" />
-    <!--bean id="RestDBController" class="ua.com.studhero.controllers.RestDBController">
-        <property name="dataBaseWorker" ref="DBWorcker">
-        </property>
-    </bean-->
-
 
 </beans>
 
