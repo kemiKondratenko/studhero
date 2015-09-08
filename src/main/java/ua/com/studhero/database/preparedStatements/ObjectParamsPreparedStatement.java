@@ -11,10 +11,10 @@ import java.util.Map;
 
 public class ObjectParamsPreparedStatement extends MyPreparedStatement {
 
-    private static final String objectParamsQuery =  "SELECT param_id, param_value, param_type" +
-                                                     " FROM params" +
-                                                     " WHERE object_id = ?" +
-                                                     " AND class_id = ?";
+    private static final String objectParamsQuery =  " SELECT attrs_id, param_value, attrs_type " +
+                                                     " FROM attrs INNER JOIN params on attrs.attrs_id = params.attr_id " +
+                                                     " WHERE object_id = ? " +
+                                                     " AND class_id = ? ";
 
     public ObjectParamsPreparedStatement(Connection connection) throws SQLException {
         super(connection.prepareStatement(objectParamsQuery));
@@ -22,7 +22,7 @@ public class ObjectParamsPreparedStatement extends MyPreparedStatement {
 
     public Map<Long, Param> getObjectParams(long objectId, long classId) throws SQLException, ClassNotFoundException {
         Map<Long, Param> map = new HashMap<Long, Param>();
-        ResultSet result = execute(objectId,classId);
+        ResultSet result = execute(objectId, classId);
         while (result.next()) {
             map.put(result.getLong(1), new Param(result.getObject(2), Class.forName(result.getString(3))));
         }

@@ -10,6 +10,8 @@ import ua.com.studhero.annotations.ClassId;
 public class BaseDBO {
     private long objectId;
 
+    public BaseDBO(){};
+
     public long getObjectId() {
         return objectId;
     }

@@ -1,7 +1,7 @@
 package ua.com.studhero.database.impl;
 
 import ua.com.studhero.annotations.ClassId;
-import ua.com.studhero.annotations.ParamId;
+import ua.com.studhero.annotations.AttrId;
 import ua.com.studhero.database.DataBaseWorker;
 import ua.com.studhero.database.entities.BaseDBO;
 import ua.com.studhero.database.entities.valueholders.Param;
@@ -29,7 +29,7 @@ public class DataBaseWorkerImpl implements DataBaseWorker {
         Map<Long, Param> objectParams = queryExecutor.getObjectParams(id, classId.id());
         for(Field field: objectClass.getDeclaredFields()){
             Class fieldClass = field.getType();
-            long paramId = field.getAnnotation(ParamId.class).id();
+            long paramId = field.getAnnotation(AttrId.class).id();
             field.set(result, objectParams.get(paramId).get(fieldClass));
         }
         return result;
