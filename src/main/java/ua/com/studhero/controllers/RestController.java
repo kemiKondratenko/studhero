@@ -2,7 +2,7 @@ package ua.com.studhero.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import ua.com.studhero.model.entity.DaoMock;
+import ua.com.studhero.database.impl.DataBaseWorkerMock;
 import ua.com.studhero.model.entity.Event;
 
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ import java.util.List;
 @RequestMapping("services")
 public class RestController {
     List<Event> events = new ArrayList<Event>();
-    private DaoMock dao = new DaoMock();
+    private DataBaseWorkerMock dao = new DataBaseWorkerMock();
 
     @RequestMapping(value="/events", method = RequestMethod.GET)
     public @ResponseBody

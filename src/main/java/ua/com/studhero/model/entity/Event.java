@@ -1,11 +1,13 @@
 package ua.com.studhero.model.entity;
 
+import ua.com.studhero.database.entities.BaseDBO;
+
 import java.util.*;
 
 /**
  * @author kaspyar
  */
-public class Event {
+public class Event extends BaseDBO{
    //mandatory
     private int id;
     private Set<Tag> tags;
@@ -23,14 +25,6 @@ public class Event {
     private List<StudentUser> usersToCome;
 
     public Event() {
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public Set<Tag> getTags() {
