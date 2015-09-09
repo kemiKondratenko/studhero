@@ -10,4 +10,8 @@ import java.util.Map;
  */
 public interface QueryExecutor {
     Map<Long, Param> getObjectParams(long objectId, long classId) throws SQLException, ClassNotFoundException;
+
+    boolean saveParameter(long paramId, Object value) throws SQLException;
+
+    boolean createParameter(long objectId, long attrId, Object value) throws SQLException;
 }

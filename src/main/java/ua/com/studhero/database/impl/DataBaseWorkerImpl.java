@@ -23,26 +23,36 @@ public class DataBaseWorkerImpl implements DataBaseWorker {
     private QueryExecutorImpl queryExecutor;
 
     @Override
-    public <T extends BaseDBO> boolean save(T value) {
+    public <T extends BaseDBO> boolean save(T value) throws SQLException, ClassNotFoundException, IllegalAccessException {
+        long objectId = value.getObjectId();
+        for(Field field: value.getClass().getDeclaredFields()) {
+            long attr_id = field.getAnnotation(AttrId.class).id();
+            Object fieldValue = field.get(value);
+            queryExecutor.createParameter(objectId, attr_id, fieldValue);
+        }
         return false;
     }
 
     @Override
-    public <T extends BaseDBO> T get(long id, Class<T> objectClass) throws IllegalAccessException, InstantiationException, SQLException, ClassNotFoundException {
-
-        log.info("START");
+    public <T extends BaseDBO> T get(long id, Class<T> objectClass) throws IllegalAccessException, InstantiationException, SQLException, ClassNotFoundException, NoSuchFieldException {
         T result = objectClass.newInstance();
         log.info(result.toString());
         ClassId classId = objectClass.getAnnotation(ClassId.class);
         log.info(classId.toString());
         Map<Long, Param> objectParams = queryExecutor.getObjectParams(id, classId.id());
-        log.info("PAPAPAPA");
         for(Field field: objectClass.getDeclaredFields()){
-            long paramId = field.getAnnotation(AttrId.class).id();
-            log.info(" param " + paramId);
-            field.set(result, objectParams.get(paramId).get());
+            field.setAccessible(true);
+            long attrId = field.getAnnotation(AttrId.class).id();
+            field.set(result, objectParams.get(attrId).get());
         }
+        setId(result, id);
         return result;
+    }
+
+    private <T extends BaseDBO> void setId(T result, long id) throws NoSuchFieldException, IllegalAccessException {
+        Field f = BaseDBO.class.getDeclaredField("objectId");
+        f.setAccessible(true);
+        f.set(result, id);
     }
 
     @Override

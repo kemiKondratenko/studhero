@@ -9,9 +9,9 @@ import java.sql.SQLException;
  */
 public interface DataBaseWorker {
 
-    public <T extends BaseDBO> boolean save(T value);
+    public <T extends BaseDBO> boolean save(T value) throws SQLException, ClassNotFoundException, IllegalAccessException;
 
-    public <T extends BaseDBO> T get(long id, Class<T> objectClass) throws IllegalAccessException, InstantiationException, SQLException, ClassNotFoundException;
+    public <T extends BaseDBO> T get(long id, Class<T> objectClass) throws IllegalAccessException, InstantiationException, SQLException, ClassNotFoundException, NoSuchFieldException;
 
     public <T extends BaseDBO> boolean update(T object);
 }

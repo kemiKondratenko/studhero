@@ -33,6 +33,21 @@ public class RestDBController {
         return null;
     }
 
+    @RequestMapping(value="/saveToDB", method = RequestMethod.GET)
+    public @ResponseBody
+    Example saveToDB(){
+        try {
+            Example example = new Example();
+            example.setObjectId(3);
+            example.field = 1654646;
+            dataBaseWorker.save(example);
+            return dataBaseWorker.get(3l, Example.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public void setDataBaseWorker(DataBaseWorker dataBaseWorker) {
         this.dataBaseWorker = dataBaseWorker;
     }

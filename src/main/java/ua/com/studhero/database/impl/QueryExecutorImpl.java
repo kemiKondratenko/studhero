@@ -3,7 +3,10 @@ package ua.com.studhero.database.impl;
 import ua.com.studhero.database.Connector;
 import ua.com.studhero.database.QueryExecutor;
 import ua.com.studhero.database.entities.valueholders.Param;
-import ua.com.studhero.database.preparedStatements.ObjectParamsPreparedStatement;
+import ua.com.studhero.database.preparedStatements.AttrIdParamIdForObjectPreparedStatement;
+import ua.com.studhero.database.preparedStatements.GetObjectParamsPreparedStatement;
+import ua.com.studhero.database.preparedStatements.CreateObjectParamsPreparedStatement;
+import ua.com.studhero.database.preparedStatements.SaveObjectParamsPreparedStatement;
 
 import java.sql.SQLException;
 import java.util.Map;
@@ -18,19 +21,43 @@ public class QueryExecutorImpl implements QueryExecutor {
 
     private Connector connector;
 
-    ObjectParamsPreparedStatement objectParamsPreparedStatement;
+    private GetObjectParamsPreparedStatement getobjectParamsPreparedStatement;
+    private CreateObjectParamsPreparedStatement createObjectParamsPreparedStatement;
+    private AttrIdParamIdForObjectPreparedStatement attrIdParamIdForObjectPreparedStatement;
+    private SaveObjectParamsPreparedStatement saveObjectParamsPreparedStatement;
 
     @Override
     public Map<Long, Param> getObjectParams(long objectId, long classId) throws SQLException, ClassNotFoundException {
-        if(objectParamsPreparedStatement == null){
-            log.info("START");
-            objectParamsPreparedStatement = new ObjectParamsPreparedStatement(connector.getConnection());
-            log.info("FIN");
+        if(getobjectParamsPreparedStatement == null){
+            getobjectParamsPreparedStatement = new GetObjectParamsPreparedStatement(connector.getConnection());
         }
-        return objectParamsPreparedStatement.getObjectParams(objectId, classId);
+        return getobjectParamsPreparedStatement.getObjectParams(objectId, classId);
+    }
+
+    @Override
+    public boolean saveParameter(long paramId, Object value) throws SQLException {
+        if(saveObjectParamsPreparedStatement == null){
+            saveObjectParamsPreparedStatement = new SaveObjectParamsPreparedStatement(connector.getConnection());
+        }
+        return saveObjectParamsPreparedStatement.save(paramId, value);
+    }
+
+    @Override
+    public boolean createParameter(long objectId, long attrId, Object value) throws SQLException {
+        if(createObjectParamsPreparedStatement == null){
+            createObjectParamsPreparedStatement = new CreateObjectParamsPreparedStatement(connector.getConnection());
+        }
+        return createObjectParamsPreparedStatement.save(objectId, attrId, value);
     }
 
     public void setConnector(Connector connector) {
         this.connector = connector;
+    }
+
+    public Map<Long, Long> getAttrIdParamIdForObject(long objectId, long id) throws SQLException {
+        if(attrIdParamIdForObjectPreparedStatement == null){
+            attrIdParamIdForObjectPreparedStatement = new AttrIdParamIdForObjectPreparedStatement(connector.getConnection());
+        }
+        return attrIdParamIdForObjectPreparedStatement.get(objectId, id);
     }
 }

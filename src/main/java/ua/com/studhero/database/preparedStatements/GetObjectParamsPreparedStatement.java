@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 
-public class ObjectParamsPreparedStatement extends MyPreparedStatement {
+public class GetObjectParamsPreparedStatement extends MyPreparedStatement {
 
     Logger log = Logger.getLogger("Logger");
 
@@ -20,7 +20,7 @@ public class ObjectParamsPreparedStatement extends MyPreparedStatement {
                                                      " WHERE object_id = ? " +
                                                      " AND class_id = ? ";
 
-    public ObjectParamsPreparedStatement(Connection connection) throws SQLException {
+    public GetObjectParamsPreparedStatement(Connection connection) throws SQLException {
         super(connection.prepareStatement(objectParamsQuery));
     }
 
