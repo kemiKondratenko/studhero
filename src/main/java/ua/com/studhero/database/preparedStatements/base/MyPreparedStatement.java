@@ -1,4 +1,4 @@
-package ua.com.studhero.database.preparedStatements;
+package ua.com.studhero.database.preparedStatements.base;
 
 import java.sql.PreparedStatement;
 

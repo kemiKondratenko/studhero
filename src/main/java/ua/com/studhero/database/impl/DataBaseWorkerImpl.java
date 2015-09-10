@@ -2,14 +2,12 @@ package ua.com.studhero.database.impl;
 
 import ua.com.studhero.annotations.ClassId;
 import ua.com.studhero.annotations.AttrId;
-import ua.com.studhero.database.Connector;
 import ua.com.studhero.database.DataBaseWorker;
 import ua.com.studhero.database.entities.BaseDBO;
 import ua.com.studhero.database.entities.valueholders.Param;
 
 import java.lang.reflect.Field;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -23,14 +21,15 @@ public class DataBaseWorkerImpl implements DataBaseWorker {
     private QueryExecutorImpl queryExecutor;
 
     @Override
-    public <T extends BaseDBO> boolean save(T value) throws SQLException, ClassNotFoundException, IllegalAccessException {
-        long objectId = value.getObjectId();
+    public <T extends BaseDBO> long save(T value) throws SQLException, ClassNotFoundException, IllegalAccessException {
+        long objectId =  queryExecutor.createNewObject("pipipipi");
         for(Field field: value.getClass().getDeclaredFields()) {
+            field.setAccessible(true);
             long attr_id = field.getAnnotation(AttrId.class).id();
             Object fieldValue = field.get(value);
             queryExecutor.createParameter(objectId, attr_id, fieldValue);
         }
-        return false;
+        return objectId;
     }
 
     @Override

@@ -9,7 +9,7 @@ import java.sql.SQLException;
  */
 public interface DataBaseWorker {
 
-    public <T extends BaseDBO> boolean save(T value) throws SQLException, ClassNotFoundException, IllegalAccessException;
+    public <T extends BaseDBO> long save(T value) throws SQLException, ClassNotFoundException, IllegalAccessException;
 
     public <T extends BaseDBO> T get(long id, Class<T> objectClass) throws IllegalAccessException, InstantiationException, SQLException, ClassNotFoundException, NoSuchFieldException;
 

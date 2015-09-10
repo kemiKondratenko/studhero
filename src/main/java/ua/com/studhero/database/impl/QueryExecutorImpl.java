@@ -3,10 +3,7 @@ package ua.com.studhero.database.impl;
 import ua.com.studhero.database.Connector;
 import ua.com.studhero.database.QueryExecutor;
 import ua.com.studhero.database.entities.valueholders.Param;
-import ua.com.studhero.database.preparedStatements.AttrIdParamIdForObjectPreparedStatement;
-import ua.com.studhero.database.preparedStatements.GetObjectParamsPreparedStatement;
-import ua.com.studhero.database.preparedStatements.CreateObjectParamsPreparedStatement;
-import ua.com.studhero.database.preparedStatements.SaveObjectParamsPreparedStatement;
+import ua.com.studhero.database.preparedStatements.*;
 
 import java.sql.SQLException;
 import java.util.Map;
@@ -25,6 +22,7 @@ public class QueryExecutorImpl implements QueryExecutor {
     private CreateObjectParamsPreparedStatement createObjectParamsPreparedStatement;
     private AttrIdParamIdForObjectPreparedStatement attrIdParamIdForObjectPreparedStatement;
     private SaveObjectParamsPreparedStatement saveObjectParamsPreparedStatement;
+    private CreateNewObjectPreparedStatement createNewObjectPreparedStatement;
 
     @Override
     public Map<Long, Param> getObjectParams(long objectId, long classId) throws SQLException, ClassNotFoundException {
@@ -59,5 +57,12 @@ public class QueryExecutorImpl implements QueryExecutor {
             attrIdParamIdForObjectPreparedStatement = new AttrIdParamIdForObjectPreparedStatement(connector.getConnection());
         }
         return attrIdParamIdForObjectPreparedStatement.get(objectId, id);
+    }
+
+    public long createNewObject(String name) throws SQLException {
+        if(createNewObjectPreparedStatement == null){
+            createNewObjectPreparedStatement = new CreateNewObjectPreparedStatement(connector.getConnection());
+        }
+        return createNewObjectPreparedStatement.create(name);
     }
 }

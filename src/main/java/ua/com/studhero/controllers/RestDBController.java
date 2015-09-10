@@ -7,6 +7,7 @@ import ua.com.studhero.database.entities.Example;
 import ua.com.studhero.database.impl.DataBaseWorkerMock;
 import ua.com.studhero.model.entity.Company;
 import ua.com.studhero.model.entity.Event;
+import ua.com.studhero.model.entity.User;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -33,13 +34,12 @@ public class RestDBController {
 
     @RequestMapping(value="/saveToDB", method = RequestMethod.GET)
     public @ResponseBody
-    Example saveToDB(){
+    User saveToDB(){
         try {
-            Example example = new Example();
-            example.setObjectId(3);
-            example.field = 1654646;
-            dataBaseWorker.save(example);
-            return dataBaseWorker.get(3l, Example.class);
+            User example = new User();
+            example.setEmail("mySuperMail@gmail");
+            example.setPassword("MysecretPass");
+            return dataBaseWorker.get(dataBaseWorker.save(example), User.class);
         } catch (Exception e) {
             e.printStackTrace();
         }

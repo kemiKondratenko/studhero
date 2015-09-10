@@ -11,4 +11,8 @@ public class Example extends BaseDBO{
 
     @AttrId( id = 1)
     public Integer field;
+
+
+    @AttrId( id = 29)
+    public String string;
 }

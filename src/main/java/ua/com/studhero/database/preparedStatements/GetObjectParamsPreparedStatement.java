@@ -2,6 +2,8 @@ package ua.com.studhero.database.preparedStatements;
 
 import ua.com.studhero.database.entities.valueholders.IntParam;
 import ua.com.studhero.database.entities.valueholders.Param;
+import ua.com.studhero.database.entities.valueholders.StringParam;
+import ua.com.studhero.database.preparedStatements.base.MyPreparedStatement;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -37,6 +39,8 @@ public class GetObjectParamsPreparedStatement extends MyPreparedStatement {
         String type = result.getString(3);
         if(IntParam.INTPARAM.equals(type))
             return new IntParam(result.getInt(2));
+        if(StringParam.STRINGPARAM.equals(type))
+            return new StringParam(result.getString(2));
         return null;
     }
 

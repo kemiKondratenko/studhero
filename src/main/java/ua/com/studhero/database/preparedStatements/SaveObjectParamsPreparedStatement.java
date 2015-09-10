@@ -1,5 +1,7 @@
 package ua.com.studhero.database.preparedStatements;
 
+import ua.com.studhero.database.preparedStatements.base.MyPreparedStatement;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 

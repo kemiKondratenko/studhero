@@ -1,5 +1,7 @@
 package ua.com.studhero.database.preparedStatements;
 
+import ua.com.studhero.database.preparedStatements.base.MyPreparedStatement;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,7 +11,7 @@ import java.util.Map;
 /**
  * Created by Eugene on 09.09.2015.
  */
-public class AttrIdParamIdForObjectPreparedStatement extends MyPreparedStatement{
+public class AttrIdParamIdForObjectPreparedStatement extends MyPreparedStatement {
 
     private static final String attrIdParamIdForObjectPreparedStatement =
                     " SELECT  attrs_id, param_id " +
