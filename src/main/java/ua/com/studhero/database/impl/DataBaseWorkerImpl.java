@@ -3,11 +3,14 @@ package ua.com.studhero.database.impl;
 import ua.com.studhero.annotations.ClassId;
 import ua.com.studhero.annotations.AttrId;
 import ua.com.studhero.database.DataBaseWorker;
+import ua.com.studhero.database.constants.RelationshipTypes;
 import ua.com.studhero.database.entities.BaseDBO;
 import ua.com.studhero.database.entities.valueholders.Param;
 
 import java.lang.reflect.Field;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -21,14 +24,17 @@ public class DataBaseWorkerImpl implements DataBaseWorker {
     private QueryExecutorImpl queryExecutor;
 
     @Override
-    public <T extends BaseDBO> long save(T value) throws SQLException, ClassNotFoundException, IllegalAccessException {
+    public <T extends BaseDBO> long save(T value) throws SQLException, ClassNotFoundException, IllegalAccessException, NoSuchFieldException {
         long objectId =  queryExecutor.createNewObject("pipipipi");
+        long classId = value.getClass().getAnnotation(ClassId.class).id();
+        queryExecutor.objectClassRelationship(objectId, classId, RelationshipTypes.primary);
         for(Field field: value.getClass().getDeclaredFields()) {
             field.setAccessible(true);
             long attr_id = field.getAnnotation(AttrId.class).id();
             Object fieldValue = field.get(value);
-            queryExecutor.createParameter(objectId, attr_id, fieldValue);
+            queryExecutor.createParameter(objectId, attr_id, fieldValue, classId);
         }
+        setId(value, objectId);
         return objectId;
     }
 
@@ -45,6 +51,16 @@ public class DataBaseWorkerImpl implements DataBaseWorker {
             field.set(result, objectParams.get(attrId).get());
         }
         setId(result, id);
+        return result;
+    }
+
+    @Override
+    public <T extends BaseDBO> List<T> get(Class<T> objectClass) throws IllegalAccessException, InstantiationException, SQLException, ClassNotFoundException, NoSuchFieldException {
+        List<Long> objects = queryExecutor.getObjectsByClass(objectClass.getAnnotation(ClassId.class).id(), RelationshipTypes.primary);
+        List<T> result = new ArrayList<T>();
+        for (Long id: objects){
+            result.add(get(id, objectClass));
+        }
         return result;
     }
 

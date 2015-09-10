@@ -6,6 +6,7 @@ import ua.com.studhero.database.entities.valueholders.Param;
 import ua.com.studhero.database.preparedStatements.*;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -23,6 +24,8 @@ public class QueryExecutorImpl implements QueryExecutor {
     private AttrIdParamIdForObjectPreparedStatement attrIdParamIdForObjectPreparedStatement;
     private SaveObjectParamsPreparedStatement saveObjectParamsPreparedStatement;
     private CreateNewObjectPreparedStatement createNewObjectPreparedStatement;
+    private ObjectClassRelationshipPreparedStatement objectClassRelationshipPreparedStatement;
+    private GetObjectsByClassPreparedStatement getObjectsByClassPreparedStatement;
 
     @Override
     public Map<Long, Param> getObjectParams(long objectId, long classId) throws SQLException, ClassNotFoundException {
@@ -41,11 +44,11 @@ public class QueryExecutorImpl implements QueryExecutor {
     }
 
     @Override
-    public boolean createParameter(long objectId, long attrId, Object value) throws SQLException {
+    public boolean createParameter(long objectId, long attrId, Object value, long classId) throws SQLException {
         if(createObjectParamsPreparedStatement == null){
             createObjectParamsPreparedStatement = new CreateObjectParamsPreparedStatement(connector.getConnection());
         }
-        return createObjectParamsPreparedStatement.save(objectId, attrId, value);
+        return createObjectParamsPreparedStatement.save(objectId, attrId, value, classId);
     }
 
     public void setConnector(Connector connector) {
@@ -64,5 +67,19 @@ public class QueryExecutorImpl implements QueryExecutor {
             createNewObjectPreparedStatement = new CreateNewObjectPreparedStatement(connector.getConnection());
         }
         return createNewObjectPreparedStatement.create(name);
+    }
+
+    public void objectClassRelationship(long objectId, long classId, long typeId) throws SQLException {
+        if(objectClassRelationshipPreparedStatement == null){
+            objectClassRelationshipPreparedStatement = new ObjectClassRelationshipPreparedStatement(connector.getConnection());
+        }
+        objectClassRelationshipPreparedStatement.create(objectId, classId, typeId);
+    }
+
+    public List<Long> getObjectsByClass(long classId, long primary) throws SQLException {
+        if(getObjectsByClassPreparedStatement == null){
+            getObjectsByClassPreparedStatement = new GetObjectsByClassPreparedStatement(connector.getConnection());
+        }
+        return getObjectsByClassPreparedStatement.get(classId, primary);
     }
 }

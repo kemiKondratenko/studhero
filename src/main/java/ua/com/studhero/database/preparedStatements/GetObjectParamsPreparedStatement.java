@@ -17,7 +17,7 @@ public class GetObjectParamsPreparedStatement extends MyPreparedStatement {
 
     Logger log = Logger.getLogger("Logger");
 
-    private static final String objectParamsQuery =  " SELECT attrs_id, param_value, attrs_type " +
+    private static final String objectParamsQuery =  " SELECT attrs_id, param_value, attrs_type_id " +
                                                      " FROM attrs INNER JOIN params on attrs.attrs_id = params.attr_id " +
                                                      " WHERE object_id = ? " +
                                                      " AND class_id = ? ";
@@ -36,10 +36,10 @@ public class GetObjectParamsPreparedStatement extends MyPreparedStatement {
     }
 
     private Param createParam(ResultSet result) throws SQLException {
-        String type = result.getString(3);
-        if(IntParam.INTPARAM.equals(type))
+        long type = result.getLong(3);
+        if(IntParam.INTPARAM == type)
             return new IntParam(result.getInt(2));
-        if(StringParam.STRINGPARAM.equals(type))
+        if(StringParam.STRINGPARAM == type)
             return new StringParam(result.getString(2));
         return null;
     }

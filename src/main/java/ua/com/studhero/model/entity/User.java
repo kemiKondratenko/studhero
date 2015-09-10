@@ -10,9 +10,9 @@ import ua.com.studhero.database.entities.BaseDBO;
 @ClassId(id = 6)
 public class User extends BaseDBO{
 
-    @AttrId(id = 30)
+    @AttrId(id = 32)
     private String email;
-    @AttrId(id = 31)
+    @AttrId(id = 33)
     private String password;
 
     public User() {

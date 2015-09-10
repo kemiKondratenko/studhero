@@ -13,5 +13,5 @@ public interface QueryExecutor {
 
     boolean saveParameter(long paramId, Object value) throws SQLException;
 
-    boolean createParameter(long objectId, long attrId, Object value) throws SQLException;
+    boolean createParameter(long objectId, long attrId, Object value, long classId) throws SQLException;
 }
