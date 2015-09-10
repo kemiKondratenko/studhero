@@ -1,5 +1,6 @@
 package ua.com.studhero.database.impl;
 
+import ua.com.studhero.database.entities.BaseDBO;
 import ua.com.studhero.model.entity.Company;
 import ua.com.studhero.model.entity.Event;
 import ua.com.studhero.model.entity.Tag;

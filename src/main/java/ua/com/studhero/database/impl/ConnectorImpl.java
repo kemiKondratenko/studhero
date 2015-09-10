@@ -3,6 +3,7 @@ package ua.com.studhero.database.impl;
 import ua.com.studhero.database.Connector;
 import ua.com.studhero.database.DataBaseConstants;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -12,22 +13,19 @@ import java.sql.SQLException;
  */
 public class ConnectorImpl implements Connector{
 
-    private Connection connection = null;
-
-    public ConnectorImpl(String s, String s2, String s23) {
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            connection = DriverManager
-                    .getConnection(s, s2, s23);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
+    private DataSource dataSource;
 
     @Override
     public Connection getConnection() {
-        return connection;
+        try {
+            return dataSource.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 }

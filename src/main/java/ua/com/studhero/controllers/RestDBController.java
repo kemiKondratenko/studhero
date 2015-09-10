@@ -3,6 +3,7 @@ package ua.com.studhero.controllers;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ua.com.studhero.database.DataBaseWorker;
+import ua.com.studhero.database.entities.BaseDBO;
 import ua.com.studhero.database.entities.Example;
 import ua.com.studhero.database.impl.DataBaseWorkerMock;
 import ua.com.studhero.model.entity.Company;
@@ -10,6 +11,9 @@ import ua.com.studhero.model.entity.Event;
 import ua.com.studhero.model.entity.User;
 
 import javax.inject.Inject;
+import javax.sql.DataSource;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -26,10 +30,29 @@ public class RestDBController {
     private DataBaseWorker dataBaseWorker;
     private DataBaseWorkerMock dataBaseWorkerMock = new DataBaseWorkerMock();
 
+    @RequestMapping(value="/login", method = RequestMethod.GET)
+    public @ResponseBody
+    BaseDBO login(){
+        return dataBaseWorker.login("mySuperMail@gmail", "MysecretPass");
+    }
+
     @RequestMapping(value="/events/getEvents", method = RequestMethod.GET)
     public @ResponseBody
-    List<Event> getFromDB(){
-        return dataBaseWorkerMock.getAllEvents();
+    List<User> getFromDB(){
+        try {
+            return dataBaseWorker.get(User.class);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @RequestMapping(value="/saveToDB", method = RequestMethod.GET)
@@ -44,6 +67,17 @@ public class RestDBController {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @RequestMapping(value="/getDataSO", method = RequestMethod.GET)
+    public @ResponseBody
+    String  newM(){
+        try {
+            Class.forName("javax.sql.DataSource");
+        } catch (Exception e) {
+            return "fail";
+        }
+        return "secces";
     }
 
     @RequestMapping(value="/companies", method = RequestMethod.GET)
