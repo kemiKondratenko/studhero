@@ -1,0 +1,604 @@
+/*
+MAIN
+*   1. Main styles
+*   2. Main menu
+*   2. Header
+*   2. Login
+*   2. Registration
+*   2. Footer
+PAGES
+*   3. Index page
+*   4. Events
+*   5. Students page
+*   6. Employers page
+ADDITIONAL
+*   1. Buttons
+*   2. Search bar
+*
+*/
+
+/* Main styles START */
+@charset "utf-8";
+
+body{
+    font-family: 'PT Sans';
+}
+h2{
+    font-family: 'PT Sans';
+}
+.btn{
+    font-family: 'PT Sans';
+}
+
+.header
+{
+    background: #32374e;
+    height: 60px;
+    position: fixed;
+    width: 100%;
+    z-index:9999;
+}
+
+.white-bg
+{
+    background-color: #ffffff;
+    padding-bottom: 20px;
+}
+.green-bg
+{
+    background-color: #8ab839;
+}
+
+.text-success{
+    color: #8ab839;
+}
+a{
+    color: #ffffff;
+}
+a:hover{
+    color: #8ab839;
+}
+
+.container{
+    margin-bottom: 20px;
+}
+
+.container-first{
+    margin-top: 60px;
+}
+
+.pagination-block{
+    float: none;
+}
+.pagination li > a:active{
+    background-color: #8AB839;
+}
+
+li:hover > .fa-check{
+    font-size: 30px;
+    transition-duration: 0.8s;
+}
+
+/* Main styles END */
+
+/* Main menu START */
+
+.logo
+{
+    color: #fa3447;
+    font-weight: 100;
+    font-size: 30px;
+    padding: 0px !important;
+    line-height: 60px;
+    -webkit-user-select: none;  /* Chrome all / Safari all */
+    -moz-user-select: none;     /* Firefox all */
+    -ms-user-select: none;      /* IE 10+ */
+    user-select: none;
+    text-decoration: none;
+    text-decoration-line: none;
+    cursor: pointer;
+
+}
+.logo:hover, logo:active
+{
+    color: #fff;
+    text-decoration: none;
+}
+.menu{
+    margin:0px !important;
+    border: none;
+}
+.menu li:focus, .menu li a:focus, .btn:focus {
+    outline: 0;
+}
+.menu li a
+{
+    color: #8ab839;
+    font-weight:500;
+    font-family: 'Poppins', sans-serif;
+    line-height: 29px;
+    background-color: #32374e;
+    z-index:999;
+
+}
+.menu li a:hover
+{
+    background-color: #32374e;
+    color:#fff;
+}
+
+
+.main-background
+{	
+    background-attachment:fixed;
+    background-color: #645862;
+    background-image:  url("/images/main-bg-min.jpg");
+    background-position: top center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: white;
+    cursor: default;
+    padding: 200px 0 120px;
+    text-align: center;
+    width: 100%;
+    float: left;
+}
+
+#create-event-block .main-background {
+    padding-top: 100px;
+}
+
+@-moz-keyframes reveal-banner { 0% { opacity: 0; } 100% { opacity: 1; } }
+@-webkit-keyframes reveal-banner { 0% { opacity: 0; } 100% { opacity: 1; } }
+@-o-keyframes reveal-banner { 0% { opacity: 0; } 100% { opacity: 1; } }
+@-ms-keyframes reveal-banner { 0% { opacity: 0; } 100% { opacity: 1; } }
+@keyframes reveal-banner { 0% { opacity: 0; } 100% { opacity: 1; } }
+
+.inner, .inner-left
+{
+    -moz-animation: reveal-banner 1s 0.25s ease-in-out;
+    -webkit-animation: reveal-banner 1s 0.25s ease-in-out;
+    -o-animation: reveal-banner 1s 0.25s ease-in-out;
+    -ms-animation: reveal-banner 1s 0.25s ease-in-out;
+    animation: reveal-banner 1s 0.25s ease-in-out;
+    -moz-animation-fill-mode: forwards;
+    -webkit-animation-fill-mode: forwards;
+    -o-animation-fill-mode: forwards;
+    -ms-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+    background: rgba(33, 42, 63, 0.5);
+    color: white;
+    display: inline-block;
+    opacity: 0;
+    padding: 20px 40px;
+    text-align: center;
+    height: 340px;
+
+}
+.inner-left
+{    
+    background: rgba(33, 42, 63, 0.5);    
+    font-weight: 700;
+    line-height: 29px;
+    text-align: left;
+    line-height: 3;
+    font-size: 20px;
+
+}
+
+/* Main menu END */
+
+
+/* Buttons START */
+
+.btn{
+    letter-spacing: 1px;
+}
+
+.btn-main-green
+{
+    background-color: #8ab839;
+    border: none;
+    color: #fff;
+    padding: 15px;
+    font-size: 17px;    
+}
+.btn-main-green:hover
+{
+    background-color: #b2dba1;    
+    color: #fff;
+}
+
+.btn-main-white
+{
+    background-color: #ffffff;
+    border: none;
+    color: #8ab839;
+    padding: 15px;
+    font-size: 17px;    
+}
+.btn-main-white:hover
+{
+    background-color: #dbdbdb;   
+    color: #8ab839;
+}
+
+.menu-button
+{
+    color: #fff;
+    font-size: 30px;
+    margin:0px !important;
+    padding:14px;
+}
+
+.btn-sub {
+    color: #fff;
+    background-color: #8AB839;
+    border-color: #fff;
+    font-size: 18px;
+    padding: 10px 30px;
+}
+/* Buttons END */
+
+.nav-tabs li{
+    cursor: pointer;
+}
+
+/* Registration START */
+#registrate-block .main-background{
+    padding-top: 100px;
+}
+#registrate-block #registarteForm{
+    padding: 20px;
+}
+.form-group label{
+    float: left;
+}
+/* Registration END */
+
+/* Footer START */
+.footer {
+    margin: 20px 0px 10px;
+    float: left;
+    text-align: center;
+    width: 100%;
+}
+.footer p {
+    text-align:  center;
+
+    font-family: 'Poppins', sans-serif;
+}
+.footer p a {
+    color: #8AB839;
+    font-family: 'Poppins', sans-serif;
+}
+/* Footer END */
+
+/* Students page START */
+#login-page .btn-main-green{
+    width: 100%;
+    margin-bottom: 5px;
+}
+#login-page .row{
+    text-align: left;
+}
+.alert-error{
+    color: #fa3447;
+}
+.main-background .row{
+    background: rgba(33, 42, 63, 0.5);
+    padding: 20px;
+}
+/* Students page END */
+
+/* Students page START */
+#employers .btn-main-green{
+    width: 100%;
+    margin-bottom: 5px;
+}
+#employers .row{
+    text-align: left;
+}
+/* Students page END */
+
+
+.input-group .input-group-btn{
+    display: block;
+}
+
+
+
+.login-form h4{
+    color: #000000;
+}
+.text-box
+{
+    font-family: 'Poppins', sans-serif;
+}
+.text-box p.intro
+{
+    font-size: 30px;
+    font-weight: 300;
+    line-height: 1;
+    font-family: 'Poppins', sans-serif;
+}
+.text-box h2
+{
+    font-size: 55px;
+    font-weight: 700;
+    color: #fff;
+    border-bottom: 7px double #fa3447;
+    border-top: 7px double #fa3447;
+    text-transform: uppercase;
+    line-height: 1.5;
+}
+.text-box h3
+{
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 1;
+}
+.text-box p
+{
+    font-size: 10px;
+    font-weight: 400;
+}
+.text-box p span
+{
+    font-size: 15px;
+    font-weight: 400;
+    color: #83D3C9;
+}
+.text-box p span a
+{
+    text-decoration: none;
+    color: #8AB839;
+    font-size: 15px;
+}
+.text-box p a.link-button
+{
+    text-decoration: none;
+    color: #fff;
+    border: #fff solid 1px;
+    padding: 15px 22px;
+    margin-top: 20px;
+    line-height: 4;
+    font-size: 18px;
+    font-weight: 400;
+    background: rgba(255, 255, 255, 0.1);
+    transition: all 0.2s ease-in-out;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+}
+.text-box p a.link-button:hover
+{
+    background: rgba(255, 255, 255, 0.3);
+}
+.some-notes
+{
+    padding: 40px 0px;
+    float: left;
+}
+.title h2
+{
+    font-weight: 300;
+    font-size: 42px;
+    text-align: center;
+    color: #8AB839;
+    text-transform: uppercase;
+}
+.desc p
+{
+    width: 75%;
+    margin: 0 auto;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    color: #2E2E2E;
+    font-size: 16px;
+    text-align: center;
+    line-height: 25px;
+
+}
+.desc p a
+{
+    text-decoration: none;
+    color: #8ab839;
+}
+
+h2.features-text::after {
+    display: block;
+    margin: 17px auto 0px;
+    width: 80px;
+    height: 1px;
+    background: #FFF none repeat scroll 0% 0%;
+    content: "";
+}
+
+.iconing
+{
+    text-align: center;
+    width:80px;
+    margin:0 auto;
+
+}
+.iconing i
+{
+    font-size: 35px;
+    text-align: center;
+    color: #fff;
+    border: 1px solid #fff;
+    display: block;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    width: 80px;
+    height: 80px;
+    line-height: 80px;
+}
+.icon-box
+{
+    margin:30px 0px;
+}
+.icon-box:hover .iconing i{
+    font-size: 50px;
+    transition-duration: 0.5s;
+}
+
+.icon-text-box h4
+{
+    color: #2e2e2e;
+    font-weight: 400;
+    font-size: 25px;
+
+}
+.icon-text-box p
+{
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    font-size: 15px;
+    color: #2E2E2E;
+}
+.notes
+{
+    background-attachment:fixed;
+    background-color: #645862;
+    background-image:  url("/images/main-bg.jpg");
+    background-position: top center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: white;
+    cursor: default;
+    text-align: center;
+    width: 100%;
+    float: left;
+}
+.notes-bg
+{
+    background: rgba(33, 42, 63, 0.9);
+    padding: 80px 0px;
+}
+.notes-bg p
+{
+    font-size: 17px;
+    margin:0px !important;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 300;
+    line-height: 30px;
+}
+
+.white-bg h2::after, .green-bg h2::after {
+    display: block;
+    margin: 17px auto 0px;
+    width: 80px;
+    height: 1px;
+    background: #8ab839 none repeat scroll 0% 0%;
+    content: "";
+}
+
+.green-bg h2::after{
+     background: #ffffff none repeat scroll 0% 0%;
+}
+
+
+#events a .featured-img
+{
+    width: 100%;
+}
+#events a .featured-img img
+{
+    width: 100%;
+    height: 200px;
+    float: left;
+    position: relative;	}
+
+@keyframes imagehover {
+    0%   {height: 40px;}
+    25%  {height: 80px;}
+    50%  {height: 120px;}
+    75%  {height: 160px;}
+    100% {height: 200px;}
+}
+.image-hover {
+    display: none;
+    position: absolute;
+    background: none repeat scroll 0% 0% rgba(255, 255, 255, 0.5);
+    text-align: center;
+    width: 100%;
+    height: 200px;
+    float: left;
+
+}
+.image-hover i{
+    color: rgba(138, 184, 57, 0);
+    font-size:30px;
+    line-height: 200px;
+    transition: 5s color ease-in;
+    display: none;
+}
+.image-hover:hover i
+{	display: block;
+  color: #32374e;
+}
+#events a h3 {
+    text-align: center;
+    padding: 15px 0px;
+    font-size: 15px;
+    float: left;
+    width: 100%;
+    font-weight: 600;
+    background: #8ab839;
+    color:#fff;
+    margin:0px;
+}
+#events a:hover .image-hover
+{
+    display: block;
+    animation: 0.4s ease-in 0s normal none 1 running imagehover;
+
+}
+.work-space
+{
+    margin: 20px 0px;
+}
+
+.active
+{
+    color:#fff !important;
+}
+.nav li a:focus
+{
+    background: #32374e;
+    color: #fff;
+}
+.nav li a:active
+{
+    color: #fff;
+}
+#menu .btn-main-green{
+    padding: 5px !important;
+    margin-top: 12px;
+    width: 120px;
+}
+
+.contact
+{
+    padding: 60px 0px;
+    float: left;
+    width: 100%;
+}
+.contact-form
+{
+    padding-top: 22px;
+}
+
+.address p i {
+    padding-right: 10px;
+    font-size: 15px;
+    color: #8AB839;
+}
+
+/* Main search bar START */
+
+
+/* Main search bar END */ 
+
+

@@ -1,5 +1,7 @@
 package ua.com.studhero.model.entity;
 
+import ua.com.studhero.annotations.AttrId;
+import ua.com.studhero.annotations.ClassId;
 import ua.com.studhero.database.entities.BaseDBO;
 
 import java.util.*;
@@ -7,18 +9,25 @@ import java.util.*;
 /**
  * @author kaspyar
  */
+@ClassId(id = 9)
 public class Event extends BaseDBO{
-   //mandatory
-    private int id;
+
     private Set<Tag> tags;
-    private Company company;
+    @AttrId(id = 39)
+    private long company;
+    @AttrId(id = 34)
     private String name;
     private GregorianCalendar calendar;
     private String photoUrl;
+    @AttrId(id = 40)
     private String descriptionShort;
+    @AttrId(id = 41)
     private String getDescriptionLong;
+    @AttrId(id = 35)
     private Status status;
+    @AttrId(id = 42)
     private int maxAmount;
+    @AttrId(id = 43)
     private int registered;
 
     //not mandatory
@@ -35,11 +44,11 @@ public class Event extends BaseDBO{
         this.tags = tags;
     }
 
-    public Company getCompany() {
+    public long getCompany() {
         return company;
     }
 
-    public void setCompany(Company company) {
+    public void setCompany(long company) {
         this.company = company;
     }
 

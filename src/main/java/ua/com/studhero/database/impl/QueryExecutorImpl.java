@@ -26,6 +26,8 @@ public class QueryExecutorImpl implements QueryExecutor {
     private CreateNewObjectPreparedStatement createNewObjectPreparedStatement;
     private ObjectClassRelationshipPreparedStatement objectClassRelationshipPreparedStatement;
     private GetObjectsByClassPreparedStatement getObjectsByClassPreparedStatement;
+    private GetObjectIdByUserPreparedStatement getObjectIdByUserPreparedStatement;
+    private GetPrimaryClassIdPreparedStatement getPrimaryClassIdPreparedStatement;
 
     @Override
     public Map<Long, Param> getObjectParams(long objectId, long classId) throws SQLException, ClassNotFoundException {
@@ -81,5 +83,19 @@ public class QueryExecutorImpl implements QueryExecutor {
             getObjectsByClassPreparedStatement = new GetObjectsByClassPreparedStatement(connector.getConnection());
         }
         return getObjectsByClassPreparedStatement.get(classId, primary);
+    }
+
+    public long getObjectIdByUser(String email, String password) throws SQLException {
+        if(getObjectIdByUserPreparedStatement == null){
+            getObjectIdByUserPreparedStatement = new GetObjectIdByUserPreparedStatement(connector.getConnection());
+        }
+        return getObjectIdByUserPreparedStatement.get(email, password);
+    }
+
+    public long getPrimaryClassId(long id) throws SQLException {
+        if(getPrimaryClassIdPreparedStatement == null){
+            getPrimaryClassIdPreparedStatement = new GetPrimaryClassIdPreparedStatement(connector.getConnection());
+        }
+        return getPrimaryClassIdPreparedStatement.get(id);
     }
 }

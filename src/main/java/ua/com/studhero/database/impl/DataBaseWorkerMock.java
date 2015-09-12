@@ -35,7 +35,7 @@ public class DataBaseWorkerMock {
         event.setObjectId(2l);
         event.setName("Event1");
         event.setCalendar(new GregorianCalendar(Calendar.YEAR, Calendar.MONTH, Calendar.DAY_OF_MONTH));
-        event.setCompany(company);
+        event.setCompany(1);
         event.setDescriptionShort("Short description Event1");
         event.setGetDescriptionLong("Long description Event1");
         event.setMaxAmount(100);
@@ -46,7 +46,7 @@ public class DataBaseWorkerMock {
         event1.setObjectId(3l);
         event1.setName("Event2");
         event1.setCalendar(new GregorianCalendar(Calendar.YEAR, Calendar.MONTH, Calendar.DAY_OF_MONTH));
-        event1.setCompany(company);
+        event1.setCompany(1);
         event1.setDescriptionShort("Short description Event2");
         event1.setGetDescriptionLong("Long description Event2");
         event1.setMaxAmount(20);

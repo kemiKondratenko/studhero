@@ -1,5 +1,7 @@
 package ua.com.studhero.model.entity;
 
+import ua.com.studhero.annotations.AttrId;
+import ua.com.studhero.annotations.ClassId;
 import ua.com.studhero.database.entities.BaseDBO;
 
 import java.util.List;
@@ -8,12 +10,16 @@ import java.util.Set;
 /**
  * @author KaspYar
  */
+@ClassId(id = 7)
 public class StudentUser extends BaseDBO {
     //mandatory
+    @AttrId(id = 36)
     private String firstName;
+    @AttrId(id = 37)
     private String lastName;
     private String username;
     // not mandatory
+    @AttrId(id = 38)
     private String city;
     private Set<Tag> interests;
     private List<Event> events;

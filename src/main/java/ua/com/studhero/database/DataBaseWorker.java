@@ -1,6 +1,7 @@
 package ua.com.studhero.database;
 
 import ua.com.studhero.database.entities.BaseDBO;
+import ua.com.studhero.model.entity.User;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -17,4 +18,8 @@ public interface DataBaseWorker {
     public <T extends BaseDBO> List<T> get(Class<T> objectClass) throws IllegalAccessException, InstantiationException, SQLException, ClassNotFoundException, NoSuchFieldException;
 
     public <T extends BaseDBO> boolean update(T object);
+
+    long getIdIfExists(User example) throws SQLException;
+
+    long getPrimaryClassId(long id) throws SQLException;
 }

@@ -6,6 +6,7 @@ import ua.com.studhero.database.DataBaseWorker;
 import ua.com.studhero.database.constants.RelationshipTypes;
 import ua.com.studhero.database.entities.BaseDBO;
 import ua.com.studhero.database.entities.valueholders.Param;
+import ua.com.studhero.model.entity.User;
 
 import java.lang.reflect.Field;
 import java.sql.SQLException;
@@ -30,7 +31,10 @@ public class DataBaseWorkerImpl implements DataBaseWorker {
         queryExecutor.objectClassRelationship(objectId, classId, RelationshipTypes.primary);
         for(Field field: value.getClass().getDeclaredFields()) {
             field.setAccessible(true);
-            long attr_id = field.getAnnotation(AttrId.class).id();
+            long attr_id;
+            if(field.getAnnotation(AttrId.class) != null)
+                attr_id = field.getAnnotation(AttrId.class).id();
+            else continue;
             Object fieldValue = field.get(value);
             queryExecutor.createParameter(objectId, attr_id, fieldValue, classId);
         }
@@ -47,8 +51,13 @@ public class DataBaseWorkerImpl implements DataBaseWorker {
         Map<Long, Param> objectParams = queryExecutor.getObjectParams(id, classId.id());
         for(Field field: objectClass.getDeclaredFields()){
             field.setAccessible(true);
-            long attrId = field.getAnnotation(AttrId.class).id();
-            field.set(result, objectParams.get(attrId).get());
+            long attrId;
+            if(field.getAnnotation(AttrId.class) != null)
+                attrId = field.getAnnotation(AttrId.class).id();
+            else continue;
+            Param<?> param = objectParams.get(attrId);
+            if(param != null)
+                field.set(result, param.get());
         }
         setId(result, id);
         return result;
@@ -73,6 +82,16 @@ public class DataBaseWorkerImpl implements DataBaseWorker {
     @Override
     public <T extends BaseDBO> boolean update(T object) {
         return false;
+    }
+
+    @Override
+    public long getIdIfExists(User object) throws SQLException {
+        return queryExecutor.getObjectIdByUser(object.getEmail(), object.getPassword());
+    }
+
+    @Override
+    public long getPrimaryClassId(long id) throws SQLException {
+        return queryExecutor.getPrimaryClassId(id);
     }
 
     public void setQueryExecutor(QueryExecutorImpl queryExecutor) {
