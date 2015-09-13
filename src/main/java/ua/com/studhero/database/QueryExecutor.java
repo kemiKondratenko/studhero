@@ -1,6 +1,6 @@
 package ua.com.studhero.database;
 
-import ua.com.studhero.database.entities.valueholders.Param;
+import ua.com.studhero.database.entities.valueholders.base.Param;
 
 import java.sql.SQLException;
 import java.util.Map;

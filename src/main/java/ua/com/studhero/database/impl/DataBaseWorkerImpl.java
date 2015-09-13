@@ -5,7 +5,8 @@ import ua.com.studhero.annotations.AttrId;
 import ua.com.studhero.database.DataBaseWorker;
 import ua.com.studhero.database.constants.RelationshipTypes;
 import ua.com.studhero.database.entities.BaseDBO;
-import ua.com.studhero.database.entities.valueholders.Param;
+import ua.com.studhero.database.entities.valueholders.base.Param;
+import ua.com.studhero.exceptions.database.DuplicateLoginException;
 import ua.com.studhero.model.entity.User;
 
 import java.lang.reflect.Field;
@@ -26,20 +27,8 @@ public class DataBaseWorkerImpl implements DataBaseWorker {
 
     @Override
     public <T extends BaseDBO> long save(T value) throws SQLException, ClassNotFoundException, IllegalAccessException, NoSuchFieldException {
-        long objectId =  queryExecutor.createNewObject("pipipipi");
-        long classId = value.getClass().getAnnotation(ClassId.class).id();
-        queryExecutor.objectClassRelationship(objectId, classId, RelationshipTypes.primary);
-        for(Field field: value.getClass().getDeclaredFields()) {
-            field.setAccessible(true);
-            long attr_id;
-            if(field.getAnnotation(AttrId.class) != null)
-                attr_id = field.getAnnotation(AttrId.class).id();
-            else continue;
-            Object fieldValue = field.get(value);
-            queryExecutor.createParameter(objectId, attr_id, fieldValue, classId);
-        }
-        setId(value, objectId);
-        return objectId;
+        long objectId =  queryExecutor.createNewObject(value.getClass().getName());
+        return save(objectId, value);
     }
 
     @Override
@@ -80,8 +69,9 @@ public class DataBaseWorkerImpl implements DataBaseWorker {
     }
 
     @Override
-    public <T extends BaseDBO> boolean update(T object) {
-        return false;
+    public <T extends BaseDBO> boolean update(T object) throws ClassNotFoundException, SQLException, NoSuchFieldException, IllegalAccessException {
+        save(object.getObjectId(), object);
+        return true;
     }
 
     @Override
@@ -92,6 +82,41 @@ public class DataBaseWorkerImpl implements DataBaseWorker {
     @Override
     public long getPrimaryClassId(long id) throws SQLException {
         return queryExecutor.getPrimaryClassId(id);
+    }
+
+    @Override
+    public long createLoginable(String login, String password) throws SQLException, DuplicateLoginException {
+        if(!isLoginValid(login)) throw new DuplicateLoginException(login);
+        long object_id =  queryExecutor.createNewObject(login);
+        queryExecutor.createLoginable(object_id, login, password);
+        return object_id;
+    }
+
+    @Override
+    public long save(long id, BaseDBO entity) throws SQLException, IllegalAccessException, NoSuchFieldException, ClassNotFoundException {
+        long classId = entity.getClass().getAnnotation(ClassId.class).id();
+        Map<Long, Param> objectParams = queryExecutor.getObjectParams(id, classId);
+        if(objectParams.isEmpty())
+            queryExecutor.objectClassRelationship(id, classId, RelationshipTypes.primary);
+        for(Field field: entity.getClass().getDeclaredFields()) {
+            field.setAccessible(true);
+            long attr_id;
+            if(field.getAnnotation(AttrId.class) != null)
+                attr_id = field.getAnnotation(AttrId.class).id();
+            else continue;
+            Object fieldValue = field.get(entity);
+            if(objectParams.containsKey(attr_id))
+                queryExecutor.updateParameter(objectParams.get(attr_id).getId(), fieldValue);
+                else
+                queryExecutor.createParameter(id, attr_id, fieldValue, classId);
+        }
+        setId(entity, id);
+        return id;
+    }
+
+    @Override
+    public boolean isLoginValid(String login) throws SQLException {
+        return queryExecutor.isLoginValid(login);
     }
 
     public void setQueryExecutor(QueryExecutorImpl queryExecutor) {

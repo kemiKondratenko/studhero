@@ -2,7 +2,7 @@ package ua.com.studhero.database.impl;
 
 import ua.com.studhero.database.Connector;
 import ua.com.studhero.database.QueryExecutor;
-import ua.com.studhero.database.entities.valueholders.Param;
+import ua.com.studhero.database.entities.valueholders.base.Param;
 import ua.com.studhero.database.preparedStatements.*;
 
 import java.sql.SQLException;
@@ -28,6 +28,9 @@ public class QueryExecutorImpl implements QueryExecutor {
     private GetObjectsByClassPreparedStatement getObjectsByClassPreparedStatement;
     private GetObjectIdByUserPreparedStatement getObjectIdByUserPreparedStatement;
     private GetPrimaryClassIdPreparedStatement getPrimaryClassIdPreparedStatement;
+    private CreateLoginablePreparedStatement createLoginablePreparedStatement;
+    private LoginValidationPreparedStatement loginValidationPreparedStatement;
+    private UpdateParameterPreparedStatement updateParameterPreparedStatement;
 
     @Override
     public Map<Long, Param> getObjectParams(long objectId, long classId) throws SQLException, ClassNotFoundException {
@@ -97,5 +100,26 @@ public class QueryExecutorImpl implements QueryExecutor {
             getPrimaryClassIdPreparedStatement = new GetPrimaryClassIdPreparedStatement(connector.getConnection());
         }
         return getPrimaryClassIdPreparedStatement.get(id);
+    }
+
+    public boolean createLoginable(long object_id, String login, String password) throws SQLException {
+        if(createLoginablePreparedStatement == null){
+            createLoginablePreparedStatement = new CreateLoginablePreparedStatement(connector.getConnection());
+        }
+        return createLoginablePreparedStatement.create(object_id, login, password);
+    }
+
+    public boolean isLoginValid(String login) throws SQLException {
+        if(loginValidationPreparedStatement == null){
+            loginValidationPreparedStatement = new LoginValidationPreparedStatement(connector.getConnection());
+        }
+        return loginValidationPreparedStatement.isValid(login);
+    }
+
+    public boolean updateParameter(long param, Object fieldValue) throws SQLException {
+        if(updateParameterPreparedStatement == null){
+            updateParameterPreparedStatement = new UpdateParameterPreparedStatement(connector.getConnection());
+        }
+        return updateParameterPreparedStatement.update(param, fieldValue);
     }
 }

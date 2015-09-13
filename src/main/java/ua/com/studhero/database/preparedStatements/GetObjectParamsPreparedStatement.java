@@ -1,7 +1,7 @@
 package ua.com.studhero.database.preparedStatements;
 
 import ua.com.studhero.database.entities.valueholders.IntParam;
-import ua.com.studhero.database.entities.valueholders.Param;
+import ua.com.studhero.database.entities.valueholders.base.Param;
 import ua.com.studhero.database.entities.valueholders.StringParam;
 import ua.com.studhero.database.preparedStatements.base.MyPreparedStatement;
 
@@ -17,7 +17,7 @@ public class GetObjectParamsPreparedStatement extends MyPreparedStatement {
 
     Logger log = Logger.getLogger("Logger");
 
-    private static final String objectParamsQuery =  " SELECT attrs_id, param_value, attrs_type_id " +
+    private static final String objectParamsQuery =  " SELECT attrs_id, param_value, param_id, attrs_type_id " +
                                                      " FROM attrs INNER JOIN params on attrs.attrs_id = params.attr_id " +
                                                      " WHERE object_id = ? " +
                                                      " AND class_id = ? ";
@@ -36,11 +36,12 @@ public class GetObjectParamsPreparedStatement extends MyPreparedStatement {
     }
 
     private Param createParam(ResultSet result) throws SQLException {
-        long type = result.getLong(3);
+        long type = result.getLong(4);
+        long param_id = result.getInt(3);
         if(IntParam.INTPARAM == type)
-            return new IntParam(result.getInt(2));
+            return new IntParam(param_id, result.getInt(2));
         if(StringParam.STRINGPARAM == type)
-            return new StringParam(result.getString(2));
+            return new StringParam(param_id, result.getString(2));
         return null;
     }
 

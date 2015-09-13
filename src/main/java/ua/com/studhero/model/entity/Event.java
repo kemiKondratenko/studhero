@@ -36,6 +36,10 @@ public class Event extends BaseDBO{
     public Event() {
     }
 
+    public Event(String message) {
+        super(message);
+    }
+
     public Set<Tag> getTags() {
         return tags;
     }

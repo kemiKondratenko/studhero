@@ -6,15 +6,9 @@ import org.springframework.web.bind.annotation.*;
 import ua.com.studhero.database.DataBaseWorker;
 import ua.com.studhero.database.constants.ClassFactory;
 import ua.com.studhero.database.entities.BaseDBO;
-import ua.com.studhero.database.entities.LoginValuesUser;
-import ua.com.studhero.database.impl.DataBaseWorkerMock;
-import ua.com.studhero.model.entity.Company;
-import ua.com.studhero.model.entity.Event;
 import ua.com.studhero.model.entity.User;
 
 import javax.inject.Inject;
-import java.sql.SQLException;
-import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -28,32 +22,46 @@ public class RestDBController {
 
     @Inject
     private DataBaseWorker dataBaseWorker;
-    private DataBaseWorkerMock dataBaseWorkerMock = new DataBaseWorkerMock();
 
     @RequestMapping(value="/login", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
-    BaseDBO login(@RequestBody LoginValuesUser login){
+    BaseDBO login(@RequestBody User entity){
         BaseDBO res = new BaseDBO();
-        res.setObjectId(465465465465l);
         try {
-            long id =  dataBaseWorker.getIdIfExists(login.getUser());
+            long id =  dataBaseWorker.getIdIfExists(entity);
             if(id != 0){
                 log.info("Prim " + dataBaseWorker.getPrimaryClassId(id)+ " for "+ id);
                 Class primary = ClassFactory.getClassById(dataBaseWorker.getPrimaryClassId(id));
                 res = dataBaseWorker.get(id, primary);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            return new BaseDBO(e.getMessage());
         }
         return res;
+    }
+
+    @RequestMapping(value="/registrate", method = RequestMethod.POST,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody
+    long registrate(@RequestBody User user){
+        try {
+            return dataBaseWorker.createLoginable(user.getEmail(), user.getPassword());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    @RequestMapping(value="validateLogin/{login}", method = RequestMethod.POST,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody
+    boolean isLoginValid(@PathVariable String login){
+        try {
+            return dataBaseWorker.isLoginValid(login);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

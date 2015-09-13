@@ -1,14 +1,13 @@
 package ua.com.studhero.controllers.entity;
 
+import com.google.common.collect.Lists;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ua.com.studhero.database.DataBaseWorker;
 import ua.com.studhero.model.entity.Company;
-import ua.com.studhero.model.entity.Event;
 
 import javax.inject.Inject;
-import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -22,45 +21,35 @@ public class CompaniesController {
     private DataBaseWorker dataBaseWorker;
 
 
-    @RequestMapping(value="/{id:.+}", method = RequestMethod.GET)
+    @RequestMapping(value="/", method = RequestMethod.GET)
     public @ResponseBody
-    List<Company> get(@PathVariable long id){
+    List<Company> get(){
         try {
-           /* if(id != 0)
-                return dataBaseWorker.get(id, Company.class);*/
             return dataBaseWorker.get(Company.class);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
+        }  catch (Exception e) {
+            return Lists.newArrayList(new Company(e.getMessage()));
         }
-        return null;
     }
 
-    @RequestMapping(value="/create", method = RequestMethod.GET,
+    @RequestMapping(value="/{id}", method = RequestMethod.GET)
+     public @ResponseBody
+    Company getById(@PathVariable long id){
+        try {
+            return dataBaseWorker.get(id, Company.class);
+        }  catch (Exception e) {
+            return new Company(e.getMessage());
+        }
+    }
+
+    @RequestMapping(value="/create", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     Company create(@RequestBody Company entity){
         try {
-            return dataBaseWorker.get(dataBaseWorker.save(entity), entity.getClass());
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
+            return dataBaseWorker.get(dataBaseWorker.save(entity.getObjectId(), entity), entity.getClass());
+        } catch (Exception e) {
+            return new Company(e.getMessage());
         }
-        return null;
     }
 
 }

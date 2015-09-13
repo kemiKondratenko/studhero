@@ -5,7 +5,7 @@ import ua.com.studhero.model.entity.User;
 /**
  * Created by Eugene on 13.09.2015.
  */
-public class LoginValuesUser {
+public class LoginValuesHolder {
     User user;
     BaseDBO userInfo;
 

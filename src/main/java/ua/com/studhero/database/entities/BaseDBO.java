@@ -10,7 +10,13 @@ import ua.com.studhero.annotations.ClassId;
 public class BaseDBO {
     private long objectId;
 
-    public BaseDBO(){};
+    private String error;
+
+    public BaseDBO() {
+
+    }
+
+    public BaseDBO(String error){this.error = error;}
 
     public long getObjectId() {
         return objectId;
@@ -18,5 +24,13 @@ public class BaseDBO {
 
     public void setObjectId(long objectId) {
         this.objectId = objectId;
+    }
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
     }
 }

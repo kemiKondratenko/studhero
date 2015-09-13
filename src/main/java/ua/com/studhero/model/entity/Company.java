@@ -17,6 +17,9 @@ public class Company extends BaseDBO{
     public Company() {
     }
 
+    public Company(String message) {
+        super(message);
+    }
 
     public String getStatus() {
         return status;
