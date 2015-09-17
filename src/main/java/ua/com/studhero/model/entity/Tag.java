@@ -14,6 +14,9 @@ public class Tag extends BaseDBO{
 
     public Tag() {
     }
+    public Tag(String msg){
+        super(msg);
+    }
 
     public String getTag() {
         return tag;
