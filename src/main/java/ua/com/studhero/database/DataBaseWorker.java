@@ -1,6 +1,7 @@
 package ua.com.studhero.database;
 
 import ua.com.studhero.database.entities.BaseDBO;
+import ua.com.studhero.database.entities.SearchScope;
 import ua.com.studhero.exceptions.database.DuplicateLoginException;
 import ua.com.studhero.exceptions.database.UnexpectedDBAnswerException;
 import ua.com.studhero.model.entity.User;
@@ -17,17 +18,21 @@ public interface DataBaseWorker {
 
     public <T extends BaseDBO> T get(long id, Class<T> objectClass) throws IllegalAccessException, InstantiationException, SQLException, ClassNotFoundException, NoSuchFieldException;
 
+    public BaseDBO get(Long id) throws ClassNotFoundException, SQLException, NoSuchFieldException, InstantiationException, IllegalAccessException;
+
     public <T extends BaseDBO> List<T> get(Class<T> objectClass) throws IllegalAccessException, InstantiationException, SQLException, ClassNotFoundException, NoSuchFieldException;
 
     public <T extends BaseDBO> boolean update(T object) throws ClassNotFoundException, SQLException, NoSuchFieldException, IllegalAccessException;
 
-    long getIdIfExists(User example) throws SQLException;
+    public long getIdIfExists(User example) throws SQLException;
 
-    long getPrimaryClassId(long id) throws SQLException;
+    public long getPrimaryClassId(long id) throws SQLException;
 
-    long createLoginable(String login, String password) throws SQLException, DuplicateLoginException, UnexpectedDBAnswerException;
+    public long createLoginable(String login, String password) throws SQLException, DuplicateLoginException, UnexpectedDBAnswerException;
 
-    long save(long id, BaseDBO userInfo) throws SQLException, IllegalAccessException, NoSuchFieldException, ClassNotFoundException;
+    public long save(long id, BaseDBO userInfo) throws SQLException, IllegalAccessException, NoSuchFieldException, ClassNotFoundException;
 
-    boolean isLoginValid(String login) throws SQLException;
+    public boolean isLoginValid(String login) throws SQLException;
+
+    public List<Long> search(SearchScope searchScope) throws SQLException;
 }

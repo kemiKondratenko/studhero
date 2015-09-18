@@ -3,8 +3,10 @@ package ua.com.studhero.database.impl;
 import ua.com.studhero.annotations.ClassId;
 import ua.com.studhero.annotations.AttrId;
 import ua.com.studhero.database.DataBaseWorker;
+import ua.com.studhero.database.constants.ClassFactory;
 import ua.com.studhero.database.constants.RelationshipTypes;
 import ua.com.studhero.database.entities.BaseDBO;
+import ua.com.studhero.database.entities.SearchScope;
 import ua.com.studhero.database.entities.valueholders.base.Param;
 import ua.com.studhero.exceptions.database.DuplicateLoginException;
 import ua.com.studhero.model.entity.User;
@@ -50,6 +52,12 @@ public class DataBaseWorkerImpl implements DataBaseWorker {
         }
         setId(result, id);
         return result;
+    }
+
+    @Override
+    public BaseDBO get(Long id) throws ClassNotFoundException, SQLException, NoSuchFieldException, InstantiationException, IllegalAccessException {
+        log.info("class" + ClassFactory.getClassById(getPrimaryClassId(id)));
+        return get(id, ClassFactory.getClassById(getPrimaryClassId(id)));
     }
 
     @Override
@@ -117,6 +125,11 @@ public class DataBaseWorkerImpl implements DataBaseWorker {
     @Override
     public boolean isLoginValid(String login) throws SQLException {
         return queryExecutor.isLoginValid(login);
+    }
+
+    @Override
+    public List<Long> search(SearchScope searchScope) throws SQLException {
+        return queryExecutor.search(searchScope.getParamAttrId(), searchScope.getParamValue());
     }
 
     public void setQueryExecutor(QueryExecutorImpl queryExecutor) {

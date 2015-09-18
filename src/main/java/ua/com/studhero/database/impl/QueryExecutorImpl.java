@@ -31,6 +31,7 @@ public class QueryExecutorImpl implements QueryExecutor {
     private CreateLoginablePreparedStatement createLoginablePreparedStatement;
     private LoginValidationPreparedStatement loginValidationPreparedStatement;
     private UpdateParameterPreparedStatement updateParameterPreparedStatement;
+    private SimpleSearchPreparedStatement simpleSearchPreparedStatement;
 
     @Override
     public Map<Long, Param> getObjectParams(long objectId, long classId) throws SQLException, ClassNotFoundException {
@@ -121,5 +122,12 @@ public class QueryExecutorImpl implements QueryExecutor {
             updateParameterPreparedStatement = new UpdateParameterPreparedStatement(connector.getConnection());
         }
         return updateParameterPreparedStatement.update(param, fieldValue);
+    }
+
+    public List<Long> search(long paramAttrId, String paramValue) throws SQLException {
+        if(simpleSearchPreparedStatement == null){
+            simpleSearchPreparedStatement = new SimpleSearchPreparedStatement(connector.getConnection());
+        }
+        return simpleSearchPreparedStatement.search(paramAttrId, paramValue);
     }
 }

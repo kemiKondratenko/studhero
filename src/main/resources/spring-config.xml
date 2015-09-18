@@ -24,4 +24,9 @@
         </property>
     </bean>
 
+    <bean id="SearchService" class="ua.com.studhero.services.impl.SearchServiceImpl">
+        <property name="dataBaseWorker" ref="DBWorker">
+        </property>
+    </bean>
+
 </beans>
