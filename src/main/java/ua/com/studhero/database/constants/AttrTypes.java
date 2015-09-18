@@ -6,4 +6,5 @@ package ua.com.studhero.database.constants;
 public class AttrTypes {
     public static final long String = 1;
     public static final long Integer = 2;
+    public static final long Reference = 3;
 }
