@@ -7,4 +7,5 @@ public class AttrTypes {
     public static final long String = 1;
     public static final long Integer = 2;
     public static final long Reference = 3;
+    public static final long List = 4;
 }

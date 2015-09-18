@@ -12,7 +12,8 @@ import java.util.*;
 @ClassId(id = 9)
 public class Event extends BaseDBO{
 
-    private Set<Tag> tags;
+    @AttrId(id = 46)
+    private List<Long> tags;
     @AttrId(id = 39)
     private long company;
     @AttrId(id = 34)
@@ -40,11 +41,11 @@ public class Event extends BaseDBO{
         super(message);
     }
 
-    public Set<Tag> getTags() {
+    public List<Long> getTags() {
         return tags;
     }
 
-    public void setTags(Set<Tag> tags) {
+    public void setTags(List<Long> tags) {
         this.tags = tags;
     }
 
