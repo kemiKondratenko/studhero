@@ -8,6 +8,6 @@
         </div>
     </div>
     <!-- Footer END -->    
-    <script src="../js/scripts.js" type="text/javascript"></script>
+    <script src="${pageContext.request.contextPath}/resources/js/scripts.js" type="text/javascript"></script>
 </body>
 </html>

@@ -132,7 +132,7 @@ li:hover > .fa-check{
 {	
     background-attachment:fixed;
     background-color: #645862;
-    background-image:  url("/images/main-bg-min.jpg");
+    background-image:  url("../images/main-bg-min.jpg");
     background-position: top center;
     background-repeat: no-repeat;
     background-size: cover;

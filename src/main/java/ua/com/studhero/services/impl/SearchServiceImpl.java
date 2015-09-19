@@ -41,7 +41,11 @@ public class SearchServiceImpl implements SearchService {
             @Override
             public SearchScope apply(SearchScope searchScope) {
                 if(searchScope.getParamAttrId() == 0)
-                    searchScope.setParamAttrId(AttrIdFactory.getAttrId(searchScope.getParamName()));
+                    try {
+                        searchScope.setParamAttrId(AttrIdFactory.getAttrId(searchScope.getParamName()));
+                    } catch (NoSuchFieldException e) {
+                        e.printStackTrace();
+                    }
                 return searchScope;
             }
         });
