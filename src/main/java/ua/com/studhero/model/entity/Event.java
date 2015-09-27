@@ -115,9 +115,10 @@ public class Event extends BaseDBO{
 
     @JsonDeserialize(using = DateDeserializer.class)
     public void setStartDate(Date startDate) {
-        if(this.startDate == null)
+        if(this.startDate == null && startDate != null)
             this.startDate = new DateParam(startDate);
-        this.startDate.set(startDate);
+        else
+            this.startDate.set(startDate);
     }
 
     @JsonSerialize(using = DateSerializer.class)
@@ -129,9 +130,10 @@ public class Event extends BaseDBO{
 
     @JsonDeserialize(using = DateDeserializer.class)
     public void setEndDate(Date endDate) {
-        if(this.endDate == null)
+        if(this.endDate == null && endDate != null)
             this.endDate = new DateParam(endDate);
-        this.endDate.set(endDate);
+        else
+            this.endDate.set(endDate);
     }
 
     @JsonSerialize(using = TimeSerializer.class)
@@ -143,9 +145,10 @@ public class Event extends BaseDBO{
 
     @JsonDeserialize(using = TimeDeserializer.class)
     public void setStartTime(Date startTime) {
-        if(this.startTime == null)
+        if(this.startTime == null && startTime != null)
             this.startTime = new TimeParam(startTime);
-        this.startTime.set(startTime);
+        else
+            this.startTime.set(startTime);
     }
 
     @JsonSerialize(using = TimeSerializer.class)
@@ -157,9 +160,10 @@ public class Event extends BaseDBO{
 
     @JsonDeserialize(using = TimeDeserializer.class)
     public void setEndTime(Date endTime) {
-        if(this.endTime == null)
+        if(this.endTime == null && endTime != null)
             this.endTime = new TimeParam(endTime);
-        this.endTime.set(endTime);
+        else
+            this.endTime.set(endTime);
     }
 
 
