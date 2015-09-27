@@ -7,6 +7,7 @@ import ua.com.studhero.database.constants.ClassFactory;
 import ua.com.studhero.database.constants.RelationshipTypes;
 import ua.com.studhero.database.entities.BaseDBO;
 import ua.com.studhero.database.entities.SearchScope;
+import ua.com.studhero.database.entities.valueholders.ListParam;
 import ua.com.studhero.database.entities.valueholders.base.Param;
 import ua.com.studhero.exceptions.database.DuplicateLoginException;
 import ua.com.studhero.model.entity.User;
@@ -36,7 +37,6 @@ public class DataBaseWorkerImpl implements DataBaseWorker {
     @Override
     public <T extends BaseDBO> T get(long id, Class<T> objectClass) throws IllegalAccessException, InstantiationException, SQLException, ClassNotFoundException, NoSuchFieldException {
         T result = objectClass.newInstance();
-        log.info(result.toString());
         ClassId classId = objectClass.getAnnotation(ClassId.class);
         log.info(classId.toString());
         Map<Long, Param> objectParams = queryExecutor.getObjectParams(id, classId.id());
@@ -48,8 +48,9 @@ public class DataBaseWorkerImpl implements DataBaseWorker {
             else continue;
             Param<?> param = objectParams.get(attrId);
             if(param != null)
-                field.set(result, param.get());
+                field.set(result, param);
         }
+        log.info(result.toString());
         setId(result, id);
         return result;
     }
@@ -103,20 +104,35 @@ public class DataBaseWorkerImpl implements DataBaseWorker {
     @Override
     public long save(long id, BaseDBO entity) throws SQLException, IllegalAccessException, NoSuchFieldException, ClassNotFoundException {
         long classId = entity.getClass().getAnnotation(ClassId.class).id();
-        Map<Long, Param> objectParams = queryExecutor.getObjectParams(id, classId);
-        if(objectParams.isEmpty())
+        long primaryClassId = queryExecutor.getPrimaryClassId(id);
+        if(primaryClassId == 0)
             queryExecutor.objectClassRelationship(id, classId, RelationshipTypes.primary);
+        log.info("C"+classId+" "+primaryClassId);
         for(Field field: entity.getClass().getDeclaredFields()) {
             field.setAccessible(true);
+            Param<?> fieldValue = (Param<?>) field.get(entity);
+            if(fieldValue == null) continue;
             long attr_id;
-            if(field.getAnnotation(AttrId.class) != null)
-                attr_id = field.getAnnotation(AttrId.class).id();
+            AttrId attr_id_annotation = field.getAnnotation(AttrId.class);
+            if(attr_id_annotation != null)
+                attr_id = attr_id_annotation.id();
             else continue;
-            Object fieldValue = field.get(entity);
-            if(objectParams.containsKey(attr_id))
-                queryExecutor.updateParameter(objectParams.get(attr_id).getId(), fieldValue);
-                else
-                queryExecutor.createParameter(id, attr_id, fieldValue, classId);
+            log.info("F"+fieldValue+" "+primaryClassId);
+            if(primaryClassId != 0) {
+                if(fieldValue.getId() == 0 || fieldValue instanceof ListParam){
+                    log.info("start savedOther 1 ");
+                    queryExecutor.updateParameter(id, attr_id, fieldValue.getBaseForm(), classId);
+                    log.info("savedOther");
+                }else {
+                    log.info("start savedOther 2");
+                    queryExecutor.updateParameter(fieldValue.getId(), fieldValue.getBaseForm());
+                    log.info("savedOther");
+                }
+            }else{
+                log.info("start create");
+                queryExecutor.createParameter(id, attr_id, fieldValue.getBaseForm(), classId);
+                log.info("created" + fieldValue.getBaseForm());
+            }
         }
         setId(entity, id);
         return id;

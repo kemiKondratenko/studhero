@@ -20,4 +20,32 @@ public class Param<T> {
     public long getId() {
         return param_id;
     }
+
+    public Object getBaseForm() {
+        return value;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Param)) return false;
+
+        Param param = (Param) o;
+
+        if (param_id != param.param_id) return false;
+        if (!value.equals(param.value)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (param_id ^ (param_id >>> 32));
+        result = value != null ? 31 * result + value.hashCode() : 31 * result;
+        return result;
+    }
+
+    public void set(T value) {
+        this.value = value;
+    }
 }

@@ -8,4 +8,6 @@ public class AttrTypes {
     public static final long Integer = 2;
     public static final long Reference = 3;
     public static final long List = 4;
+    public static final long Date = 5;
+    public static final long Time = 6;
 }

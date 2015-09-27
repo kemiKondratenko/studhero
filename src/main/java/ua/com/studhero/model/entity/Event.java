@@ -1,8 +1,15 @@
 package ua.com.studhero.model.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ua.com.studhero.annotations.AttrId;
 import ua.com.studhero.annotations.ClassId;
+import ua.com.studhero.controllers.converters.date.DateDeserializer;
+import ua.com.studhero.controllers.converters.date.DateSerializer;
+import ua.com.studhero.controllers.converters.date.TimeDeserializer;
+import ua.com.studhero.controllers.converters.date.TimeSerializer;
 import ua.com.studhero.database.entities.BaseDBO;
+import ua.com.studhero.database.entities.valueholders.*;
 
 import java.util.*;
 
@@ -13,26 +20,24 @@ import java.util.*;
 public class Event extends BaseDBO{
 
     @AttrId(id = 46)
-    private List<Long> tags;
+    private ListParam tags;
     @AttrId(id = 39)
-    private long company;
+    private LongParam company;
     @AttrId(id = 34)
-    private String name;
-    private GregorianCalendar calendar;
-    private String photoUrl;
+    private StringParam title;
     @AttrId(id = 40)
-    private String descriptionShort;
+    private StringParam descriptionShort;
     @AttrId(id = 41)
-    private String getDescriptionLong;
-    @AttrId(id = 35)
-    private Status status;
-    @AttrId(id = 42)
-    private int maxAmount;
-    @AttrId(id = 43)
-    private int registered;
+    private StringParam description;
+    @AttrId(id = 59)
+    private DateParam startDate;
+    @AttrId(id = 60)
+    private DateParam endDate;
+    @AttrId(id = 61)
+    private TimeParam startTime;
+    @AttrId(id = 62)
+    private TimeParam endTime;
 
-    //not mandatory
-    private List<StudentUser> usersToCome;
 
     public Event() {
     }
@@ -42,90 +47,134 @@ public class Event extends BaseDBO{
     }
 
     public List<Long> getTags() {
-        return tags;
+        if(tags != null)
+            return tags.get();
+        return null;
     }
 
     public void setTags(List<Long> tags) {
-        this.tags = tags;
+        if(this.tags == null)
+            this.tags = new ListParam(tags);
+        this.tags.set(tags);
     }
 
-    public long getCompany() {
-        return company;
+    public Long getCompany() {
+        if(company != null)
+            return company.get();
+        return null;
     }
 
-    public void setCompany(long company) {
-        this.company = company;
+    public void setCompany(Long company) {
+        if(this.company == null)
+            this.company = new LongParam(company);
+        this.company.set(company);
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        if(title != null)
+            return title.get();
+        return null;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public GregorianCalendar getCalendar() {
-        return calendar;
-    }
-
-    public void setCalendar(GregorianCalendar calendar) {
-        this.calendar = calendar;
-    }
-
-    public String getPhotoUrl() {
-        return photoUrl;
-    }
-
-    public void setPhotoUrl(String photoUrl) {
-        this.photoUrl = photoUrl;
+    public void setTitle(String title) {
+        if(this.title == null)
+            this.title = new StringParam(title);
+        this.title.set(title);
     }
 
     public String getDescriptionShort() {
-        return descriptionShort;
+        if(descriptionShort != null)
+            return descriptionShort.get();
+        return null;
     }
 
     public void setDescriptionShort(String descriptionShort) {
-        this.descriptionShort = descriptionShort;
+        if(this.descriptionShort == null)
+            this.descriptionShort = new StringParam(descriptionShort);
+        this.descriptionShort.set(descriptionShort);
     }
 
-    public String getGetDescriptionLong() {
-        return getDescriptionLong;
+    public String getDescription() {
+        if(description != null)
+            return description.get();
+        return null;
     }
 
-    public void setGetDescriptionLong(String getDescriptionLong) {
-        this.getDescriptionLong = getDescriptionLong;
+    public void setDescription(String description) {
+        if(this.description == null)
+            this.description = new StringParam(description);
+        this.description.set(description);
     }
 
-    public Status getStatus() {
-        return status;
+    @JsonSerialize(using = DateSerializer.class)
+    public Date getStartDate() {
+        if(startDate != null)
+            return startDate.get();
+        return null;
     }
 
-    public void setStatus(Status status) {
-        this.status = status;
+    @JsonDeserialize(using = DateDeserializer.class)
+    public void setStartDate(Date startDate) {
+        if(this.startDate == null)
+            this.startDate = new DateParam(startDate);
+        this.startDate.set(startDate);
     }
 
-    public int getMaxAmount() {
-        return maxAmount;
+    @JsonSerialize(using = DateSerializer.class)
+    public Date getEndDate() {
+        if(endDate != null)
+            return endDate.get();
+        return null;
     }
 
-    public void setMaxAmount(int maxAmount) {
-        this.maxAmount = maxAmount;
+    @JsonDeserialize(using = DateDeserializer.class)
+    public void setEndDate(Date endDate) {
+        if(this.endDate == null)
+            this.endDate = new DateParam(endDate);
+        this.endDate.set(endDate);
     }
 
-    public int getRegistered() {
-        return registered;
+    @JsonSerialize(using = TimeSerializer.class)
+    public Date getStartTime() {
+        if(startTime != null)
+            return startTime.get();
+        return null;
     }
 
-    public void setRegistered(int registered) {
-        this.registered = registered;
+    @JsonDeserialize(using = TimeDeserializer.class)
+    public void setStartTime(Date startTime) {
+        if(this.startTime == null)
+            this.startTime = new TimeParam(startTime);
+        this.startTime.set(startTime);
     }
 
-    public List<StudentUser> getUsersToCome() {
-        return usersToCome;
+    @JsonSerialize(using = TimeSerializer.class)
+    public Date getEndTime() {
+        if(endTime != null)
+            return endTime.get();
+        return null;
     }
 
-    public void setUsersToCome(List<StudentUser> usersToCome) {
-        this.usersToCome = usersToCome;
+    @JsonDeserialize(using = TimeDeserializer.class)
+    public void setEndTime(Date endTime) {
+        if(this.endTime == null)
+            this.endTime = new TimeParam(endTime);
+        this.endTime.set(endTime);
+    }
+
+
+    @Override
+    public String toString() {
+        return "Event{" +
+                "tags=" + tags +
+                ", company=" + company +
+                ", title='" + title + '\'' +
+                ", descriptionShort='" + descriptionShort + '\'' +
+                ", description='" + description + '\'' +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                '}';
     }
 }

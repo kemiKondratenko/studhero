@@ -2,6 +2,7 @@ package ua.com.studhero.database.impl;
 
 import ua.com.studhero.database.Connector;
 import ua.com.studhero.database.QueryExecutor;
+import ua.com.studhero.database.entities.valueholders.ListParam;
 import ua.com.studhero.database.entities.valueholders.base.Param;
 import ua.com.studhero.database.preparedStatements.*;
 
@@ -32,6 +33,9 @@ public class QueryExecutorImpl implements QueryExecutor {
     private LoginValidationPreparedStatement loginValidationPreparedStatement;
     private UpdateParameterPreparedStatement updateParameterPreparedStatement;
     private SimpleSearchPreparedStatement simpleSearchPreparedStatement;
+    private RemoveListParamPreparedStatement removeListParamPreparedStatement;
+    private RemoveParamPreparedStatement removeParamPreparedStatement;
+    private GetobjectParamPreparedStatement getObjectParamPreparedStatement;
 
     @Override
     public Map<Long, Param> getObjectParams(long objectId, long classId) throws SQLException, ClassNotFoundException {
@@ -39,6 +43,15 @@ public class QueryExecutorImpl implements QueryExecutor {
             getobjectParamsPreparedStatement = new GetObjectParamsPreparedStatement(connector.getConnection());
         }
         return getobjectParamsPreparedStatement.getObjectParams(objectId, classId);
+    }
+
+
+    @Override
+    public Map<Long, Param> getObjectParam(long objectId, long attr_id, long classId) throws SQLException, ClassNotFoundException {
+        if(getObjectParamPreparedStatement == null){
+            getObjectParamPreparedStatement = new GetobjectParamPreparedStatement(connector.getConnection());
+        }
+        return getObjectParamPreparedStatement.getObjectParams(objectId, attr_id, classId);
     }
 
     @Override
@@ -51,10 +64,25 @@ public class QueryExecutorImpl implements QueryExecutor {
 
     @Override
     public boolean createParameter(long objectId, long attrId, Object value, long classId) throws SQLException {
-        if(createObjectParamsPreparedStatement == null){
-            createObjectParamsPreparedStatement = new CreateObjectParamsPreparedStatement(connector.getConnection());
+        if(value instanceof List){
+            log.info("This is list, now");
+            createParameter(objectId, attrId, (List<Long> ) value, classId);
+        }else {
+            log.info("save value "+ value);
+            if(createObjectParamsPreparedStatement == null){
+                createObjectParamsPreparedStatement = new CreateObjectParamsPreparedStatement(connector.getConnection());
+            }
+            return createObjectParamsPreparedStatement.save(objectId, attrId, value, classId);
         }
-        return createObjectParamsPreparedStatement.save(objectId, attrId, value, classId);
+        return false;
+    }
+
+    @Override
+    public void createParameter(long objectId, long attrId, List<Long> listParam, long classId) throws SQLException {
+        log.info("This is list, now");
+        for(Long value: listParam){
+            createParameter(objectId, attrId, value, classId);
+        }
     }
 
     public void setConnector(Connector connector) {
@@ -124,10 +152,51 @@ public class QueryExecutorImpl implements QueryExecutor {
         return updateParameterPreparedStatement.update(param, fieldValue);
     }
 
+    public boolean updateParameter(long object_id, long attr_id, Object value, long class_id) throws SQLException, ClassNotFoundException {
+        if(value instanceof List){
+
+            log.info("List "+object_id+" "+attr_id+" "+class_id);
+
+            ListParam previousValues = (ListParam) getObjectParam(object_id, attr_id, class_id).get(attr_id);
+            if(previousValues != null) {
+                log.info("savedOther " + previousValues);
+                removeParams(object_id, attr_id, previousValues.difference((List<Long>) value), class_id);
+
+                log.info("savedOther " + previousValues.difference((List<Long>) value));
+                createParameter(object_id, attr_id, previousValues.newValues((List<Long>) value), class_id);
+            }else
+                createParameter(object_id, attr_id, value, class_id);
+
+            log.info("savedOther " + previousValues.newValues((List<Long>) value));
+        }else {
+
+            log.info("Param");
+            removeParam(object_id, attr_id, class_id);
+            createParameter(object_id, attr_id, value, class_id);
+        }return true;
+    }
+
     public List<Long> search(long paramAttrId, String paramValue) throws SQLException {
         if(simpleSearchPreparedStatement == null){
             simpleSearchPreparedStatement = new SimpleSearchPreparedStatement(connector.getConnection());
         }
         return simpleSearchPreparedStatement.search(paramAttrId, paramValue);
+    }
+
+    public void removeParams(long id, long attr_id, List<Long> difference, long classId) throws SQLException {
+        if(removeListParamPreparedStatement == null){
+            removeListParamPreparedStatement = new RemoveListParamPreparedStatement(connector.getConnection());
+        }
+        for(Long value: difference) {
+            removeListParamPreparedStatement.delete(id, attr_id, value, classId);
+        }
+        return;
+    }
+
+    public void removeParam(long id, long attr_id, long classId) throws SQLException {
+        if(removeParamPreparedStatement == null){
+            removeParamPreparedStatement = new RemoveParamPreparedStatement(connector.getConnection());
+        }
+        removeParamPreparedStatement.delete(id, attr_id, classId);
     }
 }

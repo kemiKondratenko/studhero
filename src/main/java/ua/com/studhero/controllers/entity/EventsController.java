@@ -9,6 +9,7 @@ import ua.com.studhero.model.entity.Event;
 
 import javax.inject.Inject;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Created by Eugene on 13.09.2015.
@@ -16,6 +17,8 @@ import java.util.List;
 @Controller
 @RequestMapping("events")
 public class EventsController {
+
+    Logger log = Logger.getLogger("Logger");
 
     @Inject
     private DataBaseWorker dataBaseWorker;
@@ -45,8 +48,16 @@ public class EventsController {
     @RequestMapping(value = "/create", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody Event create(@RequestBody Event entity) {
+        log.info("FIN"+ entity.toString());
         try {
-            return dataBaseWorker.get(dataBaseWorker.save(entity.getObjectId(), entity), entity.getClass());
+            log.info("In");
+            if(entity.getObjectId() == 0) {
+                log.info("no id");
+                return dataBaseWorker.get(dataBaseWorker.save(entity), entity.getClass());
+            }else {
+                log.info("with id");
+                return dataBaseWorker.get(dataBaseWorker.save(entity.getObjectId(), entity), entity.getClass());
+            }
         }  catch (Exception e) {
             return new Event(e.getMessage());
         }
