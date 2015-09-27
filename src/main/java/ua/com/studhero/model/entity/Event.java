@@ -37,6 +37,8 @@ public class Event extends BaseDBO{
     private TimeParam startTime;
     @AttrId(id = 62)
     private TimeParam endTime;
+    @AttrId(id = 63)
+    private BooleanParam approved;
 
 
     public Event() {
@@ -165,6 +167,18 @@ public class Event extends BaseDBO{
         else
             this.endTime.set(endTime);
     }
+
+    public Boolean getApproved() {
+        return approved.get();
+    }
+
+    public void setApproved(Boolean approved) {
+        if(this.approved == null && approved != null)
+            this.approved = new BooleanParam(approved);
+        else
+            this.approved.set(approved);
+    }
+
 
 
     @Override

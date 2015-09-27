@@ -56,6 +56,8 @@ public class GetObjectParamsPreparedStatement extends MyPreparedStatement {
             return  new DateParam(param_id, result.getString(2));
         if (TimeParam.TIMEPARAM == type)
             return  new TimeParam(param_id, result.getString(2));
+        if (BooleanParam.BOOLEANPARAM == type)
+            return  new BooleanParam(param_id, result.getBoolean(2));
         return null;
     }
 
