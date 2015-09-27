@@ -54,7 +54,6 @@ public class QueryExecutorImpl implements QueryExecutor {
         return getObjectParamPreparedStatement.getObjectParams(objectId, attr_id, classId);
     }
 
-    @Override
     public boolean saveParameter(long paramId, Object value) throws SQLException {
         if(saveObjectParamsPreparedStatement == null){
             saveObjectParamsPreparedStatement = new SaveObjectParamsPreparedStatement(connector.getConnection());
@@ -96,6 +95,7 @@ public class QueryExecutorImpl implements QueryExecutor {
         return attrIdParamIdForObjectPreparedStatement.get(objectId, id);
     }
 
+    @Override
     public long createNewObject(String name) throws SQLException {
         if(createNewObjectPreparedStatement == null){
             createNewObjectPreparedStatement = new CreateNewObjectPreparedStatement(connector.getConnection());
@@ -103,13 +103,15 @@ public class QueryExecutorImpl implements QueryExecutor {
         return createNewObjectPreparedStatement.create(name);
     }
 
-    public void objectClassRelationship(long objectId, long classId, long typeId) throws SQLException {
+    @Override
+    public void createObjectClassRelationship(long objectId, long classId, long typeId) throws SQLException {
         if(objectClassRelationshipPreparedStatement == null){
             objectClassRelationshipPreparedStatement = new ObjectClassRelationshipPreparedStatement(connector.getConnection());
         }
         objectClassRelationshipPreparedStatement.create(objectId, classId, typeId);
     }
 
+    @Override
     public List<Long> getObjectsByClass(long classId, long primary) throws SQLException {
         if(getObjectsByClassPreparedStatement == null){
             getObjectsByClassPreparedStatement = new GetObjectsByClassPreparedStatement(connector.getConnection());
@@ -117,6 +119,7 @@ public class QueryExecutorImpl implements QueryExecutor {
         return getObjectsByClassPreparedStatement.get(classId, primary);
     }
 
+    @Override
     public long getObjectIdByUser(String email, String password) throws SQLException {
         if(getObjectIdByUserPreparedStatement == null){
             getObjectIdByUserPreparedStatement = new GetObjectIdByUserPreparedStatement(connector.getConnection());
@@ -124,6 +127,7 @@ public class QueryExecutorImpl implements QueryExecutor {
         return getObjectIdByUserPreparedStatement.get(email, password);
     }
 
+    @Override
     public long getPrimaryClassId(long id) throws SQLException {
         if(getPrimaryClassIdPreparedStatement == null){
             getPrimaryClassIdPreparedStatement = new GetPrimaryClassIdPreparedStatement(connector.getConnection());
@@ -131,6 +135,7 @@ public class QueryExecutorImpl implements QueryExecutor {
         return getPrimaryClassIdPreparedStatement.get(id);
     }
 
+    @Override
     public boolean createLoginable(long object_id, String login, String password) throws SQLException {
         if(createLoginablePreparedStatement == null){
             createLoginablePreparedStatement = new CreateLoginablePreparedStatement(connector.getConnection());
@@ -138,6 +143,7 @@ public class QueryExecutorImpl implements QueryExecutor {
         return createLoginablePreparedStatement.create(object_id, login, password);
     }
 
+    @Override
     public boolean isLoginValid(String login) throws SQLException {
         if(loginValidationPreparedStatement == null){
             loginValidationPreparedStatement = new LoginValidationPreparedStatement(connector.getConnection());
@@ -145,6 +151,7 @@ public class QueryExecutorImpl implements QueryExecutor {
         return loginValidationPreparedStatement.isValid(login);
     }
 
+    @Override
     public boolean updateParameter(long param, Object fieldValue) throws SQLException {
         if(updateParameterPreparedStatement == null){
             updateParameterPreparedStatement = new UpdateParameterPreparedStatement(connector.getConnection());
@@ -152,30 +159,24 @@ public class QueryExecutorImpl implements QueryExecutor {
         return updateParameterPreparedStatement.update(param, fieldValue);
     }
 
+    @Override
     public boolean updateParameter(long object_id, long attr_id, Object value, long class_id) throws SQLException, ClassNotFoundException {
         if(value instanceof List){
-
-            log.info("List "+object_id+" "+attr_id+" "+class_id);
-
+            List<Long> valueList = (List<Long>) value;
             ListParam previousValues = (ListParam) getObjectParam(object_id, attr_id, class_id).get(attr_id);
             if(previousValues != null) {
-                log.info("savedOther " + previousValues);
-                removeParams(object_id, attr_id, previousValues.difference((List<Long>) value), class_id);
-
-                log.info("savedOther " + previousValues.difference((List<Long>) value));
-                createParameter(object_id, attr_id, previousValues.newValues((List<Long>) value), class_id);
+                removeParams(object_id, attr_id, previousValues.difference(valueList), class_id);
+                createParameter(object_id, attr_id, previousValues.newValues(valueList), class_id);
             }else
                 createParameter(object_id, attr_id, value, class_id);
-
-            log.info("savedOther " + previousValues.newValues((List<Long>) value));
         }else {
-
-            log.info("Param");
             removeParam(object_id, attr_id, class_id);
             createParameter(object_id, attr_id, value, class_id);
-        }return true;
+        }
+        return true;
     }
 
+    @Override
     public List<Long> search(long paramAttrId, String paramValue) throws SQLException {
         if(simpleSearchPreparedStatement == null){
             simpleSearchPreparedStatement = new SimpleSearchPreparedStatement(connector.getConnection());

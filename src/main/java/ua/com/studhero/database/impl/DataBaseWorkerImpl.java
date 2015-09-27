@@ -3,6 +3,7 @@ package ua.com.studhero.database.impl;
 import ua.com.studhero.annotations.ClassId;
 import ua.com.studhero.annotations.AttrId;
 import ua.com.studhero.database.DataBaseWorker;
+import ua.com.studhero.database.QueryExecutor;
 import ua.com.studhero.database.constants.ClassFactory;
 import ua.com.studhero.database.constants.RelationshipTypes;
 import ua.com.studhero.database.entities.BaseDBO;
@@ -26,7 +27,7 @@ public class DataBaseWorkerImpl implements DataBaseWorker {
 
     Logger log = Logger.getLogger("Logger");
 
-    private QueryExecutorImpl queryExecutor;
+    private QueryExecutor queryExecutor;
 
     @Override
     public <T extends BaseDBO> long save(T value) throws SQLException, ClassNotFoundException, IllegalAccessException, NoSuchFieldException {
@@ -106,7 +107,7 @@ public class DataBaseWorkerImpl implements DataBaseWorker {
         long classId = entity.getClass().getAnnotation(ClassId.class).id();
         long primaryClassId = queryExecutor.getPrimaryClassId(id);
         if(primaryClassId == 0)
-            queryExecutor.objectClassRelationship(id, classId, RelationshipTypes.primary);
+            queryExecutor.createObjectClassRelationship(id, classId, RelationshipTypes.primary);
         log.info("C"+classId+" "+primaryClassId);
         for(Field field: entity.getClass().getDeclaredFields()) {
             field.setAccessible(true);
