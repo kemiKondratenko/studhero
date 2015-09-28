@@ -26,9 +26,22 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public List<BaseDBO> search(List<SearchScope> searchScopeList) throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchFieldException {
-        List<Long> resultIds = Lists.newArrayList();for(SearchScope searchScope: searchScopeList){
+        List<Long> resultIds = Lists.newArrayList();
+        for(SearchScope searchScope: searchScopeList){
             resultIds = filter(resultIds, dataBaseWorker.search(searchScope));
-        } List<BaseDBO> resultObjects = Lists.newArrayList();
+        }
+        List<BaseDBO> resultObjects = Lists.newArrayList();
+        for(Long id : resultIds){
+            resultObjects.add(dataBaseWorker.get(id));
+        }
+        return resultObjects;
+    }
+
+    @Override
+    public List<BaseDBO> search(SearchScope searchScope) throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchFieldException {
+        List<Long> resultIds = Lists.newArrayList();
+        resultIds = filter(resultIds, dataBaseWorker.search(searchScope));
+        List<BaseDBO> resultObjects = Lists.newArrayList();
         for(Long id : resultIds){
             resultObjects.add(dataBaseWorker.get(id));
         }
@@ -69,4 +82,5 @@ public class SearchServiceImpl implements SearchService {
     public void setDataBaseWorker(DataBaseWorker dataBaseWorker) {
         this.dataBaseWorker = dataBaseWorker;
     }
+
 }

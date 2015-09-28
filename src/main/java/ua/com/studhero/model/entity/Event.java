@@ -169,7 +169,9 @@ public class Event extends BaseDBO{
     }
 
     public Boolean getApproved() {
-        return approved.get();
+        if(approved != null)
+            return approved.get();
+        return null;
     }
 
     public void setApproved(Boolean approved) {

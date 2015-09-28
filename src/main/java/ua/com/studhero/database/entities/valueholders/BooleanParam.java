@@ -1,6 +1,7 @@
 package ua.com.studhero.database.entities.valueholders;
 
 import ua.com.studhero.database.constants.AttrTypes;
+import ua.com.studhero.database.constants.AttrValues;
 import ua.com.studhero.database.entities.valueholders.base.Param;
 
 /**
@@ -9,6 +10,7 @@ import ua.com.studhero.database.entities.valueholders.base.Param;
 public class BooleanParam extends Param<Boolean>{
 
     public static final long BOOLEANPARAM = AttrTypes.Boolean;
+    public static final long TRUE = AttrValues.TRUE;
 
     public BooleanParam(Boolean approved) {
         super(0, approved);
@@ -21,4 +23,5 @@ public class BooleanParam extends Param<Boolean>{
     public Boolean get(){
         return super.get();
     }
+
 }

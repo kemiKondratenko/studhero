@@ -8,6 +8,11 @@ public class SearchScope {
     private String paramValue;
     private long paramAttrId = 0;
 
+    public SearchScope(String paramValue, long paramAttrId) {
+        this.paramValue = paramValue;
+        this.paramAttrId = paramAttrId;
+    }
+
     public String getParamName() {
         return paramName;
     }

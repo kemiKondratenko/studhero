@@ -5,7 +5,13 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ua.com.studhero.database.DataBaseWorker;
+import ua.com.studhero.database.constants.AttrTypes;
+import ua.com.studhero.database.constants.Attrs;
+import ua.com.studhero.database.entities.BaseDBO;
+import ua.com.studhero.database.entities.SearchScope;
+import ua.com.studhero.database.entities.valueholders.BooleanParam;
 import ua.com.studhero.model.entity.Event;
+import ua.com.studhero.services.impl.SearchServiceImpl;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -22,6 +28,9 @@ public class EventsController {
 
     @Inject
     private DataBaseWorker dataBaseWorker;
+
+    @Inject
+    private SearchServiceImpl searchService;
 
 
     @RequestMapping(value="/", method = RequestMethod.GET)
@@ -60,6 +69,18 @@ public class EventsController {
             }
         }  catch (Exception e) {
             return new Event(e.getMessage());
+        }
+    }
+
+
+    @RequestMapping(value = "/approved", method = RequestMethod.GET,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody
+    List<BaseDBO> approved() {
+        try {
+            return searchService.search(new SearchScope(String.valueOf(BooleanParam.TRUE), Attrs.Approved));
+        }  catch (Exception e) {
+            return Lists.newArrayList(new BaseDBO(e.getMessage()));
         }
     }
 
