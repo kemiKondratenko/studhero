@@ -26,20 +26,20 @@ public class User extends BaseDBO{
     }
 
     public void setEmail(String email) {
-        if(email == null && email !=null)
+        if(this.email == null && email !=null)
             this.email = new StringParam(email);
         this.email.set(email);
     }
 
     public String getPassword() {
-        if(email != null)
-            return email.get();
+        if(password != null)
+            return password.get();
         return null;
     }
 
     public void setPassword(String password) {
-        if(password == null && password !=null)
-            this.email = new StringParam(password);
+        if(this.password == null && password != null)
+            this.password = new StringParam(password);
         this.password.set(password);
     }
 }

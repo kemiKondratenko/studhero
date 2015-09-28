@@ -3,6 +3,7 @@ package ua.com.studhero.model.entity;
 import ua.com.studhero.annotations.AttrId;
 import ua.com.studhero.annotations.ClassId;
 import ua.com.studhero.database.entities.BaseDBO;
+import ua.com.studhero.database.entities.valueholders.StringParam;
 
 /**
  * Created by kaspyar on 9/9/15.
@@ -10,9 +11,9 @@ import ua.com.studhero.database.entities.BaseDBO;
 @ClassId(id = 8)
 public class Company extends BaseDBO{
     @AttrId(id = 34)
-    private String name;
+    private StringParam name;
     @AttrId(id = 35)
-    private String status;
+    private StringParam status;
 
     public Company() {
     }
@@ -22,19 +23,27 @@ public class Company extends BaseDBO{
     }
 
     public String getStatus() {
-        return status;
+        if(status != null)
+            return status.get();
+        return null;
     }
 
     public void setStatus(String status) {
-        this.status = status;
+        if(this.status == null && status !=null)
+            this.status = new StringParam(status);
+        this.status.set(status);
     }
 
 
     public String getName() {
-        return name;
+        if(name != null)
+            return name.get();
+        return null;
     }
 
     public void setName(String name) {
-        this.name = name;
+        if(this.name == null && name !=null)
+            this.name = new StringParam(name);
+        this.name.set(name);
     }
 }
