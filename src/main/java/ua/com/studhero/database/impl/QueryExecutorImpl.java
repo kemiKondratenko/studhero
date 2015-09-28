@@ -36,6 +36,7 @@ public class QueryExecutorImpl implements QueryExecutor {
     private RemoveListParamPreparedStatement removeListParamPreparedStatement;
     private RemoveParamPreparedStatement removeParamPreparedStatement;
     private GetobjectParamPreparedStatement getObjectParamPreparedStatement;
+    private GetPrimaryObjectsByClassLimitedFromTo getPrimaryObjectsByClassLimitedFromTo;
 
     @Override
     public Map<Long, Param> getObjectParams(long objectId, long classId) throws SQLException, ClassNotFoundException {
@@ -182,6 +183,14 @@ public class QueryExecutorImpl implements QueryExecutor {
             simpleSearchPreparedStatement = new SimpleSearchPreparedStatement(connector.getConnection());
         }
         return simpleSearchPreparedStatement.search(paramAttrId, paramValue);
+    }
+
+    @Override
+    public List<Long> getPrimaryObjectsByClassLimitedFromTo(long class_id, long from, long to) throws SQLException {
+        if(getPrimaryObjectsByClassLimitedFromTo == null || (getPrimaryObjectsByClassLimitedFromTo != null && getPrimaryObjectsByClassLimitedFromTo.closed())){
+            getPrimaryObjectsByClassLimitedFromTo = new GetPrimaryObjectsByClassLimitedFromTo(connector.getConnection());
+        }
+        return getPrimaryObjectsByClassLimitedFromTo.get(class_id, from, to);
     }
 
     public void removeParams(long id, long attr_id, List<Long> difference, long classId) throws SQLException {

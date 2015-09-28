@@ -4,6 +4,7 @@ import ua.com.studhero.database.entities.BaseDBO;
 import ua.com.studhero.database.entities.SearchScope;
 import ua.com.studhero.exceptions.database.DuplicateLoginException;
 import ua.com.studhero.exceptions.database.UnexpectedDBAnswerException;
+import ua.com.studhero.model.entity.Event;
 import ua.com.studhero.model.entity.User;
 
 import java.sql.SQLException;
@@ -35,4 +36,6 @@ public interface DataBaseWorker {
     public boolean isLoginValid(String login) throws SQLException;
 
     public List<Long> search(SearchScope searchScope) throws SQLException;
+
+    public <T extends BaseDBO>  List<T> get(Class<T> classValue, Long from, Long to) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException, NoSuchFieldException;
 }

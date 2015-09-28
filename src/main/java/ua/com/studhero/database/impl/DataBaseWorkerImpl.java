@@ -1,5 +1,6 @@
 package ua.com.studhero.database.impl;
 
+import com.google.common.collect.Lists;
 import ua.com.studhero.annotations.ClassId;
 import ua.com.studhero.annotations.AttrId;
 import ua.com.studhero.database.DataBaseWorker;
@@ -147,6 +148,20 @@ public class DataBaseWorkerImpl implements DataBaseWorker {
     @Override
     public List<Long> search(SearchScope searchScope) throws SQLException {
         return queryExecutor.search(searchScope.getParamAttrId(), searchScope.getParamValue());
+    }
+
+    @Override
+    public <T extends BaseDBO>  List<T> get(Class<T> classValue, Long from, Long to) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException, NoSuchFieldException {
+        long class_id = classValue.getAnnotation(ClassId.class).id();
+        return get(queryExecutor.getPrimaryObjectsByClassLimitedFromTo(class_id, from.longValue(), to.longValue()), classValue);
+    }
+
+    private <T extends BaseDBO> List<T> get(List<Long> objects, Class<T> classValue) throws ClassNotFoundException, SQLException, NoSuchFieldException, InstantiationException, IllegalAccessException {
+        List<T> res = Lists.newArrayList();
+        for (Long id: objects){
+            res.add(get(id, classValue));
+        }
+        return res;
     }
 
     public void setQueryExecutor(QueryExecutorImpl queryExecutor) {

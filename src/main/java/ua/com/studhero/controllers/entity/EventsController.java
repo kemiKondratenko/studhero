@@ -43,6 +43,19 @@ public class EventsController {
         }
     }
 
+    @RequestMapping(value="/limit", method = RequestMethod.GET)
+    public @ResponseBody
+    List<Event> limit(@RequestParam long from, @RequestParam long to){
+        try {
+            if(from == 0 && to == 0)
+                return Lists.newArrayList(new Event("Parameters were incorrect"));
+            else
+                return dataBaseWorker.get(Event.class, from, to);
+        }  catch (Exception e) {
+            return Lists.newArrayList(new Event(e.getMessage()));
+        }
+    }
+
     @RequestMapping(value="/{id}", method = RequestMethod.GET)
     public @ResponseBody
     Event getById(@PathVariable long id){

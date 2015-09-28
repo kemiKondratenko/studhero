@@ -1,5 +1,6 @@
 package ua.com.studhero.database;
 
+import ua.com.studhero.database.entities.BaseDBO;
 import ua.com.studhero.database.entities.valueholders.base.Param;
 
 import java.sql.SQLException;
@@ -37,4 +38,6 @@ public interface QueryExecutor {
     boolean isLoginValid(String login) throws SQLException;
 
     List<Long> search(long paramAttrId, String paramValue) throws SQLException;
+
+    List<Long> getPrimaryObjectsByClassLimitedFromTo(long class_id, long from, long to) throws SQLException;
 }
