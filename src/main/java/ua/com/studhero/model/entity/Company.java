@@ -13,7 +13,11 @@ public class Company extends BaseDBO{
     @AttrId(id = 34)
     private StringParam name;
     @AttrId(id = 35)
-    private StringParam status;
+    private StringParam email;
+    @AttrId(id = 64)
+    private StringParam phone;
+    @AttrId(id = 65)
+    private StringParam edrpoy;
 
     public Company() {
     }
@@ -22,16 +26,16 @@ public class Company extends BaseDBO{
         super(message);
     }
 
-    public String getStatus() {
-        if(status != null)
-            return status.get();
+    public String getEmail() {
+        if(email != null)
+            return email.get();
         return null;
     }
 
-    public void setStatus(String status) {
-        if(this.status == null && status !=null)
-            this.status = new StringParam(status);
-        this.status.set(status);
+    public void setEmail(String email) {
+        if(this.email == null && email !=null)
+            this.email = new StringParam(email);
+        this.email.set(email);
     }
 
 
@@ -46,4 +50,28 @@ public class Company extends BaseDBO{
             this.name = new StringParam(name);
         this.name.set(name);
     }
+
+    public String getPhone() {
+        if(phone != null)
+            return phone.get();
+        return null;
+    }
+
+    public void setPhone(String phone) {
+        if(this.phone == null && phone !=null)
+            this.phone = new StringParam(phone);
+        this.phone.set(phone);
+    }
+    public String getEdrpoy() {
+        if(edrpoy != null)
+            return edrpoy.get();
+        return null;
+    }
+
+    public void setEdrpoy(String edrpoy) {
+        if(this.edrpoy == null && edrpoy !=null)
+            this.edrpoy = new StringParam(edrpoy);
+        this.edrpoy.set(edrpoy);
+    }
+
 }
