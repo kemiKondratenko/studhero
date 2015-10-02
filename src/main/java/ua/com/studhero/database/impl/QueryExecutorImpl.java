@@ -1,5 +1,7 @@
 package ua.com.studhero.database.impl;
 
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import ua.com.studhero.database.Connector;
 import ua.com.studhero.database.QueryExecutor;
 import ua.com.studhero.database.entities.valueholders.ListParam;
@@ -63,6 +65,7 @@ public class QueryExecutorImpl implements QueryExecutor {
     }
 
     @Override
+    @Transactional(propagation = Propagation.NESTED)
     public boolean createParameter(long objectId, long attrId, Object value, long classId) throws SQLException {
         if(value instanceof List){
             log.info("This is list, now");
@@ -78,6 +81,7 @@ public class QueryExecutorImpl implements QueryExecutor {
     }
 
     @Override
+    @Transactional(propagation = Propagation.NESTED)
     public void createParameter(long objectId, long attrId, List<Long> listParam, long classId) throws SQLException {
         log.info("This is list, now");
         for(Long value: listParam){
@@ -105,6 +109,7 @@ public class QueryExecutorImpl implements QueryExecutor {
     }
 
     @Override
+    @Transactional(propagation = Propagation.NESTED)
     public void createObjectClassRelationship(long objectId, long classId, long typeId) throws SQLException {
         if(objectClassRelationshipPreparedStatement == null || (objectClassRelationshipPreparedStatement != null && objectClassRelationshipPreparedStatement.closed())){
             objectClassRelationshipPreparedStatement = new ObjectClassRelationshipPreparedStatement(connector.getConnection());
@@ -153,6 +158,7 @@ public class QueryExecutorImpl implements QueryExecutor {
     }
 
     @Override
+    @Transactional(propagation = Propagation.NESTED)
     public boolean updateParameter(long param, Object fieldValue) throws SQLException {
         if(updateParameterPreparedStatement == null || (updateParameterPreparedStatement != null && updateParameterPreparedStatement.closed())){
             updateParameterPreparedStatement = new UpdateParameterPreparedStatement(connector.getConnection());
@@ -161,6 +167,7 @@ public class QueryExecutorImpl implements QueryExecutor {
     }
 
     @Override
+    @Transactional(propagation = Propagation.NESTED)
     public boolean updateParameter(long object_id, long attr_id, Object value, long class_id) throws SQLException, ClassNotFoundException {
         if(value instanceof List){
             List<Long> valueList = (List<Long>) value;

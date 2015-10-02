@@ -4,8 +4,8 @@ import com.google.common.collect.Lists;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ua.com.studhero.database.DataBaseWorker;
-import ua.com.studhero.database.constants.AttrTypes;
 import ua.com.studhero.database.constants.Attrs;
 import ua.com.studhero.database.entities.BaseDBO;
 import ua.com.studhero.database.entities.SearchScope;
@@ -14,6 +14,9 @@ import ua.com.studhero.model.entity.Event;
 import ua.com.studhero.services.impl.SearchServiceImpl;
 
 import javax.inject.Inject;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -94,6 +97,47 @@ public class EventsController {
             return searchService.search(new SearchScope(String.valueOf(BooleanParam.TRUE), Attrs.Approved));
         }  catch (Exception e) {
             return Lists.newArrayList(new BaseDBO(e.getMessage()));
+        }
+    }
+
+    @RequestMapping(value = "/uploadFile", method = RequestMethod.POST)
+    public @ResponseBody
+    String uploadFileHandler(@RequestParam("name") String name,
+                             @RequestParam("file") MultipartFile file) {
+
+        if (!file.isEmpty()) {
+            try {
+                byte[] bytes = file.getBytes();
+
+                // Creating the directory to store file
+                File dir = new File("/home/h106815/tmpFiles");
+                log.info("path: "+ dir.getAbsolutePath());
+                log.info("can write?: "+dir.canWrite());
+                dir.setWritable(true);
+                log.info("can write?: "+dir.canWrite());
+                dir.setWritable(true, true);
+                log.info("can write?: "+dir.canWrite());
+                if (!dir.exists())
+                    dir.mkdirs();
+
+                // Create the file on server
+                File serverFile = new File(dir.getAbsolutePath()
+                        + File.separator + name);
+                BufferedOutputStream stream = new BufferedOutputStream(
+                        new FileOutputStream(serverFile));
+                stream.write(bytes);
+                stream.close();
+
+                log.info("Server File Location="
+                        + serverFile.getAbsolutePath());
+
+                return "You successfully uploaded file=" + name;
+            } catch (Exception e) {
+                return "You failed to upload " + name + " => " + e.getMessage();
+            }
+        } else {
+            return "You failed to upload " + name
+                    + " because the file was empty.";
         }
     }
 

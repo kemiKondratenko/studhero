@@ -1,6 +1,8 @@
 package ua.com.studhero.database.impl;
 
 import com.google.common.collect.Lists;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import ua.com.studhero.annotations.ClassId;
 import ua.com.studhero.annotations.AttrId;
 import ua.com.studhero.database.DataBaseWorker;
@@ -31,6 +33,7 @@ public class DataBaseWorkerImpl implements DataBaseWorker {
     private QueryExecutor queryExecutor;
 
     @Override
+    @Transactional
     public <T extends BaseDBO> long save(T value) throws SQLException, ClassNotFoundException, IllegalAccessException, NoSuchFieldException {
         long objectId =  queryExecutor.createNewObject(value.getClass().getName());
         return save(objectId, value);
@@ -104,6 +107,7 @@ public class DataBaseWorkerImpl implements DataBaseWorker {
     }
 
     @Override
+    @Transactional
     public long save(long id, BaseDBO entity) throws SQLException, IllegalAccessException, NoSuchFieldException, ClassNotFoundException {
         long classId = entity.getClass().getAnnotation(ClassId.class).id();
         long primaryClassId = queryExecutor.getPrimaryClassId(id);
