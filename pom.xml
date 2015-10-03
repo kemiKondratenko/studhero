@@ -103,7 +103,7 @@
 
 
     <build>
-        <finalName>StudHeroKasp</finalName>
+        <finalName>StudHero</finalName>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>

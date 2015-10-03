@@ -26,6 +26,11 @@ import java.util.logging.Logger;
 @Controller
 @RequestMapping("events")
 public class EventsController {
+    private interface Key{
+        String SERVER_PATH = "http://89.184.67.220:8080";
+        String FOLDER = "/images/events/";
+        String MAIN_FOLDER = "/var/lib/tomcat7/webapps/ROOT";
+    }
 
     Logger log = Logger.getLogger("Logger");
 
@@ -102,41 +107,33 @@ public class EventsController {
 
     @RequestMapping(value = "/uploadFile", method = RequestMethod.POST)
     public @ResponseBody
-    String uploadFileHandler(@RequestParam("name") String name,
-                             @RequestParam("file") MultipartFile file) {
+    String uploadFileHandler(@RequestParam("file") MultipartFile file) {
 
         if (!file.isEmpty()) {
             try {
                 byte[] bytes = file.getBytes();
 
                 // Creating the directory to store file
-                File dir = new File("/home/h106815/tmpFiles");
-                log.info("path: "+ dir.getAbsolutePath());
-                log.info("can write?: "+dir.canWrite());
+                File dir = new File(Key.MAIN_FOLDER+Key.FOLDER);
                 dir.setWritable(true);
-                log.info("can write?: "+dir.canWrite());
                 dir.setWritable(true, true);
-                log.info("can write?: "+dir.canWrite());
                 if (!dir.exists())
                     dir.mkdirs();
 
                 // Create the file on server
+                String newName = String.valueOf(System.nanoTime());
                 File serverFile = new File(dir.getAbsolutePath()
-                        + File.separator + name);
+                        + File.separator + newName + file.getOriginalFilename());
                 BufferedOutputStream stream = new BufferedOutputStream(
                         new FileOutputStream(serverFile));
                 stream.write(bytes);
                 stream.close();
-
-                log.info("Server File Location="
-                        + serverFile.getAbsolutePath());
-
-                return "You successfully uploaded file=" + name;
+                return Key.SERVER_PATH+ Key.FOLDER +newName+file.getOriginalFilename();
             } catch (Exception e) {
-                return "You failed to upload " + name + " => " + e.getMessage();
+                return "You failed to upload " + file.getName() + " => " + e.getMessage();
             }
         } else {
-            return "You failed to upload " + name
+            return "You failed to upload " + file.getName()
                     + " because the file was empty.";
         }
     }

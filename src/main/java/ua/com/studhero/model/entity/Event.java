@@ -39,6 +39,8 @@ public class Event extends BaseDBO{
     private TimeParam endTime;
     @AttrId(id = 63)
     private BooleanParam approved;
+    @AttrId(id = 68)
+    private StringParam image;
 
 
     public Event() {
@@ -181,7 +183,20 @@ public class Event extends BaseDBO{
             this.approved.set(approved);
     }
 
+    public String getImage() {
+        if (image != null){
+            return image.get();
+        }
+        return null;
+    }
 
+    public void setImage(String image) {
+        if (this.image == null && image != null){
+            this.image = new StringParam(image);
+        } else {
+            this.image.set(image);
+        }
+    }
 
     @Override
     public String toString() {
