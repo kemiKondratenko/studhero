@@ -5,30 +5,52 @@ import ua.com.studhero.annotations.ClassId;
 import ua.com.studhero.database.entities.BaseDBO;
 import ua.com.studhero.database.entities.valueholders.StringParam;
 
+import java.util.List;
+import java.util.Set;
+
 /**
- * Created by kaspyar on 9/9/15.
+ * @author KaspYar
  */
-@ClassId(id = 8)
-public class Company extends BaseDBO{
+@ClassId(id = 7)
+public class Student extends BaseDBO {
+
     @AttrId(id = 34)
     private StringParam name;
-    @AttrId(id = 35)
+    @AttrId(id = 37)
+    private StringParam lastName;
+    @AttrId(id = 32)
     private StringParam email;
     @AttrId(id = 64)
     private StringParam phone;
-    @AttrId(id = 65)
-    private StringParam edrpoy;
-
-    @AttrId(id = 66)
+    @AttrId(id = 38)
     private StringParam city;
-    @AttrId(id = 67)
-    private StringParam activity;
 
-    public Company() {
+    public Student(String message) {
+        setError(message);
     }
 
-    public Company(String message) {
-        super(message);
+    public String getName() {
+        if(name != null)
+            return name.get();
+        return null;
+    }
+
+    public void setName(String name) {
+        if(this.name == null && name !=null)
+            this.name = new StringParam(name);
+        this.name.set(name);
+    }
+
+    public String getLastName() {
+        if(lastName != null)
+            return lastName.get();
+        return null;
+    }
+
+    public void setLastName(String lastName) {
+        if(this.lastName == null && lastName !=null)
+            this.lastName = new StringParam(lastName);
+        this.lastName.set(lastName);
     }
 
     public String getEmail() {
@@ -43,19 +65,6 @@ public class Company extends BaseDBO{
         this.email.set(email);
     }
 
-
-    public String getName() {
-        if(name != null)
-            return name.get();
-        return null;
-    }
-
-    public void setName(String name) {
-        if(this.name == null && name !=null)
-            this.name = new StringParam(name);
-        this.name.set(name);
-    }
-
     public String getPhone() {
         if(phone != null)
             return phone.get();
@@ -66,17 +75,6 @@ public class Company extends BaseDBO{
         if(this.phone == null && phone !=null)
             this.phone = new StringParam(phone);
         this.phone.set(phone);
-    }
-    public String getEdrpoy() {
-        if(edrpoy != null)
-            return edrpoy.get();
-        return null;
-    }
-
-    public void setEdrpoy(String edrpoy) {
-        if(this.edrpoy == null && edrpoy !=null)
-            this.edrpoy = new StringParam(edrpoy);
-        this.edrpoy.set(edrpoy);
     }
 
     public String getCity() {
@@ -89,17 +87,5 @@ public class Company extends BaseDBO{
         if(this.city == null && city !=null)
             this.city = new StringParam(city);
         this.city.set(city);
-    }
-
-    public String getActivity() {
-        if(activity != null)
-            return activity.get();
-        return null;
-    }
-
-    public void setActivity(String activity) {
-        if(this.activity == null && activity !=null)
-            this.activity = new StringParam(activity);
-        this.activity.set(activity);
     }
 }

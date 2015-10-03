@@ -3,7 +3,7 @@ package ua.com.studhero.database.constants;
 import ua.com.studhero.annotations.AttrId;
 import ua.com.studhero.model.entity.Company;
 import ua.com.studhero.model.entity.Event;
-import ua.com.studhero.model.entity.StudentUser;
+import ua.com.studhero.model.entity.Student;
 
 import java.lang.reflect.Field;
 
@@ -25,7 +25,7 @@ public class AttrIdFactory {
         }catch (NoSuchFieldException e){
         }
         try {
-            field = StudentUser.class.getDeclaredField(paramName);
+            field = Student.class.getDeclaredField(paramName);
             if(field != null) return field.getAnnotation(AttrId.class).id();
         }catch (NoSuchFieldException e){
         }/*

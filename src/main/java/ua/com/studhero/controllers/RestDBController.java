@@ -6,14 +6,11 @@ import org.springframework.web.bind.annotation.*;
 import ua.com.studhero.database.DataBaseWorker;
 import ua.com.studhero.database.constants.ClassFactory;
 import ua.com.studhero.database.entities.BaseDBO;
-import ua.com.studhero.model.entity.Company;
-import ua.com.studhero.model.entity.StudentUser;
 import ua.com.studhero.model.entity.Tag;
 import ua.com.studhero.model.entity.User;
 
 import javax.inject.Inject;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 

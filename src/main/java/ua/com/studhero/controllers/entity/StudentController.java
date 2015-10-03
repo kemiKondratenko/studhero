@@ -6,19 +6,21 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ua.com.studhero.annotations.ClassId;
 import ua.com.studhero.controllers.entity.model.CompanyRegistrateModel;
+import ua.com.studhero.controllers.entity.model.StudentRegistrateModel;
 import ua.com.studhero.database.DataBaseWorker;
 import ua.com.studhero.model.entity.Company;
+import ua.com.studhero.model.entity.Student;
 import ua.com.studhero.model.entity.User;
 
 import javax.inject.Inject;
 import java.util.List;
 
 /**
- * Created by Eugene on 13.09.2015.
+ * Created by Eugene on 03.10.2015.
  */
 @Controller
-@RequestMapping("companies")
-public class CompaniesController {
+@RequestMapping("student")
+public class StudentController {
 
     @Inject
     private DataBaseWorker dataBaseWorker;
@@ -26,16 +28,16 @@ public class CompaniesController {
 
     @RequestMapping(value="/", method = RequestMethod.GET)
     public @ResponseBody
-    List<Company> get(){
+    List<Student> get(){
         try {
-            return dataBaseWorker.get(Company.class);
+            return dataBaseWorker.get(Student.class);
         }  catch (Exception e) {
-            return Lists.newArrayList(new Company(e.getMessage()));
+            return Lists.newArrayList(new Student(e.getMessage()));
         }
     }
 
     @RequestMapping(value="/{id}", method = RequestMethod.GET)
-     public @ResponseBody
+    public @ResponseBody
     Company getById(@PathVariable long id){
         try {
             return dataBaseWorker.get(id, Company.class);
@@ -47,45 +49,45 @@ public class CompaniesController {
     @RequestMapping(value="/update", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Company update(@RequestBody Company entity){
+    Student update(@RequestBody Student entity){
         try {
             if(entity.getObjectId() == 0){
-                return new Company("Object does not have an id");
+                return new Student("Object does not have an id");
             }
             return dataBaseWorker.get(dataBaseWorker.save(entity.getObjectId(), entity), entity.getClass());
         } catch (Exception e) {
-            return new Company(e.getMessage());
+            return new Student(e.getMessage());
         }
     }
 
     @RequestMapping(value="/registrate", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Company registrate(@RequestBody CompanyRegistrateModel entity){
+    Student registrate(@RequestBody StudentRegistrateModel entity){
         try {
             long newId = dataBaseWorker.createLoginable(entity.getUser().getEmail(), entity.getUser().getPassword());
             if(newId != 0){
-                dataBaseWorker.save(newId, entity.getCompany());
-                return dataBaseWorker.get(newId, Company.class);
+                dataBaseWorker.save(newId, entity.getStudent());
+                return dataBaseWorker.get(newId, Student.class);
             }else
-                return new Company("cant create company");
+                return new Student("cant create student");
         } catch (Exception e) {
-            return new Company(e.getMessage());
+            return new Student(e.getMessage());
         }
     }
 
     @RequestMapping(value="/login", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Company login(@RequestBody User entity){
+    Student login(@RequestBody User entity){
         try {
             long id =  dataBaseWorker.getIdIfExists(entity);
             long classId_id =  dataBaseWorker.getPrimaryClassId(id);
-            long company_classId_id =  Company.class.getAnnotation(ClassId.class).id();
-            if(id == 0 || classId_id != company_classId_id) return new Company("No such company");
-            return dataBaseWorker.get(id, Company.class);
+            long company_classId_id =  Student.class.getAnnotation(ClassId.class).id();
+            if(id == 0 || classId_id != company_classId_id) return new Student("No such student");
+            return dataBaseWorker.get(id, Student.class);
         } catch (Exception e) {
-            return new Company(e.getMessage());
+            return new Student(e.getMessage());
         }
     }
 
