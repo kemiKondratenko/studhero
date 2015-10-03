@@ -7,6 +7,7 @@ import ua.com.studhero.database.entities.valueholders.StringParam;
 
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 
 /**
  * @author KaspYar
@@ -24,6 +25,9 @@ public class Student extends BaseDBO {
     private StringParam phone;
     @AttrId(id = 38)
     private StringParam city;
+
+    public Student() {
+    }
 
     public Student(String message) {
         setError(message);

@@ -7,7 +7,8 @@ import ua.com.studhero.model.entity.User;
 /**
  * Created by Eugene on 03.10.2015.
  */
-public class StudentRegistrateModel  {
+public class StudentRegistrateModel {
+
     private User user;
     private Student student;
 

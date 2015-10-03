@@ -19,7 +19,7 @@ import java.util.List;
  * Created by Eugene on 03.10.2015.
  */
 @Controller
-@RequestMapping("student")
+@RequestMapping("students")
 public class StudentController {
 
     @Inject
