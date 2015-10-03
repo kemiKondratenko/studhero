@@ -19,6 +19,11 @@ public class Company extends BaseDBO{
     @AttrId(id = 65)
     private StringParam edrpoy;
 
+    @AttrId(id = 66)
+    private StringParam city;
+    @AttrId(id = 67)
+    private StringParam activity;
+
     public Company() {
     }
 
@@ -74,4 +79,23 @@ public class Company extends BaseDBO{
         this.edrpoy.set(edrpoy);
     }
 
+    public StringParam getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        if(this.city == null && city !=null)
+            this.city = new StringParam(city);
+        this.city.set(city);
+    }
+
+    public StringParam getActivity() {
+        return activity;
+    }
+
+    public void setActivity(String activity) {
+        if(this.activity == null && activity !=null)
+            this.activity = new StringParam(activity);
+        this.activity.set(activity);
+    }
 }
