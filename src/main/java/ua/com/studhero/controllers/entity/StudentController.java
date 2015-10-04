@@ -102,7 +102,13 @@ public class StudentController {
             } else {
                 student.setEvents(Lists.newArrayList(idEvent));
             }
-            return new BaseDBO();
+            BaseDBO obj = new BaseDBO();
+            if (dataBaseWorker.update(student)) {
+                obj.setObjectId(idStudent);
+            } else {
+                obj.setError("Problems with updating student");
+            }
+            return obj;
         } catch (Exception e) {
             return new BaseDBO(e.getMessage());
         }
