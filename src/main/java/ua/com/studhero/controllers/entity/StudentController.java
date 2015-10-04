@@ -8,6 +8,7 @@ import ua.com.studhero.annotations.ClassId;
 import ua.com.studhero.controllers.entity.model.CompanyRegistrateModel;
 import ua.com.studhero.controllers.entity.model.StudentRegistrateModel;
 import ua.com.studhero.database.DataBaseWorker;
+import ua.com.studhero.database.entities.BaseDBO;
 import ua.com.studhero.model.entity.Company;
 import ua.com.studhero.model.entity.Student;
 import ua.com.studhero.model.entity.User;
@@ -91,4 +92,19 @@ public class StudentController {
         }
     }
 
+    @RequestMapping(value="/{idStudent}/subscribe/{idEvent}", method = RequestMethod.GET)
+    public @ResponseBody
+    BaseDBO subscribe(@PathVariable long idStudent, @PathVariable long idEvent) {
+        try {
+            Student student = dataBaseWorker.get(idStudent, Student.class);
+            if (student.getEvents() != null) {
+                student.getEvents().add(idEvent);
+            } else {
+                student.setEvents(Lists.newArrayList(idEvent));
+            }
+            return new BaseDBO();
+        } catch (Exception e) {
+            return new BaseDBO(e.getMessage());
+        }
+    }
 }

@@ -45,7 +45,13 @@ public class EventsController {
     public @ResponseBody
     List<Event> get(){
         try {
-            return dataBaseWorker.get(Event.class);
+            List<Event> lst = dataBaseWorker.get(Event.class);
+            for (Event event:lst){
+                if (event.getImage()!=null){
+                    event.setImage(Key.SERVER_PATH+Key.FOLDER+event.getImage());
+                }
+            }
+            return lst;
         }  catch (Exception e) {
             return Lists.newArrayList(new Event(e.getMessage()));
         }
@@ -128,7 +134,7 @@ public class EventsController {
                         new FileOutputStream(serverFile));
                 stream.write(bytes);
                 stream.close();
-                return Key.SERVER_PATH+ Key.FOLDER +newName+file.getOriginalFilename();
+                return newName+file.getOriginalFilename();
             } catch (Exception e) {
                 return "You failed to upload " + file.getName() + " => " + e.getMessage();
             }

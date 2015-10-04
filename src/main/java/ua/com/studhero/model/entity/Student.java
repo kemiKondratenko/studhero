@@ -3,6 +3,7 @@ package ua.com.studhero.model.entity;
 import ua.com.studhero.annotations.AttrId;
 import ua.com.studhero.annotations.ClassId;
 import ua.com.studhero.database.entities.BaseDBO;
+import ua.com.studhero.database.entities.valueholders.ListParam;
 import ua.com.studhero.database.entities.valueholders.StringParam;
 
 import java.util.List;
@@ -25,6 +26,8 @@ public class Student extends BaseDBO {
     private StringParam phone;
     @AttrId(id = 38)
     private StringParam city;
+    @AttrId(id = 69)
+    private ListParam events;
 
     public Student() {
     }
@@ -91,5 +94,17 @@ public class Student extends BaseDBO {
         if(this.city == null && city !=null)
             this.city = new StringParam(city);
         this.city.set(city);
+    }
+
+    public List<Long> getEvents() {
+        if(events != null)
+            return events.get();
+        return null;
+    }
+
+    public void setEvents(List<Long> events) {
+        if(this.events == null && events !=null)
+            this.events = new ListParam(events);
+        this.events.set(events);
     }
 }
