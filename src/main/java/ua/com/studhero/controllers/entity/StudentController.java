@@ -38,11 +38,11 @@ public class StudentController {
 
     @RequestMapping(value="/{id}", method = RequestMethod.GET)
     public @ResponseBody
-    Company getById(@PathVariable long id){
+    Student getById(@PathVariable long id){
         try {
-            return dataBaseWorker.get(id, Company.class);
+            return dataBaseWorker.get(id, Student.class);
         }  catch (Exception e) {
-            return new Company(e.getMessage());
+            return new Student(e.getMessage());
         }
     }
 
