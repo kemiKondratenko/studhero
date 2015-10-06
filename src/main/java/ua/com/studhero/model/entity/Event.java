@@ -41,7 +41,8 @@ public class Event extends BaseDBO{
     private BooleanParam approved;
     @AttrId(id = 68)
     private StringParam image;
-
+    @AttrId(id = 70)
+    private StringParam manager;
 
     public Event() {
     }
@@ -196,6 +197,17 @@ public class Event extends BaseDBO{
         } else {
             this.image.set(image);
         }
+    }
+    public String getManager() {
+        if(manager != null)
+            return manager.get();
+        return null;
+    }
+
+    public void setManager(String manager) {
+        if(this.manager == null && manager !=null)
+            this.manager = new StringParam(manager);
+        this.manager.set(manager);
     }
 
     @Override

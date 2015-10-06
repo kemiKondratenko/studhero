@@ -27,8 +27,6 @@ public class Company extends BaseDBO{
     private StringParam city;
     @AttrId(id = 67)
     private StringParam activity;
-    @AttrId(id = 70)
-    private StringParam manager;
 
     public Company() {
     }
@@ -107,17 +105,5 @@ public class Company extends BaseDBO{
         if(this.activity == null && activity !=null)
             this.activity = new StringParam(activity);
         this.activity.set(activity);
-    }
-
-    public String getManager() {
-        if(manager != null)
-            return manager.get();
-        return null;
-    }
-
-    public void setManager(String manager) {
-        if(this.manager == null && manager !=null)
-            this.manager = new StringParam(manager);
-        this.manager.set(manager);
     }
 }
