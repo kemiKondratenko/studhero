@@ -22,7 +22,7 @@ public class Event extends BaseDBO{
     @AttrId(id = 46)
     private ListParam tags;
     @AttrId(id = 39)
-    private LongParam company;
+    private StringParam company;
     @AttrId(id = 34)
     private StringParam title;
     @AttrId(id = 40)
@@ -67,15 +67,15 @@ public class Event extends BaseDBO{
         this.tags.set(tags);
     }
 
-    public Long getCompany() {
+    public String getCompany() {
         if(company != null)
             return company.get();
         return null;
     }
 
-    public void setCompany(Long company) {
+    public void setCompany(String company) {
         if(this.company == null)
-            this.company = new LongParam(company);
+            this.company = new StringParam(company);
         this.company.set(company);
     }
 
