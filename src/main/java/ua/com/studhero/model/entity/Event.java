@@ -43,6 +43,10 @@ public class Event extends BaseDBO{
     private StringParam image;
     @AttrId(id = 70)
     private StringParam manager;
+    @AttrId(id = 71)
+    private StringParam type;
+    @AttrId(id = 72)
+    private StringParam activity;
 
     public Event() {
     }
@@ -208,6 +212,30 @@ public class Event extends BaseDBO{
         if(this.manager == null && manager !=null)
             this.manager = new StringParam(manager);
         this.manager.set(manager);
+    }
+
+    public String getType() {
+        if(type != null)
+            return type.get();
+        return null;
+    }
+
+    public void setType(String type) {
+        if(this.type == null && type !=null)
+            this.type = new StringParam(type);
+        this.type.set(type);
+    }
+
+    public String getActivity() {
+        if(activity != null)
+            return activity.get();
+        return null;
+    }
+
+    public void setActivity(String activity) {
+        if(this.activity == null && activity !=null)
+            this.activity = new StringParam(activity);
+        this.activity.set(activity);
     }
 
     @Override
