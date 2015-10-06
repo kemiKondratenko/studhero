@@ -41,7 +41,6 @@ public class StudentController {
     @RequestMapping(value="/{id}", method = RequestMethod.GET)
     public @ResponseBody
     Student getById(@PathVariable long id, HttpServletResponse response){
-        response.setHeader("Access-Control-Allow-Origin", "http://89.184.67.220:80");
         try {
             return dataBaseWorker.get(id, Student.class);
         }  catch (Exception e) {
@@ -53,7 +52,6 @@ public class StudentController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     Student update(@RequestBody Student entity, HttpServletResponse response){
-        response.setHeader("Access-Control-Allow-Origin", "http://89.184.67.220:80");
         try {
             if(entity.getObjectId() == 0){
                 return new Student("Object does not have an id");
@@ -68,7 +66,6 @@ public class StudentController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     Student registrate(@RequestBody StudentRegistrateModel entity, HttpServletResponse response){
-        response.setHeader("Access-Control-Allow-Origin", "http://89.184.67.220:80");
         try {
             long newId = dataBaseWorker.createLoginable(entity.getUser().getEmail(), entity.getUser().getPassword());
             if(newId != 0){
@@ -85,7 +82,6 @@ public class StudentController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     Student login(@RequestBody User entity, HttpServletResponse response){
-        response.setHeader("Access-Control-Allow-Origin", "http://89.184.67.220:80");
         try {
             long id =  dataBaseWorker.getIdIfExists(entity);
             long classId_id =  dataBaseWorker.getPrimaryClassId(id);
@@ -100,7 +96,6 @@ public class StudentController {
     @RequestMapping(value="/{idStudent}/subscribe/{idEvent}", method = RequestMethod.GET)
     public @ResponseBody
     BaseDBO subscribe(@PathVariable long idStudent, @PathVariable long idEvent, HttpServletResponse response){
-        response.setHeader("Access-Control-Allow-Origin", "http://89.184.67.220:80");
         try {
             Student student = dataBaseWorker.get(idStudent, Student.class);
             if (student.getEvents() != null) {
