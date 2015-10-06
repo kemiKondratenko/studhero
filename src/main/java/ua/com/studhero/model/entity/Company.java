@@ -15,8 +15,9 @@ import java.util.List;
 public class Company extends BaseDBO{
     @AttrId(id = 34)
     private StringParam name;
-    @AttrId(id = 35)
-    private StringParam email;
+    //redundant field
+//    @AttrId(id = 35)
+//    private StringParam email;
     @AttrId(id = 64)
     private StringParam phone;
     @AttrId(id = 65)
@@ -36,17 +37,17 @@ public class Company extends BaseDBO{
         super(message);
     }
 
-    public String getEmail() {
-        if(email != null)
-            return email.get();
-        return null;
-    }
-
-    public void setEmail(String email) {
-        if(this.email == null && email !=null)
-            this.email = new StringParam(email);
-        this.email.set(email);
-    }
+//    public String getEmail() {
+//        if(email != null)
+//            return email.get();
+//        return null;
+//    }
+//
+//    public void setEmail(String email) {
+//        if(this.email == null && email !=null)
+//            this.email = new StringParam(email);
+//        this.email.set(email);
+//    }
 
 
     public String getName() {

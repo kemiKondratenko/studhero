@@ -5,6 +5,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ua.com.studhero.Key;
 import ua.com.studhero.database.DataBaseWorker;
 import ua.com.studhero.database.constants.Attrs;
 import ua.com.studhero.database.entities.BaseDBO;
@@ -26,11 +27,6 @@ import java.util.logging.Logger;
 @Controller
 @RequestMapping("events")
 public class EventsController {
-    private interface Key{
-        String SERVER_PATH = "http://89.184.67.220:8080";
-        String FOLDER = "/images/events/";
-        String MAIN_FOLDER = "/var/lib/tomcat7/webapps/ROOT";
-    }
 
     Logger log = Logger.getLogger("Logger");
 
@@ -48,7 +44,7 @@ public class EventsController {
             List<Event> lst = dataBaseWorker.get(Event.class);
             for (Event event:lst){
                 if (event.getImage()!=null){
-                    event.setImage(Key.SERVER_PATH+Key.FOLDER+event.getImage());
+                    event.setImage(Key.SERVER_PATH+Key.IMAGES_EVENTS_DIR+event.getImage());
                 }
             }
             return lst;
@@ -120,7 +116,7 @@ public class EventsController {
                 byte[] bytes = file.getBytes();
 
                 // Creating the directory to store file
-                File dir = new File(Key.MAIN_FOLDER+Key.FOLDER);
+                File dir = new File(Key.ROOT_DIR+Key.IMAGES_EVENTS_DIR);
                 dir.setWritable(true);
                 dir.setWritable(true, true);
                 if (!dir.exists())

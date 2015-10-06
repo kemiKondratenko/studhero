@@ -20,8 +20,9 @@ public class Student extends BaseDBO {
     private StringParam name;
     @AttrId(id = 37)
     private StringParam lastName;
-    @AttrId(id = 32)
-    private StringParam email;
+    //redundant
+//    @AttrId(id = 32)
+//    private StringParam email;
     @AttrId(id = 64)
     private StringParam phone;
     @AttrId(id = 38)
@@ -60,17 +61,17 @@ public class Student extends BaseDBO {
         this.lastName.set(lastName);
     }
 
-    public String getEmail() {
-        if(email != null)
-            return email.get();
-        return null;
-    }
-
-    public void setEmail(String email) {
-        if(this.email == null && email !=null)
-            this.email = new StringParam(email);
-        this.email.set(email);
-    }
+//    public String getEmail() {
+//        if(email != null)
+//            return email.get();
+//        return null;
+//    }
+//
+//    public void setEmail(String email) {
+//        if(this.email == null && email !=null)
+//            this.email = new StringParam(email);
+//        this.email.set(email);
+//    }
 
     public String getPhone() {
         if(phone != null)

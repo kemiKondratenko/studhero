@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import ua.com.studhero.Key;
 import ua.com.studhero.annotations.ClassId;
 import ua.com.studhero.controllers.entity.model.CompanyRegistrateModel;
 import ua.com.studhero.database.DataBaseWorker;
@@ -20,7 +21,7 @@ import java.util.List;
 @Controller
 @RequestMapping("companies")
 public class CompaniesController {
-    String fullPath = "/var/lib/tomcat7/webapps/StudHeroKasp/WEB-INF/mail/";
+    String fullPath = Key.PATH+Key.PROJECT+Key.MAIL_TEMPLATES_DIR;
 
     @Inject
     private DataBaseWorker dataBaseWorker;

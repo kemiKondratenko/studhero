@@ -103,10 +103,10 @@ public class StudentController {
                 student.setEvents(Lists.newArrayList(idEvent));
             }
             BaseDBO obj = new BaseDBO();
-            if (dataBaseWorker.update(student)) {
+            if (dataBaseWorker.save(idStudent, student) != 0) {
                 obj.setObjectId(idStudent);
             } else {
-                obj.setError("Problems with updating student");
+                obj.setError("Problems with registrating student for event");
             }
             return obj;
         } catch (Exception e) {
