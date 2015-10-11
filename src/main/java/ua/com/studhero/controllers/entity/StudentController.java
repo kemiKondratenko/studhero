@@ -5,17 +5,15 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ua.com.studhero.annotations.ClassId;
-import ua.com.studhero.controllers.entity.model.CompanyRegistrateModel;
 import ua.com.studhero.controllers.entity.model.StudentRegistrateModel;
 import ua.com.studhero.database.DataBaseWorker;
 import ua.com.studhero.database.entities.BaseDBO;
-import ua.com.studhero.model.entity.Company;
 import ua.com.studhero.model.entity.Student;
 import ua.com.studhero.model.entity.User;
 
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Created by Eugene on 03.10.2015.
@@ -26,6 +24,7 @@ public class StudentController {
 
     @Inject
     private DataBaseWorker dataBaseWorker;
+    Logger log = Logger.getLogger("Student rest");
 
 
     @RequestMapping(value="/", method = RequestMethod.GET)
@@ -40,7 +39,7 @@ public class StudentController {
 
     @RequestMapping(value="/{id}", method = RequestMethod.GET)
     public @ResponseBody
-    Student getById(@PathVariable long id, HttpServletResponse response){
+    Student getById(@PathVariable long id){
         try {
             return dataBaseWorker.get(id, Student.class);
         }  catch (Exception e) {
@@ -51,7 +50,7 @@ public class StudentController {
     @RequestMapping(value="/update", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Student update(@RequestBody Student entity, HttpServletResponse response){
+    Student update(@RequestBody Student entity){
         try {
             if(entity.getObjectId() == 0){
                 return new Student("Object does not have an id");
@@ -65,7 +64,9 @@ public class StudentController {
     @RequestMapping(value="/registrate", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Student registrate(@RequestBody StudentRegistrateModel entity, HttpServletResponse response){
+    Student registrate(@RequestBody StudentRegistrateModel entity){
+        log.info("resistrate:"+entity.getUser().getEmail());
+        log.info("city:"+entity.getStudent().getCity());
         try {
             long newId = dataBaseWorker.createLoginable(entity.getUser().getEmail(), entity.getUser().getPassword());
             if(newId != 0){
@@ -81,10 +82,15 @@ public class StudentController {
     @RequestMapping(value="/login", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Student login(@RequestBody User entity, HttpServletResponse response){
+    Student login(@RequestBody User entity){
+
+        log.info("Login student");
+
         try {
             long id =  dataBaseWorker.getIdIfExists(entity);
+            log.info("id: "+id);
             long classId_id =  dataBaseWorker.getPrimaryClassId(id);
+            log.info("classId: "+classId_id);
             long company_classId_id =  Student.class.getAnnotation(ClassId.class).id();
             if(id == 0 || classId_id != company_classId_id) return new Student("No such student");
             return dataBaseWorker.get(id, Student.class);
@@ -95,7 +101,7 @@ public class StudentController {
 
     @RequestMapping(value="/{idStudent}/subscribe/{idEvent}", method = RequestMethod.GET)
     public @ResponseBody
-    BaseDBO subscribe(@PathVariable long idStudent, @PathVariable long idEvent, HttpServletResponse response){
+    BaseDBO subscribe(@PathVariable long idStudent, @PathVariable long idEvent){
         try {
             Student student = dataBaseWorker.get(idStudent, Student.class);
             if (student.getEvents() != null) {
