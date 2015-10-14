@@ -85,6 +85,7 @@ public class EventsController {
             log.info("In");
             if(entity.getObjectId() == 0) {
                 log.info("no id");
+                entity.setApproved(false);
                 return dataBaseWorker.get(dataBaseWorker.save(entity), entity.getClass());
             }else {
                 log.info("with id");
@@ -122,15 +123,16 @@ public class EventsController {
                 if (!dir.exists())
                     dir.mkdirs();
 
-                // Create the file on server
                 String newName = String.valueOf(System.nanoTime());
+                String extension = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+                String fullNewName = newName+extension;
                 File serverFile = new File(dir.getAbsolutePath()
-                        + File.separator + newName + file.getOriginalFilename());
+                        + File.separator + fullNewName);
                 BufferedOutputStream stream = new BufferedOutputStream(
                         new FileOutputStream(serverFile));
                 stream.write(bytes);
                 stream.close();
-                return newName+file.getOriginalFilename();
+                return fullNewName;
             } catch (Exception e) {
                 return "You failed to upload " + file.getName() + " => " + e.getMessage();
             }
