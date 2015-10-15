@@ -3,10 +3,7 @@ package ua.com.studhero.model.entity;
 import ua.com.studhero.annotations.AttrId;
 import ua.com.studhero.annotations.ClassId;
 import ua.com.studhero.database.entities.BaseDBO;
-import ua.com.studhero.database.entities.valueholders.ListParam;
 import ua.com.studhero.database.entities.valueholders.StringParam;
-
-import java.util.List;
 
 /**
  * Created by kaspyar on 9/9/15.

@@ -11,4 +11,5 @@ public class AttrTypes {
     public static final long Date = 5;
     public static final long Time = 6;
     public static final long Boolean = 7;
+    public static final long ListReference = 9;
 }

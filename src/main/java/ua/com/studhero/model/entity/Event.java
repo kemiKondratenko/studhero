@@ -20,7 +20,7 @@ import java.util.*;
 public class Event extends BaseDBO{
 
     @AttrId(id = 46)
-    private ListParam tags;
+    private IdListParam tags;
     @AttrId(id = 39)
     private StringParam company;
     @AttrId(id = 34)
@@ -51,6 +51,10 @@ public class Event extends BaseDBO{
     public Event() {
     }
 
+    public Event(Long id) {
+        super(id);
+    }
+
     public Event(String message) {
         super(message);
     }
@@ -63,7 +67,7 @@ public class Event extends BaseDBO{
 
     public void setTags(List<Long> tags) {
         if(this.tags == null)
-            this.tags = new ListParam(tags);
+            this.tags = new IdListParam(tags);
         this.tags.set(tags);
     }
 

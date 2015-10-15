@@ -4,7 +4,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.studhero.database.Connector;
 import ua.com.studhero.database.QueryExecutor;
-import ua.com.studhero.database.entities.valueholders.ListParam;
+import ua.com.studhero.database.entities.valueholders.base.ListParam;
 import ua.com.studhero.database.entities.valueholders.base.Param;
 import ua.com.studhero.database.preparedStatements.*;
 
@@ -54,7 +54,7 @@ public class QueryExecutorImpl implements QueryExecutor {
         if(getObjectParamPreparedStatement == null || (getObjectParamPreparedStatement != null && getObjectParamPreparedStatement.closed())){
             getObjectParamPreparedStatement = new GetobjectParamPreparedStatement(connector.getConnection());
         }
-        return getObjectParamPreparedStatement.getObjectParams(objectId, attr_id, classId);
+        return getObjectParamPreparedStatement.getObjectParam(objectId, attr_id, classId);
     }
 
     public boolean saveParameter(long paramId, Object value) throws SQLException {
@@ -171,13 +171,18 @@ public class QueryExecutorImpl implements QueryExecutor {
     public boolean updateParameter(long object_id, long attr_id, Object value, long class_id) throws SQLException, ClassNotFoundException {
         if(value instanceof List){
             List<Long> valueList = (List<Long>) value;
-            ListParam previousValues = (ListParam) getObjectParam(object_id, attr_id, class_id).get(attr_id);
+            log.info("List"+valueList);
+            Param e = getObjectParam(object_id, attr_id, class_id).get(attr_id);
+            log.info("List"+e);
+            ListParam previousValues = (ListParam) e;
+            log.info(""+previousValues);
             if(previousValues != null) {
                 removeParams(object_id, attr_id, previousValues.difference(valueList), class_id);
                 createParameter(object_id, attr_id, previousValues.newValues(valueList), class_id);
             }else
                 createParameter(object_id, attr_id, value, class_id);
         }else {
+            log.info("Not a List");
             removeParam(object_id, attr_id, class_id);
             createParameter(object_id, attr_id, value, class_id);
         }

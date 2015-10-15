@@ -1,17 +1,20 @@
 package ua.com.studhero.database.impl;
 
 import com.google.common.collect.Lists;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.studhero.annotations.ClassId;
 import ua.com.studhero.annotations.AttrId;
+import ua.com.studhero.annotations.FullLoad;
 import ua.com.studhero.database.DataBaseWorker;
 import ua.com.studhero.database.QueryExecutor;
 import ua.com.studhero.database.constants.ClassFactory;
 import ua.com.studhero.database.constants.RelationshipTypes;
 import ua.com.studhero.database.entities.BaseDBO;
 import ua.com.studhero.database.entities.SearchScope;
-import ua.com.studhero.database.entities.valueholders.ListParam;
+import ua.com.studhero.database.entities.valueholders.BaseDBOListParam;
+import ua.com.studhero.database.entities.valueholders.BaseDBOParam;
+import ua.com.studhero.database.entities.valueholders.IdListParam;
+import ua.com.studhero.database.entities.valueholders.base.ListParam;
 import ua.com.studhero.database.entities.valueholders.base.Param;
 import ua.com.studhero.exceptions.database.DuplicateLoginException;
 import ua.com.studhero.model.entity.User;
@@ -52,12 +55,32 @@ public class DataBaseWorkerImpl implements DataBaseWorker {
                 attrId = field.getAnnotation(AttrId.class).id();
             else continue;
             Param<?> param = objectParams.get(attrId);
-            if(param != null)
-                field.set(result, param);
+            if(param != null) {
+                if(field.getAnnotation(FullLoad.class) == null) {
+                    field.set(result, param);
+                }else {
+                    field.set(result, get(param));
+                }
+            }
         }
         log.info(result.toString());
         setId(result, id);
         return result;
+    }
+
+    private <T> Param<T> get(Param<T> param) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException, NoSuchFieldException {
+        if (param instanceof BaseDBOParam){
+            param.set((T) get(((BaseDBOParam) param).get().getObjectId()));
+        }else {
+            if (param instanceof BaseDBOListParam){
+                List<BaseDBO> res = Lists.newArrayList();
+                for (BaseDBO object: ((BaseDBOListParam) param).get()){
+                    res.add(get(object.getObjectId()));
+                }
+                param.set((T) res);
+            }
+        }
+        return param;
     }
 
     @Override
