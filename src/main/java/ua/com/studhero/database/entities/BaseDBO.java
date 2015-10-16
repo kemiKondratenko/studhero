@@ -18,6 +18,10 @@ public class BaseDBO {
 
     public BaseDBO(String error){this.error = error;}
 
+    public BaseDBO(Long objectId) {
+        this.objectId = objectId;
+    }
+
     public long getObjectId() {
         return objectId;
     }

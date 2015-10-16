@@ -1,14 +1,15 @@
 package ua.com.studhero.model.entity;
 
+import com.google.common.collect.Lists;
 import ua.com.studhero.annotations.AttrId;
 import ua.com.studhero.annotations.ClassId;
+import ua.com.studhero.annotations.FullLoad;
 import ua.com.studhero.database.entities.BaseDBO;
-import ua.com.studhero.database.entities.valueholders.ListParam;
+import ua.com.studhero.database.entities.valueholders.BaseDBOListParam;
+import ua.com.studhero.database.entities.valueholders.IdListParam;
 import ua.com.studhero.database.entities.valueholders.StringParam;
 
 import java.util.List;
-import java.util.Set;
-import java.util.logging.Logger;
 
 /**
  * @author KaspYar
@@ -27,8 +28,10 @@ public class Student extends BaseDBO {
     private StringParam phone;
     @AttrId(id = 38)
     private StringParam city;
-    @AttrId(id = 69)
-    private ListParam events;
+
+    @FullLoad
+    @AttrId(id = 73)
+    private BaseDBOListParam events;
 
     public Student() {
     }
@@ -97,15 +100,14 @@ public class Student extends BaseDBO {
         this.city.set(city);
     }
 
-    public List<Long> getEvents() {
+    public List<BaseDBO> getEvents() {
         if(events != null)
             return events.get();
         return null;
     }
 
-    public void setEvents(List<Long> events) {
+    public void setEvents(List<BaseDBO> events) {
         if(this.events == null && events !=null)
-            this.events = new ListParam(events);
-        this.events.set(events);
+            this.events = new BaseDBOListParam(events);
     }
 }

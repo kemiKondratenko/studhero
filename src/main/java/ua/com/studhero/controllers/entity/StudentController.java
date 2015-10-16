@@ -8,6 +8,7 @@ import ua.com.studhero.annotations.ClassId;
 import ua.com.studhero.controllers.entity.model.StudentRegistrateModel;
 import ua.com.studhero.database.DataBaseWorker;
 import ua.com.studhero.database.entities.BaseDBO;
+import ua.com.studhero.model.entity.Event;
 import ua.com.studhero.model.entity.Student;
 import ua.com.studhero.model.entity.User;
 
@@ -105,9 +106,9 @@ public class StudentController {
         try {
             Student student = dataBaseWorker.get(idStudent, Student.class);
             if (student.getEvents() != null) {
-                student.getEvents().add(idEvent);
+                student.getEvents().add(new Event(idEvent));
             } else {
-                student.setEvents(Lists.newArrayList(idEvent));
+                student.setEvents(Lists.newArrayList(new BaseDBO(idEvent)));
             }
             BaseDBO obj = new BaseDBO();
             if (dataBaseWorker.save(idStudent, student) != 0) {
