@@ -1,7 +1,11 @@
 package ua.com.studhero.database;
 
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import ua.com.studhero.database.entities.BaseDBO;
+import ua.com.studhero.database.entities.valueholders.TextValue;
 import ua.com.studhero.database.entities.valueholders.base.Param;
+import ua.com.studhero.exceptions.database.DataBaseConsistensyError;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -17,6 +21,9 @@ public interface QueryExecutor {
 
     boolean createParameter(long objectId, long attrId, Object value, long classId) throws SQLException;
 
+    @Transactional(propagation = Propagation.NESTED)
+    void createParameter(long objectId, long attrId, TextValue listParam, long classId) throws SQLException;
+
     void createParameter(long objectId, long attrId, List<Long> listValue, long classId) throws SQLException;
 
     long createNewObject(String name) throws SQLException;
@@ -31,13 +38,15 @@ public interface QueryExecutor {
 
     void createObjectClassRelationship(long id, long classId, long primary) throws SQLException;
 
-    boolean updateParameter(long id, long attr_id, Object baseForm, long classId) throws SQLException, ClassNotFoundException;
+    boolean updateParameter(long id, long attr_id, Object baseForm, long classId) throws SQLException, ClassNotFoundException, DataBaseConsistensyError;
 
-    boolean updateParameter(long id, Object baseForm) throws SQLException;
+    boolean updateParameter(long id, Object baseForm) throws SQLException, DataBaseConsistensyError;
 
     boolean isLoginValid(String login) throws SQLException;
 
     List<Long> search(long paramAttrId, String paramValue) throws SQLException;
 
     List<Long> getPrimaryObjectsByClassLimitedFromTo(long class_id, long from, long to) throws SQLException;
+
+    String getTestValue(Long id) throws SQLException;
 }

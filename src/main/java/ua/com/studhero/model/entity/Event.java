@@ -26,9 +26,9 @@ public class Event extends BaseDBO{
     @AttrId(id = 34)
     private StringParam title;
     @AttrId(id = 40)
-    private StringParam descriptionShort;
+    private TextParam descriptionShort;
     @AttrId(id = 41)
-    private StringParam description;
+    private TextParam description;
     @AttrId(id = 59)
     private DateParam startDate;
     @AttrId(id = 60)
@@ -68,7 +68,8 @@ public class Event extends BaseDBO{
     public void setTags(List<Long> tags) {
         if(this.tags == null)
             this.tags = new IdListParam(tags);
-        this.tags.set(tags);
+        else
+            this.tags.set(tags);
     }
 
     public String getCompany() {
@@ -80,7 +81,8 @@ public class Event extends BaseDBO{
     public void setCompany(String company) {
         if(this.company == null)
             this.company = new StringParam(company);
-        this.company.set(company);
+        else
+            this.company.set(company);
     }
 
     public String getTitle() {
@@ -92,31 +94,34 @@ public class Event extends BaseDBO{
     public void setTitle(String title) {
         if(this.title == null)
             this.title = new StringParam(title);
-        this.title.set(title);
+        else
+            this.title.set(title);
     }
 
     public String getDescriptionShort() {
         if(descriptionShort != null)
-            return descriptionShort.get();
+            return descriptionShort.get().getValue();
         return null;
     }
 
     public void setDescriptionShort(String descriptionShort) {
         if(this.descriptionShort == null)
-            this.descriptionShort = new StringParam(descriptionShort);
-        this.descriptionShort.set(descriptionShort);
+            this.descriptionShort = new TextParam(new TextValue(descriptionShort));
+        else
+            this.descriptionShort.get().setValue(descriptionShort);
     }
 
     public String getDescription() {
         if(description != null)
-            return description.get();
+            return description.get().getValue();
         return null;
     }
 
     public void setDescription(String description) {
         if(this.description == null)
-            this.description = new StringParam(description);
-        this.description.set(description);
+            this.description = new TextParam(new TextValue(description));
+        else
+            this.description.get().setValue(description);
     }
 
     @JsonSerialize(using = DateSerializer.class)
@@ -215,7 +220,8 @@ public class Event extends BaseDBO{
     public void setManager(String manager) {
         if(this.manager == null && manager !=null)
             this.manager = new StringParam(manager);
-        this.manager.set(manager);
+        else
+            this.manager.set(manager);
     }
 
     public String getType() {
@@ -227,7 +233,8 @@ public class Event extends BaseDBO{
     public void setType(String type) {
         if(this.type == null && type !=null)
             this.type = new StringParam(type);
-        this.type.set(type);
+        else
+            this.type.set(type);
     }
 
     public String getActivity() {
@@ -239,7 +246,8 @@ public class Event extends BaseDBO{
     public void setActivity(String activity) {
         if(this.activity == null && activity !=null)
             this.activity = new StringParam(activity);
-        this.activity.set(activity);
+        else
+            this.activity.set(activity);
     }
 
     @Override
