@@ -89,6 +89,7 @@ public class EventsController {
                 return dataBaseWorker.get(dataBaseWorker.save(entity), entity.getClass());
             }else {
                 log.info("with id");
+                entity.setImage(entity.getImage().substring(entity.getImage().lastIndexOf("/") + 1));
                 return dataBaseWorker.get(dataBaseWorker.save(entity.getObjectId(), entity), entity.getClass());
             }
         }  catch (Exception e) {
