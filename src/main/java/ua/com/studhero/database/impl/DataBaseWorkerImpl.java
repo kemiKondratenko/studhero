@@ -14,8 +14,10 @@ import ua.com.studhero.database.entities.SearchScope;
 import ua.com.studhero.database.entities.valueholders.BaseDBOListParam;
 import ua.com.studhero.database.entities.valueholders.BaseDBOParam;
 import ua.com.studhero.database.entities.valueholders.IdListParam;
+import ua.com.studhero.database.entities.valueholders.TextParam;
 import ua.com.studhero.database.entities.valueholders.base.ListParam;
 import ua.com.studhero.database.entities.valueholders.base.Param;
+import ua.com.studhero.exceptions.database.DataBaseConsistensyError;
 import ua.com.studhero.exceptions.database.DuplicateLoginException;
 import ua.com.studhero.model.entity.User;
 
@@ -37,7 +39,7 @@ public class DataBaseWorkerImpl implements DataBaseWorker {
 
     @Override
     @Transactional
-    public <T extends BaseDBO> long save(T value) throws SQLException, ClassNotFoundException, IllegalAccessException, NoSuchFieldException {
+    public <T extends BaseDBO> long save(T value) throws SQLException, ClassNotFoundException, IllegalAccessException, NoSuchFieldException, DataBaseConsistensyError {
         long objectId =  queryExecutor.createNewObject(value.getClass().getName());
         return save(objectId, value);
     }
@@ -49,7 +51,7 @@ public class DataBaseWorkerImpl implements DataBaseWorker {
 
     @Override
     public <T extends BaseDBO> T getFull(long id, Class<T> objectClass) throws IllegalAccessException, InstantiationException, SQLException, ClassNotFoundException, NoSuchFieldException {
-        return get(id, objectClass, false);
+        return get(id, objectClass, true);
     }
 
     @Override
@@ -76,7 +78,7 @@ public class DataBaseWorkerImpl implements DataBaseWorker {
 
     @Override
     @Transactional
-    public long save(long id, BaseDBO entity) throws SQLException, IllegalAccessException, NoSuchFieldException, ClassNotFoundException {
+    public long save(long id, BaseDBO entity) throws SQLException, IllegalAccessException, NoSuchFieldException, ClassNotFoundException, DataBaseConsistensyError {
         long classId = entity.getClass().getAnnotation(ClassId.class).id();
         long primaryClassId = queryExecutor.getPrimaryClassId(id);
         if(primaryClassId == 0)
@@ -113,7 +115,7 @@ public class DataBaseWorkerImpl implements DataBaseWorker {
     }
 
     @Override
-    public <T extends BaseDBO> boolean update(T object) throws ClassNotFoundException, SQLException, NoSuchFieldException, IllegalAccessException {
+    public <T extends BaseDBO> boolean update(T object) throws ClassNotFoundException, SQLException, NoSuchFieldException, IllegalAccessException, DataBaseConsistensyError {
         save(object.getObjectId(), object);
         return true;
     }
@@ -171,7 +173,7 @@ public class DataBaseWorkerImpl implements DataBaseWorker {
             Param<?> param = objectParams.get(attrId);
             if(param != null) {
                 if(field.getAnnotation(FullLoad.class) == null) {
-                    field.set(result, param);
+                    field.set(result, get(param));
                 }else {
                     if(full) {
                         noNeedToLoad.add(id);
@@ -183,6 +185,14 @@ public class DataBaseWorkerImpl implements DataBaseWorker {
         log.info(result.toString());
         setId(result, id);
         return result;
+    }
+
+    private Param<?> get(Param<?> param) throws SQLException {
+        if (param instanceof TextParam){
+            ((TextParam) param).get().setValue(
+                    queryExecutor.getTestValue(((TextParam) param).get().getId()));
+        }
+        return param;
     }
 
     private <T> Param<T> get(Param<T> param, List<Long> noNeedToLoad) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException, NoSuchFieldException {

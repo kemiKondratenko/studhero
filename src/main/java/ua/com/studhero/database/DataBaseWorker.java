@@ -2,6 +2,7 @@ package ua.com.studhero.database;
 
 import ua.com.studhero.database.entities.BaseDBO;
 import ua.com.studhero.database.entities.SearchScope;
+import ua.com.studhero.exceptions.database.DataBaseConsistensyError;
 import ua.com.studhero.exceptions.database.DuplicateLoginException;
 import ua.com.studhero.exceptions.database.UnexpectedDBAnswerException;
 import ua.com.studhero.model.entity.Event;
@@ -15,7 +16,7 @@ import java.util.List;
  */
 public interface DataBaseWorker {
 
-    public <T extends BaseDBO> long save(T value) throws SQLException, ClassNotFoundException, IllegalAccessException, NoSuchFieldException;
+    public <T extends BaseDBO> long save(T value) throws SQLException, ClassNotFoundException, IllegalAccessException, NoSuchFieldException, DataBaseConsistensyError;
 
     public <T extends BaseDBO> T get(long id, Class<T> objectClass) throws IllegalAccessException, InstantiationException, SQLException, ClassNotFoundException, NoSuchFieldException;
 
@@ -27,7 +28,7 @@ public interface DataBaseWorker {
 
     public <T extends BaseDBO> List<T> get(Class<T> objectClass) throws IllegalAccessException, InstantiationException, SQLException, ClassNotFoundException, NoSuchFieldException;
 
-    public <T extends BaseDBO> boolean update(T object) throws ClassNotFoundException, SQLException, NoSuchFieldException, IllegalAccessException;
+    public <T extends BaseDBO> boolean update(T object) throws ClassNotFoundException, SQLException, NoSuchFieldException, IllegalAccessException, DataBaseConsistensyError;
 
     public long getIdIfExists(User example) throws SQLException;
 
@@ -35,7 +36,7 @@ public interface DataBaseWorker {
 
     public long createLoginable(String login, String password) throws SQLException, DuplicateLoginException, UnexpectedDBAnswerException;
 
-    public long save(long id, BaseDBO userInfo) throws SQLException, IllegalAccessException, NoSuchFieldException, ClassNotFoundException;
+    public long save(long id, BaseDBO userInfo) throws SQLException, IllegalAccessException, NoSuchFieldException, ClassNotFoundException, DataBaseConsistensyError;
 
     public boolean isLoginValid(String login) throws SQLException;
 

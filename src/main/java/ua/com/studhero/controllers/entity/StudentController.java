@@ -43,7 +43,7 @@ public class StudentController {
     public @ResponseBody
     Student getById(@PathVariable long id){
         try {
-            return dataBaseWorker.get(id, Student.class);
+            return dataBaseWorker.getFull(id, Student.class);
         }  catch (Exception e) {
             return new Student(e.getMessage());
         }

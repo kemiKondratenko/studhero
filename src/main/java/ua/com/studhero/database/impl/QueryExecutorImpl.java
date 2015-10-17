@@ -4,9 +4,12 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.studhero.database.Connector;
 import ua.com.studhero.database.QueryExecutor;
+import ua.com.studhero.database.entities.valueholders.TextParam;
+import ua.com.studhero.database.entities.valueholders.TextValue;
 import ua.com.studhero.database.entities.valueholders.base.ListParam;
 import ua.com.studhero.database.entities.valueholders.base.Param;
 import ua.com.studhero.database.preparedStatements.*;
+import ua.com.studhero.exceptions.database.DataBaseConsistensyError;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -39,6 +42,10 @@ public class QueryExecutorImpl implements QueryExecutor {
     private RemoveParamPreparedStatement removeParamPreparedStatement;
     private GetobjectParamPreparedStatement getObjectParamPreparedStatement;
     private GetPrimaryObjectsByClassLimitedFromTo getPrimaryObjectsByClassLimitedFromTo;
+    private GetTestValuePreparedStatement getTestValuePreparedStatement;
+    private UpdateTextValuePreparedStatement updateTextValuePreparedStatement;
+    private GetObjectParamByIdPreparedStatement getObjectParamByIdPreparedStatement;
+    private CreateTextParameterPreparedStatement createTextParameterPreparedStatement;
 
     @Override
     public Map<Long, Param> getObjectParams(long objectId, long classId) throws SQLException, ClassNotFoundException {
@@ -57,6 +64,13 @@ public class QueryExecutorImpl implements QueryExecutor {
         return getObjectParamPreparedStatement.getObjectParam(objectId, attr_id, classId);
     }
 
+    private Param getObjectParam(long param) throws SQLException {
+        if(getObjectParamByIdPreparedStatement == null || (getObjectParamByIdPreparedStatement != null && getObjectParamByIdPreparedStatement.closed())){
+            getObjectParamByIdPreparedStatement = new GetObjectParamByIdPreparedStatement(connector.getConnection());
+        }
+        return getObjectParamByIdPreparedStatement.get(param);
+    }
+
     public boolean saveParameter(long paramId, Object value) throws SQLException {
         if(saveObjectParamsPreparedStatement == null || (saveObjectParamsPreparedStatement != null && saveObjectParamsPreparedStatement.closed())){
             saveObjectParamsPreparedStatement = new SaveObjectParamsPreparedStatement(connector.getConnection());
@@ -71,13 +85,33 @@ public class QueryExecutorImpl implements QueryExecutor {
             log.info("This is list, now");
             createParameter(objectId, attrId, (List<Long> ) value, classId);
         }else {
-            log.info("save value "+ value);
-            if(createObjectParamsPreparedStatement == null || (createObjectParamsPreparedStatement != null && createObjectParamsPreparedStatement.closed())){
-                createObjectParamsPreparedStatement = new CreateObjectParamsPreparedStatement(connector.getConnection());
+            if(value instanceof TextValue){
+                log.info("This is text, now");
+                createParameter(objectId, attrId, (TextValue) value, classId);
+            }else {
+                log.info("save value " + value);
+                if (createObjectParamsPreparedStatement == null || (createObjectParamsPreparedStatement != null && createObjectParamsPreparedStatement.closed())) {
+                    createObjectParamsPreparedStatement = new CreateObjectParamsPreparedStatement(connector.getConnection());
+                }
+                return createObjectParamsPreparedStatement.save(objectId, attrId, value, classId);
             }
-            return createObjectParamsPreparedStatement.save(objectId, attrId, value, classId);
         }
         return false;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.NESTED)
+    public void createParameter(long objectId, long attrId, TextValue textValue, long classId) throws SQLException {
+        log.info("This is text, now");
+        createParameter(objectId, attrId, createTextParameter(textValue.getValue()), classId);
+    }
+
+    private Long createTextParameter(String value) throws SQLException {
+        log.info("This is text, now");
+        if(createTextParameterPreparedStatement == null || (createTextParameterPreparedStatement != null && createTextParameterPreparedStatement.closed())){
+            createTextParameterPreparedStatement = new CreateTextParameterPreparedStatement(connector.getConnection());
+        }
+        return createTextParameterPreparedStatement.create(value);
     }
 
     @Override
@@ -87,10 +121,6 @@ public class QueryExecutorImpl implements QueryExecutor {
         for(Long value: listParam){
             createParameter(objectId, attrId, value, classId);
         }
-    }
-
-    public void setConnector(Connector connector) {
-        this.connector = connector;
     }
 
     public Map<Long, Long> getAttrIdParamIdForObject(long objectId, long id) throws SQLException {
@@ -159,32 +189,82 @@ public class QueryExecutorImpl implements QueryExecutor {
 
     @Override
     @Transactional(propagation = Propagation.NESTED)
-    public boolean updateParameter(long param, Object fieldValue) throws SQLException {
-        if(updateParameterPreparedStatement == null || (updateParameterPreparedStatement != null && updateParameterPreparedStatement.closed())){
-            updateParameterPreparedStatement = new UpdateParameterPreparedStatement(connector.getConnection());
+    public boolean updateParameter(long param, Object fieldValue) throws SQLException, DataBaseConsistensyError {
+        if (fieldValue instanceof TextValue){
+            return updateParameter(param, (TextValue) fieldValue);
+        }else {
+            if (updateParameterPreparedStatement == null || (updateParameterPreparedStatement != null && updateParameterPreparedStatement.closed())) {
+                updateParameterPreparedStatement = new UpdateParameterPreparedStatement(connector.getConnection());
+            }
+            return updateParameterPreparedStatement.update(param, fieldValue);
         }
-        return updateParameterPreparedStatement.update(param, fieldValue);
+    }
+    public boolean updateParameter(long param, TextValue fieldValue) throws SQLException, DataBaseConsistensyError {
+        log.info("updateParameter TextValue");
+
+        if (updateTextValuePreparedStatement == null || (updateTextValuePreparedStatement != null && updateTextValuePreparedStatement.closed())) {
+            updateTextValuePreparedStatement = new UpdateTextValuePreparedStatement(connector.getConnection());
+        }
+
+        if(fieldValue.getId() == 0){
+            log.info("updateParameter TextValue " +fieldValue.getId());
+            Param textParam = getObjectParam(param);
+            if( textParam != null) {
+                log.info("updateParameter TextValue " +textParam);
+
+                fieldValue.setId(((TextParam) textParam).get().getId());
+                return updateTextValuePreparedStatement.update(fieldValue.getId(), fieldValue.getValue());
+            } else {
+                throw new DataBaseConsistensyError("Cant find text value for param with "+ param);
+            }
+        }else {
+            log.info("updateParameter TextValue " +fieldValue.getId());
+
+            return updateTextValuePreparedStatement.update(fieldValue.getId(), fieldValue.getValue());
+        }
     }
 
     @Override
     @Transactional(propagation = Propagation.NESTED)
-    public boolean updateParameter(long object_id, long attr_id, Object value, long class_id) throws SQLException, ClassNotFoundException {
+    public boolean updateParameter(long object_id, long attr_id, Object value, long class_id) throws SQLException, ClassNotFoundException, DataBaseConsistensyError {
         if(value instanceof List){
-            List<Long> valueList = (List<Long>) value;
-            log.info("List"+valueList);
-            Param e = getObjectParam(object_id, attr_id, class_id).get(attr_id);
-            log.info("List"+e);
-            ListParam previousValues = (ListParam) e;
-            log.info(""+previousValues);
-            if(previousValues != null) {
-                removeParams(object_id, attr_id, previousValues.difference(valueList), class_id);
-                createParameter(object_id, attr_id, previousValues.newValues(valueList), class_id);
-            }else
-                createParameter(object_id, attr_id, value, class_id);
+            log.info("List");
+            updateParameter(object_id, attr_id, (List<Long>) value, class_id);
         }else {
-            log.info("Not a List");
-            removeParam(object_id, attr_id, class_id);
+            if (value instanceof TextValue){
+                log.info("TextValue");
+                updateParameter(object_id, attr_id, (TextValue) value, class_id);
+            }else {
+                log.info("Not a List");
+                removeParam(object_id, attr_id, class_id);
+                createParameter(object_id, attr_id, value, class_id);
+            }
+        }
+        return true;
+    }
+
+    public boolean updateParameter(long object_id, long attr_id, List<Long> value, long class_id) throws SQLException, ClassNotFoundException {
+        log.info("List"+value);
+        Param e = getObjectParam(object_id, attr_id, class_id).get(attr_id);
+        log.info("List"+e);
+        ListParam previousValues = (ListParam) e;
+        log.info(""+previousValues);
+        if(previousValues != null) {
+            removeParams(object_id, attr_id, previousValues.difference(value), class_id);
+            createParameter(object_id, attr_id, previousValues.newValues(value), class_id);
+        }else
             createParameter(object_id, attr_id, value, class_id);
+        return true;
+    }
+
+    public boolean updateParameter(long object_id, long attr_id, TextValue value, long class_id) throws SQLException, ClassNotFoundException, DataBaseConsistensyError {
+        log.info("updateParameter TextValue");
+        Param param = getObjectParam(object_id, attr_id, class_id).get(attr_id);
+        log.info("TextValue "+ param);
+        if(param == null){
+            createParameter(object_id, attr_id, createTextParameter(value.getValue()), class_id);
+        }else {
+            updateParameter(param.getId(), value);
         }
         return true;
     }
@@ -205,6 +285,14 @@ public class QueryExecutorImpl implements QueryExecutor {
         return getPrimaryObjectsByClassLimitedFromTo.get(class_id, from, to);
     }
 
+    @Override
+    public String getTestValue(Long id) throws SQLException {
+        if(getTestValuePreparedStatement == null || (getTestValuePreparedStatement != null && getTestValuePreparedStatement.closed())){
+            getTestValuePreparedStatement = new GetTestValuePreparedStatement(connector.getConnection());
+        }
+        return getTestValuePreparedStatement.get(id);
+    }
+
     public void removeParams(long id, long attr_id, List<Long> difference, long classId) throws SQLException {
         if(removeListParamPreparedStatement == null || (removeListParamPreparedStatement != null && removeListParamPreparedStatement.closed())){
             removeListParamPreparedStatement = new RemoveListParamPreparedStatement(connector.getConnection());
@@ -220,5 +308,9 @@ public class QueryExecutorImpl implements QueryExecutor {
             removeParamPreparedStatement = new RemoveParamPreparedStatement(connector.getConnection());
         }
         removeParamPreparedStatement.delete(id, attr_id, classId);
+    }
+
+    public void setConnector(Connector connector) {
+        this.connector = connector;
     }
 }

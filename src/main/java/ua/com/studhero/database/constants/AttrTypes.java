@@ -12,4 +12,5 @@ public class AttrTypes {
     public static final long Time = 6;
     public static final long Boolean = 7;
     public static final long ListReference = 9;
+    public static final long Text = 10;
 }

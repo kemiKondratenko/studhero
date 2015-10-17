@@ -26,9 +26,9 @@ public class Event extends BaseDBO{
     @AttrId(id = 34)
     private StringParam title;
     @AttrId(id = 40)
-    private StringParam descriptionShort;
+    private TextParam descriptionShort;
     @AttrId(id = 41)
-    private StringParam description;
+    private TextParam description;
     @AttrId(id = 59)
     private DateParam startDate;
     @AttrId(id = 60)
@@ -97,26 +97,26 @@ public class Event extends BaseDBO{
 
     public String getDescriptionShort() {
         if(descriptionShort != null)
-            return descriptionShort.get();
+            return descriptionShort.get().getValue();
         return null;
     }
 
     public void setDescriptionShort(String descriptionShort) {
         if(this.descriptionShort == null)
-            this.descriptionShort = new StringParam(descriptionShort);
-        this.descriptionShort.set(descriptionShort);
+            this.descriptionShort = new TextParam(new TextValue(descriptionShort));
+        this.descriptionShort.get().setValue(descriptionShort);
     }
 
     public String getDescription() {
         if(description != null)
-            return description.get();
+            return description.get().getValue();
         return null;
     }
 
     public void setDescription(String description) {
         if(this.description == null)
-            this.description = new StringParam(description);
-        this.description.set(description);
+            this.description = new TextParam(new TextValue(description));
+        this.description.get().setValue(description);
     }
 
     @JsonSerialize(using = DateSerializer.class)
