@@ -54,7 +54,7 @@
                                         Welcome ! </h1>
                                 </div>
                                 <p style="text-align: center;font-size: 20px;color: #cfeafa;line-height: 19px;margin: 0;padding: 0">
-                                    Find your first job easily
+                                    Hire students easily
                                 </p>
                             </td>
 
@@ -65,8 +65,8 @@
                         <tr>
                             <td style="vertical-align: top">
                                 <div style="text-align: center;margin: 0;padding: 0 0 10 0">
-                                    <a href="http://studhero.org/for-students.php" target="blank"
-                                       style="padding: 15px;font-size: 13px;text-decoration: none;background: #1C80C9;color: #E5F5FF;border-radius: 6px;-moz-border-radius: 6px;-webkit-border-radius: 6px">Become
+                                    <a href="http://studhero.org/for-companies.php" target="blank"
+                                       style="padding: 15px;font-size: 13px;text-decoration: none;background: #1C80C9;color: #E5F5FF;border-radius: 6px;-moz-border-radius: 6px;-webkit-border-radius: 6px">Find
                                         a Hero</a>
                                 </div>
                             </td>
@@ -103,7 +103,7 @@
                                     <br/>
 
                                     <p style="margin: 0;padding: 0;font-size: 14px;line-height: 21px;color: #AAA">Thank
-                                        you for registration on StudHero !<br/>Your password is :
+                                        you for registration on StudHero !<br/>Your company password is :
                                     </p>
                                     <br/><br/><a class="link2"
                                                  style="color: #fff;text-decoration: none;border-top: 10px solid #27A1E5;border-bottom: 10px solid #27A1E5;border-left: 18px solid #27A1E5;border-right: 18px solid #27A1E5;border-radius: 3px;-moz-border-radius: 3px;-webkit-border-radius: 3px;background: #27A1E5">${body}</a>

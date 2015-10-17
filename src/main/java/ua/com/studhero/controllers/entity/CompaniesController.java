@@ -4,11 +4,10 @@ import com.google.common.collect.Lists;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import ua.com.studhero.Key;
 import ua.com.studhero.annotations.ClassId;
 import ua.com.studhero.controllers.entity.model.CompanyRegistrateModel;
 import ua.com.studhero.database.DataBaseWorker;
-import ua.com.studhero.mail.EmailSender;
+import ua.com.studhero.mail.Emailer;
 import ua.com.studhero.model.entity.Company;
 import ua.com.studhero.model.entity.User;
 
@@ -21,7 +20,6 @@ import java.util.List;
 @Controller
 @RequestMapping("companies")
 public class CompaniesController {
-    String fullPath = Key.PATH+Key.PROJECT+Key.MAIL_TEMPLATES_DIR;
 
     @Inject
     private DataBaseWorker dataBaseWorker;
@@ -74,7 +72,9 @@ public class CompaniesController {
             long newId = dataBaseWorker.createLoginable(entity.getUser().getEmail(), entity.getUser().getPassword());
             if (newId != 0) {
                 dataBaseWorker.save(newId, entity.getCompany());
-//                EmailSender.sendRegistrationEmailToCustomer(entity.getUser(), entity.getUser().getPassword(), fullPath);
+                Emailer.sendRegistrationEmailToCompany(entity.getUser().getEmail(),
+                        entity.getCompany().getName(),
+                        entity.getUser().getPassword());
                 return dataBaseWorker.get(newId, Company.class);
             } else
                 return new Company("cant create company");
@@ -98,19 +98,4 @@ public class CompaniesController {
             return new Company(e.getMessage());
         }
     }
-
-    @RequestMapping(value = "/tryemail", method = RequestMethod.GET)
-    public
-    @ResponseBody
-    String tryemail() {
-        User user = new User();
-//        EmailSender.send();
-
-        user.setEmail("kaspyar@gmail.com");
-        EmailSender.sendRegistrationEmailToCustomer(user, "123asdTRE", fullPath);
-        user.setEmail("slavko.yeapp@yandex.ua");
-        EmailSender.sendRegistrationEmailToCustomer(user, "123asdTRE", fullPath);
-        return "check it out";
-    }
-
-    }
+}

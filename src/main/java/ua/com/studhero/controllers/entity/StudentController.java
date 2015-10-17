@@ -8,6 +8,7 @@ import ua.com.studhero.annotations.ClassId;
 import ua.com.studhero.controllers.entity.model.StudentRegistrateModel;
 import ua.com.studhero.database.DataBaseWorker;
 import ua.com.studhero.database.entities.BaseDBO;
+import ua.com.studhero.mail.Emailer;
 import ua.com.studhero.model.entity.Event;
 import ua.com.studhero.model.entity.Student;
 import ua.com.studhero.model.entity.User;
@@ -73,6 +74,10 @@ public class StudentController {
             long newId = dataBaseWorker.createLoginable(entity.getUser().getEmail(), entity.getUser().getPassword());
             if(newId != 0){
                 dataBaseWorker.save(newId, entity.getStudent());
+                Emailer.sendRegistrationEmailToStudent(
+                        entity.getUser().getEmail(),
+                        entity.getStudent().getName() + entity.getStudent().getLastName(),
+                        entity.getUser().getPassword());
                 return dataBaseWorker.get(newId, Student.class);
             }else
                 return new Student("cant create student");
