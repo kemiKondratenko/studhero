@@ -5,5 +5,5 @@ package ua.com.studhero.database.constants;
  */
 public class AttrValues {
     public static final long TRUE = 1;
-    public static final long FALSE= 1;
+    public static final long FALSE= 0;
 }
