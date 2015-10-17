@@ -68,7 +68,8 @@ public class Event extends BaseDBO{
     public void setTags(List<Long> tags) {
         if(this.tags == null)
             this.tags = new IdListParam(tags);
-        this.tags.set(tags);
+        else
+            this.tags.set(tags);
     }
 
     public String getCompany() {
@@ -80,7 +81,8 @@ public class Event extends BaseDBO{
     public void setCompany(String company) {
         if(this.company == null)
             this.company = new StringParam(company);
-        this.company.set(company);
+        else
+            this.company.set(company);
     }
 
     public String getTitle() {
@@ -92,7 +94,8 @@ public class Event extends BaseDBO{
     public void setTitle(String title) {
         if(this.title == null)
             this.title = new StringParam(title);
-        this.title.set(title);
+        else
+            this.title.set(title);
     }
 
     public String getDescriptionShort() {
@@ -104,7 +107,8 @@ public class Event extends BaseDBO{
     public void setDescriptionShort(String descriptionShort) {
         if(this.descriptionShort == null)
             this.descriptionShort = new TextParam(new TextValue(descriptionShort));
-        this.descriptionShort.get().setValue(descriptionShort);
+        else
+            this.descriptionShort.get().setValue(descriptionShort);
     }
 
     public String getDescription() {
@@ -116,7 +120,8 @@ public class Event extends BaseDBO{
     public void setDescription(String description) {
         if(this.description == null)
             this.description = new TextParam(new TextValue(description));
-        this.description.get().setValue(description);
+        else
+            this.description.get().setValue(description);
     }
 
     @JsonSerialize(using = DateSerializer.class)
@@ -215,7 +220,8 @@ public class Event extends BaseDBO{
     public void setManager(String manager) {
         if(this.manager == null && manager !=null)
             this.manager = new StringParam(manager);
-        this.manager.set(manager);
+        else
+            this.manager.set(manager);
     }
 
     public String getType() {
@@ -227,7 +233,8 @@ public class Event extends BaseDBO{
     public void setType(String type) {
         if(this.type == null && type !=null)
             this.type = new StringParam(type);
-        this.type.set(type);
+        else
+            this.type.set(type);
     }
 
     public String getActivity() {
@@ -239,7 +246,8 @@ public class Event extends BaseDBO{
     public void setActivity(String activity) {
         if(this.activity == null && activity !=null)
             this.activity = new StringParam(activity);
-        this.activity.set(activity);
+        else
+            this.activity.set(activity);
     }
 
     @Override

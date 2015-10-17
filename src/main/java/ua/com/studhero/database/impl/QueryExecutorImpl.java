@@ -200,13 +200,13 @@ public class QueryExecutorImpl implements QueryExecutor {
         }
     }
     public boolean updateParameter(long param, TextValue fieldValue) throws SQLException, DataBaseConsistensyError {
-        log.info("updateParameter TextValue");
+        log.info("updateParameter TextValue with param value "+param+ " and value "+fieldValue);
 
         if (updateTextValuePreparedStatement == null || (updateTextValuePreparedStatement != null && updateTextValuePreparedStatement.closed())) {
             updateTextValuePreparedStatement = new UpdateTextValuePreparedStatement(connector.getConnection());
         }
 
-        if(fieldValue.getId() == 0){
+        if(fieldValue.getId() == null){
             log.info("updateParameter TextValue " +fieldValue.getId());
             Param textParam = getObjectParam(param);
             if( textParam != null) {
@@ -258,12 +258,13 @@ public class QueryExecutorImpl implements QueryExecutor {
     }
 
     public boolean updateParameter(long object_id, long attr_id, TextValue value, long class_id) throws SQLException, ClassNotFoundException, DataBaseConsistensyError {
-        log.info("updateParameter TextValue");
+        log.info("updateParameter TextValue with find param");
         Param param = getObjectParam(object_id, attr_id, class_id).get(attr_id);
         log.info("TextValue "+ param);
         if(param == null){
             createParameter(object_id, attr_id, createTextParameter(value.getValue()), class_id);
         }else {
+            value.setId(((TextValue)param.get()).getId());
             updateParameter(param.getId(), value);
         }
         return true;

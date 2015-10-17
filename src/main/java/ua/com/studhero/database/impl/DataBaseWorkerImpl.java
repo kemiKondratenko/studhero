@@ -96,13 +96,13 @@ public class DataBaseWorkerImpl implements DataBaseWorker {
             log.info("F"+fieldValue+" "+primaryClassId);
             if(primaryClassId != 0) {
                 if(fieldValue.getId() == 0 || fieldValue instanceof ListParam){
-                    log.info("start savedOther 1 ");
+                    log.info("start value without id ");
                     queryExecutor.updateParameter(id, attr_id, fieldValue.getBaseForm(), classId);
-                    log.info("savedOther");
+                    log.info("saved");
                 }else {
-                    log.info("start savedOther 2");
+                    log.info("start value with id "+fieldValue.getId());
                     queryExecutor.updateParameter(fieldValue.getId(), fieldValue.getBaseForm());
-                    log.info("savedOther");
+                    log.info("saved");
                 }
             }else{
                 log.info("start create");
