@@ -22,10 +22,7 @@ import java.util.Properties;
  * @author kaspyar.
  */
 public class Emailer {
-    private final static String STUDHERO = "Thanks for joining us! \"StudHero\"";
-    public final static String REGISTRATION_TEMPLATE = "regTemplate.ftl";
-    public final static String REGISTRATION_TEMPLATE_COMPANY = "regTemplateCompany.ftl";
-    public final static String GENERIC_TEMPLATE = "mailTemplate.ftl";
+
     private static String from = "studhero@gmail.com";
     private static String host = "localhost";
     private static Properties properties;
@@ -51,7 +48,7 @@ public class Emailer {
             Map<String, String> rootMap = new HashMap<String, String>();
             rootMap.put(to, personName);
             rootMap.put(bodyValue, body);
-            rootMap.put(from, STUDHERO);
+            rootMap.put(from, Key.STUDHERO);
             Writer out = new StringWriter();
             try {
                 template.process(rootMap, out);
@@ -70,12 +67,12 @@ public class Emailer {
 
     public static void sendRegistrationEmailToStudent(String to, String name, String password) {
         String subject = "Registration on studhero.org";
-        send(to, name, subject, password, getTemplate(REGISTRATION_TEMPLATE));
+        send(to, name, subject, password, getTemplate(Key.REGISTRATION_TEMPLATE));
     }
 
     public static void sendRegistrationEmailToCompany(String to, String name, String password) {
         String subject = "Registration on studhero.org";
-        send(to, name, subject, password, getTemplate(REGISTRATION_TEMPLATE_COMPANY));
+        send(to, name, subject, password, getTemplate(Key.REGISTRATION_TEMPLATE_COMPANY));
     }
 
     private static Template getTemplate(String templateName) {

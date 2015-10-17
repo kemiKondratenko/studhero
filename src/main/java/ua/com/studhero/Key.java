@@ -4,6 +4,10 @@ package ua.com.studhero;
  * @author kaspyar.
  */
 public interface Key {
+    String STUDHERO = "Thanks for joining us! \"StudHero\"";
+    String REGISTRATION_TEMPLATE = "regTemplate.ftl";
+    String REGISTRATION_TEMPLATE_COMPANY = "regTemplateCompany.ftl";
+    String GENERIC_TEMPLATE = "mailTemplate.ftl";
     String PATH = "/var/lib/tomcat7/webapps/";
     String PROJECT = "StudHero/";
     String MAIL_TEMPLATES_DIR = "WEB-INF/mail/";
