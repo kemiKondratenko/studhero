@@ -68,25 +68,20 @@ public class DataBaseWorkerImpl implements DataBaseWorker {
         return result;
     }
 
-    private <T> Param<T> get(Param<T> param) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException, NoSuchFieldException {
-        if (param instanceof BaseDBOParam){
-            param.set((T) get(((BaseDBOParam) param).get().getObjectId()));
-        }else {
-            if (param instanceof BaseDBOListParam){
-                List<BaseDBO> res = Lists.newArrayList();
-                for (BaseDBO object: ((BaseDBOListParam) param).get()){
-                    res.add(get(object.getObjectId()));
-                }
-                param.set((T) res);
-            }
-        }
-        return param;
+    @Override
+    public <T extends BaseDBO> T getFull(long id, Class<T> objectClass) throws IllegalAccessException, InstantiationException, SQLException, ClassNotFoundException, NoSuchFieldException {
+        return null;
     }
 
     @Override
     public BaseDBO get(Long id) throws ClassNotFoundException, SQLException, NoSuchFieldException, InstantiationException, IllegalAccessException {
         log.info("class" + ClassFactory.getClassById(getPrimaryClassId(id)));
         return get(id, ClassFactory.getClassById(getPrimaryClassId(id)));
+    }
+
+    @Override
+    public BaseDBO getFull(Long id) throws ClassNotFoundException, SQLException, NoSuchFieldException, InstantiationException, IllegalAccessException {
+        return null;
     }
 
     @Override
@@ -97,36 +92,6 @@ public class DataBaseWorkerImpl implements DataBaseWorker {
             result.add(get(id, objectClass));
         }
         return result;
-    }
-
-    private <T extends BaseDBO> void setId(T result, long id) throws NoSuchFieldException, IllegalAccessException {
-        Field f = BaseDBO.class.getDeclaredField("objectId");
-        f.setAccessible(true);
-        f.set(result, id);
-    }
-
-    @Override
-    public <T extends BaseDBO> boolean update(T object) throws ClassNotFoundException, SQLException, NoSuchFieldException, IllegalAccessException {
-        save(object.getObjectId(), object);
-        return true;
-    }
-
-    @Override
-    public long getIdIfExists(User object) throws SQLException {
-        return queryExecutor.getObjectIdByUser(object.getEmail(), object.getPassword());
-    }
-
-    @Override
-    public long getPrimaryClassId(long id) throws SQLException {
-        return queryExecutor.getPrimaryClassId(id);
-    }
-
-    @Override
-    public long createLoginable(String login, String password) throws SQLException, DuplicateLoginException {
-        if(!isLoginValid(login)) throw new DuplicateLoginException(login);
-        long object_id =  queryExecutor.createNewObject(login);
-        queryExecutor.createLoginable(object_id, login, password);
-        return object_id;
     }
 
     @Override
@@ -168,6 +133,30 @@ public class DataBaseWorkerImpl implements DataBaseWorker {
     }
 
     @Override
+    public <T extends BaseDBO> boolean update(T object) throws ClassNotFoundException, SQLException, NoSuchFieldException, IllegalAccessException {
+        save(object.getObjectId(), object);
+        return true;
+    }
+
+    @Override
+    public long getIdIfExists(User object) throws SQLException {
+        return queryExecutor.getObjectIdByUser(object.getEmail(), object.getPassword());
+    }
+
+    @Override
+    public long getPrimaryClassId(long id) throws SQLException {
+        return queryExecutor.getPrimaryClassId(id);
+    }
+
+    @Override
+    public long createLoginable(String login, String password) throws SQLException, DuplicateLoginException {
+        if(!isLoginValid(login)) throw new DuplicateLoginException(login);
+        long object_id =  queryExecutor.createNewObject(login);
+        queryExecutor.createLoginable(object_id, login, password);
+        return object_id;
+    }
+
+    @Override
     public boolean isLoginValid(String login) throws SQLException {
         return queryExecutor.isLoginValid(login);
     }
@@ -181,6 +170,27 @@ public class DataBaseWorkerImpl implements DataBaseWorker {
     public <T extends BaseDBO>  List<T> get(Class<T> classValue, Long from, Long to) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException, NoSuchFieldException {
         long class_id = classValue.getAnnotation(ClassId.class).id();
         return get(queryExecutor.getPrimaryObjectsByClassLimitedFromTo(class_id, from.longValue(), to.longValue()), classValue);
+    }
+
+    private <T> Param<T> get(Param<T> param) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException, NoSuchFieldException {
+        if (param instanceof BaseDBOParam){
+            param.set((T) get(((BaseDBOParam) param).get().getObjectId()));
+        }else {
+            if (param instanceof BaseDBOListParam){
+                List<BaseDBO> res = Lists.newArrayList();
+                for (BaseDBO object: ((BaseDBOListParam) param).get()){
+                    res.add(get(object.getObjectId()));
+                }
+                param.set((T) res);
+            }
+        }
+        return param;
+    }
+
+    private <T extends BaseDBO> void setId(T result, long id) throws NoSuchFieldException, IllegalAccessException {
+        Field f = BaseDBO.class.getDeclaredField("objectId");
+        f.setAccessible(true);
+        f.set(result, id);
     }
 
     private <T extends BaseDBO> List<T> get(List<Long> objects, Class<T> classValue) throws ClassNotFoundException, SQLException, NoSuchFieldException, InstantiationException, IllegalAccessException {
