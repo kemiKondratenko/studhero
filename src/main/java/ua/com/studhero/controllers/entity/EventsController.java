@@ -105,6 +105,7 @@ public class EventsController {
                 return new Event("Event does not have an id, cant update it");
             }else {
                 log.info("with id");
+                entity.setImage(entity.getImage().substring(entity.getImage().lastIndexOf("/") + 1));
                 dataBaseWorker.update(entity);
                 return dataBaseWorker.get(entity.getObjectId(), entity.getClass());
             }
