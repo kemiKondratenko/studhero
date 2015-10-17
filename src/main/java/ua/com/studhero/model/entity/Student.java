@@ -1,12 +1,10 @@
 package ua.com.studhero.model.entity;
 
-import com.google.common.collect.Lists;
 import ua.com.studhero.annotations.AttrId;
 import ua.com.studhero.annotations.ClassId;
 import ua.com.studhero.annotations.FullLoad;
 import ua.com.studhero.database.entities.BaseDBO;
 import ua.com.studhero.database.entities.valueholders.BaseDBOListParam;
-import ua.com.studhero.database.entities.valueholders.IdListParam;
 import ua.com.studhero.database.entities.valueholders.StringParam;
 
 import java.util.List;

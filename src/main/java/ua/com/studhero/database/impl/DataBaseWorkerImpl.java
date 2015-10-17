@@ -44,49 +44,24 @@ public class DataBaseWorkerImpl implements DataBaseWorker {
 
     @Override
     public <T extends BaseDBO> T get(long id, Class<T> objectClass) throws IllegalAccessException, InstantiationException, SQLException, ClassNotFoundException, NoSuchFieldException {
-        T result = objectClass.newInstance();
-        ClassId classId = objectClass.getAnnotation(ClassId.class);
-        log.info(classId.toString());
-        Map<Long, Param> objectParams = queryExecutor.getObjectParams(id, classId.id());
-        for(Field field: objectClass.getDeclaredFields()){
-            field.setAccessible(true);
-            long attrId;
-            if(field.getAnnotation(AttrId.class) != null)
-                attrId = field.getAnnotation(AttrId.class).id();
-            else continue;
-            Param<?> param = objectParams.get(attrId);
-            if(param != null) {
-                if(field.getAnnotation(FullLoad.class) == null) {
-                    field.set(result, param);
-                }else {
-                    field.set(result, get(param));
-                }
-            }
-        }
-        log.info(result.toString());
-        setId(result, id);
-        return result;
+        return get(id, objectClass, false);
     }
 
-    private <T> Param<T> get(Param<T> param) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException, NoSuchFieldException {
-        if (param instanceof BaseDBOParam){
-            param.set((T) get(((BaseDBOParam) param).get().getObjectId()));
-        }else {
-            if (param instanceof BaseDBOListParam){
-                List<BaseDBO> res = Lists.newArrayList();
-                for (BaseDBO object: ((BaseDBOListParam) param).get()){
-                    res.add(get(object.getObjectId()));
-                }
-                param.set((T) res);
-            }
-        }
-        return param;
+    @Override
+    public <T extends BaseDBO> T getFull(long id, Class<T> objectClass) throws IllegalAccessException, InstantiationException, SQLException, ClassNotFoundException, NoSuchFieldException {
+        return get(id, objectClass, false);
     }
 
     @Override
     public BaseDBO get(Long id) throws ClassNotFoundException, SQLException, NoSuchFieldException, InstantiationException, IllegalAccessException {
         log.info("class" + ClassFactory.getClassById(getPrimaryClassId(id)));
-        return get(id, ClassFactory.getClassById(getPrimaryClassId(id)));
+        return get(id, ClassFactory.getClassById(getPrimaryClassId(id)), false);
+    }
+
+    @Override
+    public BaseDBO getFull(Long id) throws ClassNotFoundException, SQLException, NoSuchFieldException, InstantiationException, IllegalAccessException {
+        log.info("class" + ClassFactory.getClassById(getPrimaryClassId(id)));
+        return get(id, ClassFactory.getClassById(getPrimaryClassId(id)), true);
     }
 
     @Override
@@ -94,39 +69,9 @@ public class DataBaseWorkerImpl implements DataBaseWorker {
         List<Long> objects = queryExecutor.getObjectsByClass(objectClass.getAnnotation(ClassId.class).id(), RelationshipTypes.primary);
         List<T> result = new ArrayList<T>();
         for (Long id: objects){
-            result.add(get(id, objectClass));
+            result.add(get(id, objectClass, false));
         }
         return result;
-    }
-
-    private <T extends BaseDBO> void setId(T result, long id) throws NoSuchFieldException, IllegalAccessException {
-        Field f = BaseDBO.class.getDeclaredField("objectId");
-        f.setAccessible(true);
-        f.set(result, id);
-    }
-
-    @Override
-    public <T extends BaseDBO> boolean update(T object) throws ClassNotFoundException, SQLException, NoSuchFieldException, IllegalAccessException {
-        save(object.getObjectId(), object);
-        return true;
-    }
-
-    @Override
-    public long getIdIfExists(User object) throws SQLException {
-        return queryExecutor.getObjectIdByUser(object.getEmail(), object.getPassword());
-    }
-
-    @Override
-    public long getPrimaryClassId(long id) throws SQLException {
-        return queryExecutor.getPrimaryClassId(id);
-    }
-
-    @Override
-    public long createLoginable(String login, String password) throws SQLException, DuplicateLoginException {
-        if(!isLoginValid(login)) throw new DuplicateLoginException(login);
-        long object_id =  queryExecutor.createNewObject(login);
-        queryExecutor.createLoginable(object_id, login, password);
-        return object_id;
     }
 
     @Override
@@ -168,6 +113,30 @@ public class DataBaseWorkerImpl implements DataBaseWorker {
     }
 
     @Override
+    public <T extends BaseDBO> boolean update(T object) throws ClassNotFoundException, SQLException, NoSuchFieldException, IllegalAccessException {
+        save(object.getObjectId(), object);
+        return true;
+    }
+
+    @Override
+    public long getIdIfExists(User object) throws SQLException {
+        return queryExecutor.getObjectIdByUser(object.getEmail(), object.getPassword());
+    }
+
+    @Override
+    public long getPrimaryClassId(long id) throws SQLException {
+        return queryExecutor.getPrimaryClassId(id);
+    }
+
+    @Override
+    public long createLoginable(String login, String password) throws SQLException, DuplicateLoginException {
+        if(!isLoginValid(login)) throw new DuplicateLoginException(login);
+        long object_id =  queryExecutor.createNewObject(login);
+        queryExecutor.createLoginable(object_id, login, password);
+        return object_id;
+    }
+
+    @Override
     public boolean isLoginValid(String login) throws SQLException {
         return queryExecutor.isLoginValid(login);
     }
@@ -181,6 +150,68 @@ public class DataBaseWorkerImpl implements DataBaseWorker {
     public <T extends BaseDBO>  List<T> get(Class<T> classValue, Long from, Long to) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException, NoSuchFieldException {
         long class_id = classValue.getAnnotation(ClassId.class).id();
         return get(queryExecutor.getPrimaryObjectsByClassLimitedFromTo(class_id, from.longValue(), to.longValue()), classValue);
+    }
+
+    private  <T extends BaseDBO> T get(long id, Class<T> objectClass, boolean full) throws IllegalAccessException, InstantiationException, SQLException, ClassNotFoundException, NoSuchFieldException {
+        List<Long> noNeedToLoad = Lists.newArrayList();
+        return get(id, objectClass, noNeedToLoad, full);
+    }
+
+    private  <T extends BaseDBO> T get(long id, Class<T> objectClass, List<Long> noNeedToLoad, boolean full) throws IllegalAccessException, InstantiationException, SQLException, ClassNotFoundException, NoSuchFieldException {
+        T result = objectClass.newInstance();
+        ClassId classId = objectClass.getAnnotation(ClassId.class);
+        log.info(classId.toString());
+        Map<Long, Param> objectParams = queryExecutor.getObjectParams(id, classId.id());
+        for(Field field: objectClass.getDeclaredFields()){
+            field.setAccessible(true);
+            long attrId;
+            if(field.getAnnotation(AttrId.class) != null)
+                attrId = field.getAnnotation(AttrId.class).id();
+            else continue;
+            Param<?> param = objectParams.get(attrId);
+            if(param != null) {
+                if(field.getAnnotation(FullLoad.class) == null) {
+                    field.set(result, param);
+                }else {
+                    if(full) {
+                        noNeedToLoad.add(id);
+                        field.set(result, get(param, noNeedToLoad));
+                    }
+                }
+            }
+        }
+        log.info(result.toString());
+        setId(result, id);
+        return result;
+    }
+
+    private <T> Param<T> get(Param<T> param, List<Long> noNeedToLoad) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException, NoSuchFieldException {
+        if (param instanceof BaseDBOParam){
+            Long id = ((BaseDBOParam) param).get().getObjectId();
+            if(!noNeedToLoad.contains(id)) {
+                param.set((T) getFull(id, noNeedToLoad));
+            }
+        }else {
+            if (param instanceof BaseDBOListParam){
+                List<BaseDBO> res = Lists.newArrayList();
+                for (BaseDBO object: ((BaseDBOListParam) param).get()){
+                    res.add(get(object.getObjectId()));
+                }
+                param.set((T) res);
+            }
+        }
+        return param;
+    }
+
+    private BaseDBO getFull(Long id, List<Long> noNeedToLoad) throws ClassNotFoundException, SQLException, NoSuchFieldException, InstantiationException, IllegalAccessException {
+        log.info("class" + ClassFactory.getClassById(getPrimaryClassId(id)));
+        return get(id, ClassFactory.getClassById(getPrimaryClassId(id)), noNeedToLoad, true);
+    }
+
+    private <T extends BaseDBO> void setId(T result, long id) throws NoSuchFieldException, IllegalAccessException {
+        Field f = BaseDBO.class.getDeclaredField("objectId");
+        f.setAccessible(true);
+        f.set(result, id);
     }
 
     private <T extends BaseDBO> List<T> get(List<Long> objects, Class<T> classValue) throws ClassNotFoundException, SQLException, NoSuchFieldException, InstantiationException, IllegalAccessException {
