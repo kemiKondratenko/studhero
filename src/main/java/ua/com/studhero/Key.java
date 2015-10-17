@@ -4,6 +4,7 @@ package ua.com.studhero;
  * @author kaspyar.
  */
 public interface Key {
+    String EMAIL_REGISTRATION_SUBJECT = "Registration on studhero.org";
     String STUDHERO = "Thanks for joining us! \"StudHero\"";
     String REGISTRATION_TEMPLATE = "regTemplate.ftl";
     String REGISTRATION_TEMPLATE_COMPANY = "regTemplateCompany.ftl";

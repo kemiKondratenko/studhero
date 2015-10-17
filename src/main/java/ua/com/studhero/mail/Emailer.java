@@ -22,13 +22,16 @@ import java.util.Properties;
  * @author kaspyar.
  */
 public class Emailer {
+    private static final String FULL_PATH = Key.PATH + Key.PROJECT + Key.MAIL_TEMPLATES_DIR;
 
-    private static String from = "studhero@gmail.com";
-    private static String host = "localhost";
+    private static String from;
+    private static String host;
     private static Properties properties;
     private static Session session;
 
     static {
+        from = "studhero@gmail.com";
+        host = "localhost";
         properties = System.getProperties();
         properties.setProperty("mail.smtp.host", host);
         session = Session.getDefaultInstance(properties);
@@ -66,20 +69,18 @@ public class Emailer {
     }
 
     public static void sendRegistrationEmailToStudent(String to, String name, String password) {
-        String subject = "Registration on studhero.org";
-        send(to, name, subject, password, getTemplate(Key.REGISTRATION_TEMPLATE));
+        send(to, name, Key.EMAIL_REGISTRATION_SUBJECT, password, getTemplate(Key.REGISTRATION_TEMPLATE));
     }
 
     public static void sendRegistrationEmailToCompany(String to, String name, String password) {
-        String subject = "Registration on studhero.org";
-        send(to, name, subject, password, getTemplate(Key.REGISTRATION_TEMPLATE_COMPANY));
+        send(to, name, Key.EMAIL_REGISTRATION_SUBJECT, password, getTemplate(Key.REGISTRATION_TEMPLATE_COMPANY));
     }
 
     private static Template getTemplate(String templateName) {
         Configuration cfg = new Configuration();
         try {
             cfg.setDirectoryForTemplateLoading(new java.io.File(
-                    Key.PATH + Key.PROJECT + Key.MAIL_TEMPLATES_DIR));
+                    FULL_PATH));
         } catch (IOException e) {
             e.printStackTrace();
             //todo logger
