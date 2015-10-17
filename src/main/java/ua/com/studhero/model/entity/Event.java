@@ -66,6 +66,7 @@ public class Event extends BaseDBO{
     }
 
     public void setTags(List<Long> tags) {
+        if(tags ==null) return;
         if(this.tags == null)
             this.tags = new IdListParam(tags);
         else
@@ -79,6 +80,7 @@ public class Event extends BaseDBO{
     }
 
     public void setCompany(String company) {
+        if(company ==null) return;
         if(this.company == null)
             this.company = new StringParam(company);
         else
@@ -92,6 +94,7 @@ public class Event extends BaseDBO{
     }
 
     public void setTitle(String title) {
+        if(title ==null) return;
         if(this.title == null)
             this.title = new StringParam(title);
         else
@@ -105,6 +108,7 @@ public class Event extends BaseDBO{
     }
 
     public void setDescriptionShort(String descriptionShort) {
+        if(descriptionShort ==null) return;
         if(this.descriptionShort == null)
             this.descriptionShort = new TextParam(new TextValue(descriptionShort));
         else
@@ -118,6 +122,7 @@ public class Event extends BaseDBO{
     }
 
     public void setDescription(String description) {
+        if(description ==null) return;
         if(this.description == null)
             this.description = new TextParam(new TextValue(description));
         else
@@ -133,7 +138,8 @@ public class Event extends BaseDBO{
 
     @JsonDeserialize(using = DateDeserializer.class)
     public void setStartDate(Date startDate) {
-        if(this.startDate == null && startDate != null)
+        if(startDate ==null) return;
+        if(this.startDate == null)
             this.startDate = new DateParam(startDate);
         else
             this.startDate.set(startDate);
@@ -148,7 +154,8 @@ public class Event extends BaseDBO{
 
     @JsonDeserialize(using = DateDeserializer.class)
     public void setEndDate(Date endDate) {
-        if(this.endDate == null && endDate != null)
+        if(endDate ==null) return;
+        if(this.endDate == null)
             this.endDate = new DateParam(endDate);
         else
             this.endDate.set(endDate);
@@ -163,7 +170,8 @@ public class Event extends BaseDBO{
 
     @JsonDeserialize(using = TimeDeserializer.class)
     public void setStartTime(Date startTime) {
-        if(this.startTime == null && startTime != null)
+        if(startTime ==null) return;
+        if(this.startTime == null)
             this.startTime = new TimeParam(startTime);
         else
             this.startTime.set(startTime);
@@ -178,7 +186,8 @@ public class Event extends BaseDBO{
 
     @JsonDeserialize(using = TimeDeserializer.class)
     public void setEndTime(Date endTime) {
-        if(this.endTime == null && endTime != null)
+        if(endTime ==null) return;
+        if(this.endTime == null)
             this.endTime = new TimeParam(endTime);
         else
             this.endTime.set(endTime);
@@ -191,7 +200,8 @@ public class Event extends BaseDBO{
     }
 
     public void setApproved(Boolean approved) {
-        if(this.approved == null && approved != null)
+        if(approved ==null) return;
+        if(this.approved == null)
             this.approved = new BooleanParam(approved);
         else
             this.approved.set(approved);
@@ -205,7 +215,8 @@ public class Event extends BaseDBO{
     }
 
     public void setImage(String image) {
-        if (this.image == null && image != null){
+        if(image ==null) return;
+        if (this.image == null){
             this.image = new StringParam(image);
         } else {
             this.image.set(image);
@@ -218,7 +229,8 @@ public class Event extends BaseDBO{
     }
 
     public void setManager(String manager) {
-        if(this.manager == null && manager !=null)
+        if(manager ==null) return;
+        if(this.manager == null)
             this.manager = new StringParam(manager);
         else
             this.manager.set(manager);
@@ -231,7 +243,8 @@ public class Event extends BaseDBO{
     }
 
     public void setType(String type) {
-        if(this.type == null && type !=null)
+        if(type ==null) return;
+        if(this.type == null)
             this.type = new StringParam(type);
         else
             this.type.set(type);
@@ -244,7 +257,8 @@ public class Event extends BaseDBO{
     }
 
     public void setActivity(String activity) {
-        if(this.activity == null && activity !=null)
+        if(activity ==null) return;
+        if(this.activity == null)
             this.activity = new StringParam(activity);
         else
             this.activity.set(activity);

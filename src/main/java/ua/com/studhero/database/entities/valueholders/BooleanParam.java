@@ -11,6 +11,7 @@ public class BooleanParam extends Param<Boolean>{
 
     public static final long BOOLEANPARAM = AttrTypes.Boolean;
     public static final long TRUE = AttrValues.TRUE;
+    public static final long FALSE = AttrValues.FALSE;
 
     public BooleanParam(Boolean approved) {
         super(0, approved);

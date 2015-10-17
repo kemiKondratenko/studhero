@@ -88,15 +88,30 @@ public class EventsController {
                 entity.setApproved(false);
                 return dataBaseWorker.get(dataBaseWorker.save(entity), entity.getClass());
             }else {
-                log.info("with id");
-                entity.setImage(entity.getImage().substring(entity.getImage().lastIndexOf("/") + 1));
-                return dataBaseWorker.get(dataBaseWorker.save(entity.getObjectId(), entity), entity.getClass());
+                return new Event("Event has an id, do you want to create or update?");
             }
         }  catch (Exception e) {
             return new Event(e.getMessage());
         }
     }
 
+    @RequestMapping(value = "/update", method = RequestMethod.POST,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody Event update(@RequestBody Event entity) {
+        log.info("FIN"+ entity.toString());
+        try {
+            log.info("In");
+            if(entity.getObjectId() == 0) {
+                return new Event("Event does not have an id, cant update it");
+            }else {
+                log.info("with id");
+                dataBaseWorker.update(entity);
+                return dataBaseWorker.get(entity.getObjectId(), entity.getClass());
+            }
+        }  catch (Exception e) {
+            return new Event(e.getMessage());
+        }
+    }
 
     @RequestMapping(value = "/approved", method = RequestMethod.GET,
             consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -104,6 +119,18 @@ public class EventsController {
     List<BaseDBO> approved() {
         try {
             return searchService.search(new SearchScope(String.valueOf(BooleanParam.TRUE), Attrs.Approved));
+        }  catch (Exception e) {
+            return Lists.newArrayList(new BaseDBO(e.getMessage()));
+        }
+    }
+
+
+    @RequestMapping(value = "/unapproved", method = RequestMethod.GET,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody
+    List<BaseDBO> unapproved() {
+        try {
+            return searchService.search(new SearchScope(String.valueOf(BooleanParam.FALSE), Attrs.Approved));
         }  catch (Exception e) {
             return Lists.newArrayList(new BaseDBO(e.getMessage()));
         }

@@ -1,5 +1,7 @@
 package ua.com.studhero.controllers.entity;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -110,9 +112,36 @@ public class StudentController {
     public @ResponseBody
     BaseDBO subscribe(@PathVariable long idStudent, @PathVariable long idEvent){
         try {
-            Student student = dataBaseWorker.get(idStudent, Student.class);
+            Student student = dataBaseWorker.getFull(idStudent, Student.class);
             if (student.getEvents() != null) {
                 student.getEvents().add(new Event(idEvent));
+            } else {
+                student.setEvents(Lists.newArrayList(new BaseDBO(idEvent)));
+            }
+            BaseDBO obj = new BaseDBO();
+            if (dataBaseWorker.save(idStudent, student) != 0) {
+                obj.setObjectId(idStudent);
+            } else {
+                obj.setError("Problems with registrating student for event");
+            }
+            return obj;
+        } catch (Exception e) {
+            return new BaseDBO(e.getMessage());
+        }
+    }
+
+    @RequestMapping(value="/{idStudent}/unsubscribe/{idEvent}", method = RequestMethod.GET)
+    public @ResponseBody
+    BaseDBO unsubscribe(@PathVariable long idStudent, @PathVariable final long idEvent){
+        try {
+            Student student = dataBaseWorker.getFull(idStudent, Student.class);
+            if (student.getEvents() != null) {
+                student.getEvents().remove(Iterables.indexOf(student.getEvents(), new Predicate<BaseDBO>() {
+                    @Override
+                    public boolean apply(BaseDBO baseDBO) {
+                        return baseDBO.getObjectId() == idEvent;
+                    }
+                }));
             } else {
                 student.setEvents(Lists.newArrayList(new BaseDBO(idEvent)));
             }
