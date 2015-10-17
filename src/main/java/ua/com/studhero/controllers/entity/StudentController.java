@@ -56,7 +56,8 @@ public class StudentController {
             if(entity.getObjectId() == 0){
                 return new Student("Object does not have an id");
             }
-            return dataBaseWorker.get(dataBaseWorker.save(entity.getObjectId(), entity), entity.getClass());
+            dataBaseWorker.update(entity);
+            return dataBaseWorker.get(entity.getObjectId(), entity.getClass());
         } catch (Exception e) {
             return new Student(e.getMessage());
         }
