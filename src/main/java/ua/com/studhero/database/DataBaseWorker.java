@@ -40,7 +40,9 @@ public interface DataBaseWorker {
 
     public boolean isLoginValid(String login) throws SQLException;
 
-    public List<Long> search(SearchScope searchScope) throws SQLException;
-
     public <T extends BaseDBO>  List<T> get(Class<T> classValue, Long from, Long to) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException, NoSuchFieldException;
+
+    List<Long> search(SearchScope searchScope) throws SQLException;
+
+    List<Long> search(SearchScope searchScope, long id) throws SQLException;
 }

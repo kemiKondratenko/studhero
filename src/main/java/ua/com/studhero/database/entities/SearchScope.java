@@ -1,31 +1,55 @@
 package ua.com.studhero.database.entities;
 
+import com.google.common.collect.Lists;
+
+import java.util.List;
+
 /**
  * Created by Eugene on 19.09.2015.
  */
 public class SearchScope {
-    private String paramName;
+    private List<String> paramNames;
     private String paramValue;
-    private long paramAttrId = 0;
+    private List<Long> paramAttrIds;
 
-    public SearchScope(String paramValue, long paramAttrId) {
-        this.paramValue = paramValue;
-        this.paramAttrId = paramAttrId;
+    public SearchScope(){
     }
 
-    public String getParamName() {
-        return paramName;
+    public SearchScope(String paramValue, List<Long> paramAttrIds) {
+        this.paramValue = paramValue;
+        this.paramAttrIds = paramAttrIds;
+    }
+
+    public List<String> getParamNames() {
+        return paramNames;
+    }
+
+    public void setParamNames(List<String> paramNames) {
+        this.paramNames = paramNames;
     }
 
     public String getParamValue() {
         return paramValue;
     }
 
-    public long getParamAttrId() {
-        return paramAttrId;
+    public void setParamValue(String paramValue) {
+        this.paramValue = paramValue;
     }
 
-    public void setParamAttrId(long paramAttrId) {
-        this.paramAttrId = paramAttrId;
+    public List<Long> getParamAttrIds() {
+        return paramAttrIds;
+    }
+
+    public void setParamAttrIds(List<Long> paramAttrIds) {
+        this.paramAttrIds = paramAttrIds;
+    }
+
+    @Override
+    public String toString() {
+        return "SearchScope{" +
+                "paramAttrIds=" + paramAttrIds +
+                ", paramValue='" + paramValue + '\'' +
+                ", paramNames=" + paramNames +
+                '}';
     }
 }

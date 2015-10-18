@@ -46,6 +46,8 @@ public interface QueryExecutor {
 
     List<Long> search(long paramAttrId, String paramValue) throws SQLException;
 
+    List<Long> search(List<Long> paramAttrIds, String paramValue, long class_id) throws SQLException;
+
     List<Long> getPrimaryObjectsByClassLimitedFromTo(long class_id, long from, long to) throws SQLException;
 
     String getTestValue(Long id) throws SQLException;

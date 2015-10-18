@@ -9,6 +9,7 @@ import ua.com.studhero.database.entities.valueholders.TextValue;
 import ua.com.studhero.database.entities.valueholders.base.ListParam;
 import ua.com.studhero.database.entities.valueholders.base.Param;
 import ua.com.studhero.database.preparedStatements.*;
+import ua.com.studhero.database.queries.ListSearchQueryExecutor;
 import ua.com.studhero.exceptions.database.DataBaseConsistensyError;
 
 import java.sql.SQLException;
@@ -46,6 +47,7 @@ public class QueryExecutorImpl implements QueryExecutor {
     private UpdateTextValuePreparedStatement updateTextValuePreparedStatement;
     private GetObjectParamByIdPreparedStatement getObjectParamByIdPreparedStatement;
     private CreateTextParameterPreparedStatement createTextParameterPreparedStatement;
+    private ListSearchQueryExecutor listSearchQueryExecutor;
 
     @Override
     public Map<Long, Param> getObjectParams(long objectId, long classId) throws SQLException, ClassNotFoundException {
@@ -276,6 +278,14 @@ public class QueryExecutorImpl implements QueryExecutor {
             simpleSearchPreparedStatement = new SimpleSearchPreparedStatement(connector.getConnection());
         }
         return simpleSearchPreparedStatement.search(paramAttrId, paramValue);
+    }
+
+    @Override
+    public List<Long> search(List<Long> paramAttrIds, String paramValue, long class_id) throws SQLException {
+        if(listSearchQueryExecutor == null || (listSearchQueryExecutor != null && listSearchQueryExecutor.closed())){
+            listSearchQueryExecutor = new ListSearchQueryExecutor(connector.getConnection());
+        }
+        return listSearchQueryExecutor.search(paramAttrIds, paramValue, class_id);
     }
 
     @Override

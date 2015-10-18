@@ -18,6 +18,7 @@ import javax.inject.Inject;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -118,7 +119,7 @@ public class EventsController {
     public @ResponseBody
     List<BaseDBO> approved() {
         try {
-            return searchService.search(new SearchScope(String.valueOf(BooleanParam.TRUE), Attrs.Approved));
+            return searchService.search(new SearchScope(String.valueOf(BooleanParam.TRUE), Lists.newArrayList(Attrs.Approved)));
         }  catch (Exception e) {
             return Lists.newArrayList(new BaseDBO(e.getMessage()));
         }
@@ -130,7 +131,20 @@ public class EventsController {
     public @ResponseBody
     List<BaseDBO> unapproved() {
         try {
-            return searchService.search(new SearchScope(String.valueOf(BooleanParam.FALSE), Attrs.Approved));
+            return searchService.search(new SearchScope(String.valueOf(BooleanParam.FALSE), Lists.newArrayList(Attrs.Approved)));
+        }  catch (Exception e) {
+            return Lists.newArrayList(new BaseDBO(e.getMessage()));
+        }
+    }
+
+
+    @RequestMapping(value = "/search", method = RequestMethod.POST,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody
+    List<BaseDBO> search(@RequestBody List<SearchScope> searchScopeList) {
+        try {
+            log.info("Try Search");
+            return searchService.search(searchService.transform(searchScopeList), Event.class);
         }  catch (Exception e) {
             return Lists.newArrayList(new BaseDBO(e.getMessage()));
         }

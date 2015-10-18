@@ -4,6 +4,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import ua.com.studhero.annotations.ClassId;
 import ua.com.studhero.database.DataBaseWorker;
 import ua.com.studhero.database.constants.AttrIdFactory;
 import ua.com.studhero.database.entities.BaseDBO;
@@ -38,6 +39,19 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
+    public <T extends BaseDBO> List<BaseDBO> search(List<SearchScope> searchScopeList, Class<T> clazz) throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchFieldException {
+        List<Long> resultIds = Lists.newArrayList();
+        for(SearchScope searchScope: searchScopeList){
+            resultIds = filter(resultIds, dataBaseWorker.search(searchScope, clazz.getAnnotation(ClassId.class).id()));
+        }
+        List<BaseDBO> resultObjects = Lists.newArrayList();
+        for(Long id : resultIds){
+            resultObjects.add(dataBaseWorker.get(id));
+        }
+        return resultObjects;
+    }
+
+    @Override
     public List<BaseDBO> search(SearchScope searchScope) throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchFieldException {
         List<Long> resultIds = Lists.newArrayList();
         resultIds = filter(resultIds, dataBaseWorker.search(searchScope));
@@ -49,17 +63,29 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public Iterable<SearchScope> transform(List<SearchScope> searchScopeList) {
-        return Iterables.transform(searchScopeList, new Function<SearchScope, SearchScope>() {
+    public List<SearchScope> transform(List<SearchScope> searchScopeList) {
+        log.info("transform "+ searchScopeList);
+        return Lists.transform(searchScopeList, new Function<SearchScope, SearchScope>() {
             @Override
             public SearchScope apply(SearchScope searchScope) {
-                if(searchScope.getParamAttrId() == 0)
-                    try {
-                        searchScope.setParamAttrId(AttrIdFactory.getAttrId(searchScope.getParamName()));
-                    } catch (NoSuchFieldException e) {
-                        e.printStackTrace();
-                    }
+                if(searchScope.getParamAttrIds() == null || searchScope.getParamAttrIds().isEmpty())
+                    searchScope.setParamAttrIds(convert(searchScope.getParamNames()));
                 return searchScope;
+            }
+        });
+    }
+
+    private List<Long> convert(List<String> paramNames) {
+        log.info("convert "+ paramNames);
+        return Lists.transform(paramNames, new Function<String, Long>() {
+            @Override
+            public Long apply(String s) {
+                try {
+                    return AttrIdFactory.getAttrId(s);
+                } catch (NoSuchFieldException e) {
+                    log.info(e.toString());
+                }
+                return Long.valueOf(0);
             }
         });
     }
