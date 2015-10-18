@@ -13,19 +13,6 @@
     <mvc:annotation-driven />
     <import resource="classpath*:spring-config.xml" />
 
-
-    <mvc:view-controller path="/main"  view-name="index"/>
-    <mvc:view-controller path="/login"  view-name="login"/>
-    <mvc:view-controller path="/registration"  view-name="registration"/>
-    <mvc:view-controller path="/events"  view-name="events"/>
-    <mvc:view-controller path="/faq"  view-name="faq"/>
-    <mvc:resources mapping="/resources/**" location="/resources/" />
-
-    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <property name="prefix" value="/WEB-INF/pages/"/>
-        <property name="suffix" value=".jsp"/>
-    </bean>
-
 </beans>
 
 
