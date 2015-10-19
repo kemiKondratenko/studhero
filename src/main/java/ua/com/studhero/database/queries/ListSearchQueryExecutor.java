@@ -57,7 +57,7 @@ public class ListSearchQueryExecutor extends BaseQueryExecutor {
         String buildQueryTexts = buildQueryTexts(textAttrIds, paramValue, class_id);
 
         query.append(buildQueryParams);
-        if(buildQueryParams != null && buildQueryTexts != null 
+        if(buildQueryParams != null && buildQueryTexts != null
                 && !buildQueryParams.isEmpty() && !buildQueryTexts.isEmpty())
             query.append(OR);
         query.append(buildQueryTexts);
