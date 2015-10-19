@@ -150,7 +150,7 @@ public class DataBaseWorkerImpl implements DataBaseWorker {
 
     @Override
     public List<Long> search(SearchScope searchScope, long class_id) throws SQLException {
-        return queryExecutor.search(searchScope.getParamAttrIds(), searchScope.getParamValue(), class_id);
+        return queryExecutor.search(searchScope.getParamAttrIds(), searchScope.getTextAttrIds(),searchScope.getParamValue(), class_id);
     }
 
     @Override

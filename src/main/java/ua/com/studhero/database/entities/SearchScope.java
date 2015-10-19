@@ -11,6 +11,7 @@ public class SearchScope {
     private List<String> paramNames;
     private String paramValue;
     private List<Long> paramAttrIds;
+    private List<Long> textAttrIds;
 
     public SearchScope(){
     }
@@ -44,12 +45,21 @@ public class SearchScope {
         this.paramAttrIds = paramAttrIds;
     }
 
+    public void setTextAttrIds(List<Long> textAttrIds) {
+        this.textAttrIds = textAttrIds;
+    }
+
+    public List<Long> getTextAttrIds() {
+        return textAttrIds;
+    }
+
     @Override
     public String toString() {
         return "SearchScope{" +
-                "paramAttrIds=" + paramAttrIds +
+                "paramNames=" + paramNames +
                 ", paramValue='" + paramValue + '\'' +
-                ", paramNames=" + paramNames +
+                ", paramAttrIds=" + paramAttrIds +
+                ", textAttrIds=" + textAttrIds +
                 '}';
     }
 }

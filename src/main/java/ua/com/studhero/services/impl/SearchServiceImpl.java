@@ -9,6 +9,7 @@ import ua.com.studhero.database.DataBaseWorker;
 import ua.com.studhero.database.constants.AttrIdFactory;
 import ua.com.studhero.database.entities.BaseDBO;
 import ua.com.studhero.database.entities.SearchScope;
+import ua.com.studhero.database.entities.valueholders.TextParam;
 import ua.com.studhero.services.SearchService;
 
 import java.sql.SQLException;
@@ -64,30 +65,37 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public List<SearchScope> transform(List<SearchScope> searchScopeList) {
-        log.info("transform "+ searchScopeList);
+        //log.info("transform "+ searchScopeList);
         return Lists.transform(searchScopeList, new Function<SearchScope, SearchScope>() {
             @Override
             public SearchScope apply(SearchScope searchScope) {
-                if(searchScope.getParamAttrIds() == null || searchScope.getParamAttrIds().isEmpty())
-                    searchScope.setParamAttrIds(convert(searchScope.getParamNames()));
+                //log.info("setParamAttrIds " + convert(searchScope.getParamNames(), TextParam.class, false));
+                    searchScope.setParamAttrIds(convert(searchScope.getParamNames(), TextParam.class, false));
+                //log.info("setTextAttrIds " + convert(searchScope.getParamNames(), TextParam.class, true));
+                searchScope.setTextAttrIds(convert(searchScope.getParamNames(), TextParam.class, true));
                 return searchScope;
             }
         });
     }
 
-    private List<Long> convert(List<String> paramNames) {
-        log.info("convert "+ paramNames);
-        return Lists.transform(paramNames, new Function<String, Long>() {
+    private List<Long> convert(List<String> paramNames, final Class<TextParam> textParamClass, final boolean b) {
+        //log.info("convert "+ paramNames);
+        return Lists.newArrayList(Iterables.filter(Lists.transform(paramNames, new Function<String, Long>() {
             @Override
             public Long apply(String s) {
                 try {
-                    return AttrIdFactory.getAttrId(s);
+                    return AttrIdFactory.getAttrId(s, textParamClass, b);
                 } catch (NoSuchFieldException e) {
                     log.info(e.toString());
                 }
                 return Long.valueOf(0);
             }
-        });
+        }), new Predicate<Long>() {
+            @Override
+            public boolean apply(Long aLong) {
+                return aLong.compareTo(Long.valueOf(0l)) != 0;
+            }
+        }));
     }
 
     private List<Long> filter(List<Long> resultIds, final List<Long> search){

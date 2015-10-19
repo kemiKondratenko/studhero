@@ -281,11 +281,11 @@ public class QueryExecutorImpl implements QueryExecutor {
     }
 
     @Override
-    public List<Long> search(List<Long> paramAttrIds, String paramValue, long class_id) throws SQLException {
+    public List<Long> search(List<Long> paramAttrIds, List<Long> textAttrIds, String paramValue, long class_id) throws SQLException {
         if(listSearchQueryExecutor == null || (listSearchQueryExecutor != null && listSearchQueryExecutor.closed())){
             listSearchQueryExecutor = new ListSearchQueryExecutor(connector.getConnection());
         }
-        return listSearchQueryExecutor.search(paramAttrIds, paramValue, class_id);
+        return listSearchQueryExecutor.search(paramAttrIds, textAttrIds, paramValue, class_id);
     }
 
     @Override
