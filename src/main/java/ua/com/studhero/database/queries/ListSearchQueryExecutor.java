@@ -57,7 +57,8 @@ public class ListSearchQueryExecutor extends BaseQueryExecutor {
         String buildQueryTexts = buildQueryTexts(textAttrIds, paramValue, class_id);
 
         query.append(buildQueryParams);
-        if(buildQueryParams != "" && buildQueryTexts != "")
+        if(buildQueryParams != null && buildQueryTexts != null 
+                && !buildQueryParams.isEmpty() && !buildQueryTexts.isEmpty())
             query.append(OR);
         query.append(buildQueryTexts);
         query.append(GROUP_BY);
@@ -74,9 +75,9 @@ public class ListSearchQueryExecutor extends BaseQueryExecutor {
     private String buildQueryParams(List<Long> paramAttrIds, String paramValue, long class_id) {
         StringBuilder builder = new StringBuilder();
         for(int i = 0; i < paramAttrIds.size(); i++){
-            builder.append(String.format(PARAM_QUERY, paramAttrIds.get(i), "%"+paramValue+"%", class_id));
-            if(i < paramAttrIds.size() - 1)
+            if(i != 0)
                 builder.append(OR);
+            builder.append(String.format(PARAM_QUERY, paramAttrIds.get(i), "%"+paramValue+"%", class_id));
         }
         return builder.toString();
     }
@@ -84,9 +85,9 @@ public class ListSearchQueryExecutor extends BaseQueryExecutor {
     private String buildQueryTexts(List<Long> textAttrIds, String paramValue, long class_id) {
         StringBuilder builder = new StringBuilder();
         for(int i = 0; i < textAttrIds.size(); i++){
-            builder.append(String.format(TEXT_QUERY, textAttrIds.get(i), class_id, "%"+paramValue+"%"));
-            if(i < textAttrIds.size() - 1)
+            if(i != 0)
                 builder.append(OR);
+            builder.append(String.format(TEXT_QUERY, textAttrIds.get(i), class_id, "%"+paramValue+"%"));
         }
         return builder.toString();
     }
