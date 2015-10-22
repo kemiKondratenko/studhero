@@ -18,7 +18,6 @@ import javax.inject.Inject;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -105,8 +104,14 @@ public class EventsController {
             if(entity.getObjectId() == 0) {
                 return new Event("Event does not have an id, cant update it");
             }else {
-                log.info("with id");
-                entity.setImage(entity.getImage().substring(entity.getImage().lastIndexOf("/") + 1));
+                log.info("with id" + entity.getObjectId());
+                log.info("approved: " + entity.getApproved());
+                if (entity.getImage() != null) {
+                    log.info("image not null: " + entity.getImage());
+                    entity.setImage(entity.getImage().substring(entity.getImage().lastIndexOf("/") + 1));
+                } else {
+                    log.info("image null");
+                }
                 dataBaseWorker.update(entity);
                 return dataBaseWorker.get(entity.getObjectId(), entity.getClass());
             }
