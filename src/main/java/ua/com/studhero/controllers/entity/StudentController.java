@@ -10,6 +10,7 @@ import ua.com.studhero.annotations.ClassId;
 import ua.com.studhero.controllers.entity.model.StudentRegistrateModel;
 import ua.com.studhero.database.DataBaseWorker;
 import ua.com.studhero.database.entities.BaseDBO;
+import ua.com.studhero.database.entities.valueholders.BooleanResult;
 import ua.com.studhero.mail.Emailer;
 import ua.com.studhero.model.entity.Event;
 import ua.com.studhero.model.entity.Student;
@@ -128,6 +129,25 @@ public class StudentController {
         } catch (Exception e) {
             return new BaseDBO(e.getMessage());
         }
+    }
+
+    @RequestMapping(value = "/{idStudent}/isSubscribed/{idEvent}", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    BooleanResult isSubscribed(@PathVariable long idStudent, @PathVariable long idEvent) {
+        try {
+            Student student = dataBaseWorker.getFull(idStudent, Student.class);
+            if (student.getEvents() != null) {
+                for (BaseDBO obj : student.getEvents()) {
+                    if (obj.getObjectId() == idEvent) {
+                        return new BooleanResult(true);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            return new BooleanResult(e.getMessage());
+        }
+        return new BooleanResult(false);
     }
 
     @RequestMapping(value="/{idStudent}/unsubscribe/{idEvent}", method = RequestMethod.GET)
